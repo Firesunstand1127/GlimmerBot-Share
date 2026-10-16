@@ -1,0 +1,948 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "VoyageDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "VoyagePassRewardPopup",
+            "VoyageCancelAcceleration",
+            "VoyageRewardOverlay",
+            "VoyageMerchantReady",
+            "VoyageEnterFromHome",
+            "VoyageEnter"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "VoyageStopSafely"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "VoyageEnsureIdlePage": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "VoyageIdlePageReady",
+            "VoyageReturnIdleFromMerchant",
+            "VoyageEnterIdleFromHome"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "VoyageStopSafely"
+        ]
+    },
+    "VoyageIdlePageReady": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeStablePageFeature"
+        ],
+        "action": "StopTask",
+        "rate_limit": 100
+    },
+    "VoyageEnterIdleFromHome": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "Click",
+        "target": [
+            360,
+            1215,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "VoyageIdlePageReady",
+            "VoyageEnterIdleFromHome"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "VoyageStopSafely"
+        ]
+    },
+    "VoyageIdleValueScan": {
+        "recognition": "OCR",
+        "roi": [
+            600,
+            300,
+            115,
+            58
+        ],
+        "expected": "^[0-9]{1,5}$",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": [
+            "VoyageStopSafely"
+        ]
+    },
+    "VoyagePassRewardPopup": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            90,
+            320,
+            100
+        ],
+        "expected": ".*通关奖励.*",
+        "action": "Click",
+        "target": [
+            683,
+            202,
+            1,
+            1
+        ],
+        "post_delay": 600,
+        "next": [
+            "VoyageMerchantReady",
+            "VoyageEnter"
+        ],
+        "rate_limit": 150,
+        "timeout": 8000,
+        "on_error": [
+            "VoyageStopSafely"
+        ]
+    },
+    "VoyageEnterFromHome": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "Click",
+        "target": [
+            360,
+            1215,
+            1,
+            1
+        ],
+        "post_delay": 100,
+        "next": [
+            "VoyagePassRewardPopup",
+            "VoyageEnter",
+            "VoyageEnterFromHome"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "VoyageStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "VoyageEnter": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeStablePageFeature"
+        ],
+        "action": "Click",
+        "target": [
+            650,
+            280,
+            1,
+            1
+        ],
+        "post_wait_freezes": {
+            "time": 200,
+            "rate_limit": 150,
+            "timeout": 3000
+        },
+        "post_delay": 300,
+        "next": [
+            "VoyagePassRewardPopup",
+            "VoyageMerchantReady",
+            "VoyageEnter"
+        ],
+        "timeout": 10000,
+        "on_error": [
+            "VoyageStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "VoyageMerchantReady": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/merchant_title.png",
+        "threshold": 0.8,
+        "roi": [
+            167,
+            100,
+            433,
+            173
+        ],
+        "action": "DoNothing",
+        "next": [
+            "VoyageEnsureQuickAccept"
+        ],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "VoyageStopSafely"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "VoyageEnsureQuickAccept": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/quick_accept_checked.png",
+        "threshold": 0.8,
+        "roi": [
+            27,
+            933,
+            107,
+            147
+        ],
+        "action": "DoNothing",
+        "next": [
+            "VoyageEnsureAutoAccept"
+        ],
+        "timeout": 2500,
+        "on_error": [
+            "VoyageEnableQuickAccept"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "VoyageEnableQuickAccept": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/quick_accept_unchecked.png",
+        "threshold": 0.8,
+        "roi": [
+            27,
+            933,
+            107,
+            147
+        ],
+        "action": "Click",
+        "post_delay": 100,
+        "next": [
+            "VoyageVerifyQuickAccept"
+        ],
+        "timeout": 3000,
+        "on_error": [
+            "VoyageStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "VoyageVerifyQuickAccept": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/quick_accept_checked.png",
+        "threshold": 0.8,
+        "roi": [
+            27,
+            933,
+            107,
+            147
+        ],
+        "action": "DoNothing",
+        "next": [
+            "VoyageEnsureAutoAccept"
+        ],
+        "timeout": 3000,
+        "on_error": [
+            "VoyageStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "VoyageEnsureAutoAccept": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/auto_accept_checked.png",
+        "threshold": 0.8,
+        "roi": [
+            27,
+            993,
+            107,
+            147
+        ],
+        "action": "DoNothing",
+        "next": [
+            "VoyageClaimAll"
+        ],
+        "timeout": 2500,
+        "on_error": [
+            "VoyageEnableAutoAccept"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "VoyageEnableAutoAccept": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/auto_accept_unchecked.png",
+        "threshold": 0.8,
+        "roi": [
+            27,
+            993,
+            107,
+            147
+        ],
+        "action": "Click",
+        "post_delay": 100,
+        "next": [
+            "VoyageVerifyAutoAccept"
+        ],
+        "timeout": 3000,
+        "on_error": [
+            "VoyageStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "VoyageVerifyAutoAccept": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/auto_accept_checked.png",
+        "threshold": 0.8,
+        "roi": [
+            27,
+            993,
+            107,
+            147
+        ],
+        "action": "DoNothing",
+        "next": [
+            "VoyageClaimAll"
+        ],
+        "timeout": 3000,
+        "on_error": [
+            "VoyageStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "VoyageClaimAll": {
+        "recognition": "And",
+        "all_of": [
+            "VoyageClaimAllFeature",
+            "VoyageQuickCheckedFeature",
+            "VoyageAutoCheckedFeature"
+        ],
+        "box_index": 0,
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "VoyageRewardOverlay",
+            "VoyageAfterClaimWithoutReward"
+        ],
+        "timeout": 10000,
+        "on_error": [
+            "VoyageStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "VoyageClaimAllFeature": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/claim_all.png",
+        "threshold": 0.8,
+        "roi": [
+            467,
+            913,
+            240,
+            200
+        ]
+    },
+    "VoyageQuickCheckedFeature": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/quick_accept_checked.png",
+        "threshold": 0.8,
+        "roi": [
+            27,
+            933,
+            107,
+            147
+        ]
+    },
+    "VoyageAutoCheckedFeature": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/auto_accept_checked.png",
+        "threshold": 0.8,
+        "roi": [
+            27,
+            993,
+            107,
+            147
+        ]
+    },
+    "VoyageRewardOverlay": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantRewardTitleFeature",
+            "TaskAssistantTapBlankFeature"
+        ],
+        "action": "Click",
+        "target": [
+            653,
+            840,
+            53,
+            53
+        ],
+        "post_delay": 500,
+        "next": [
+            "VoyageRefreshLoop"
+        ],
+        "timeout": 10000,
+        "on_error": [
+            "VoyageAfterClaimWithoutReward"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "VoyageAfterClaimWithoutReward": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/merchant_title.png",
+        "threshold": 0.8,
+        "roi": [
+            167,
+            100,
+            433,
+            173
+        ],
+        "action": "DoNothing",
+        "next": [
+            "VoyageRefreshLoop"
+        ],
+        "timeout": 3000,
+        "on_error": [
+            "VoyageStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "VoyageRefreshLoop": {
+        "recognition": "And",
+        "all_of": [
+            "VoyageMerchantReady",
+            "VoyageQuickCheckedFeature",
+            "VoyageAutoCheckedFeature"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "VoyagePriorityEpicLegendary",
+            "VoyagePriorityRainRebuild",
+            "VoyageRefreshOnce"
+        ],
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": [
+            "VoyageStopSafely"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "VoyagePriorityEpicLegendary": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "PriorityTier",
+                "recognition": "OCR",
+                "expected": "^(史诗|传说)$",
+                "roi": [
+                    0,
+                    330,
+                    360,
+                    620
+                ],
+                "order_by": "Vertical",
+                "index": 0
+            },
+            {
+                "recognition": "OCR",
+                "expected": "^接取$",
+                "roi": "PriorityTier",
+                "roi_offset": [
+                    300,
+                    -40,
+                    340,
+                    150
+                ]
+            }
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 700,
+        "next": [
+            "VoyageDetailAssign",
+            "VoyageCycleFinished"
+        ],
+        "rate_limit": 100,
+        "max_hit": 1
+    },
+    "VoyagePriorityRainRebuild": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "RainPriorityTitle",
+                "recognition": "TemplateMatch",
+                "template": "voyage/rain_rebuild_rare.png",
+                "threshold": 0.76,
+                "roi": [
+                    0,
+                    347,
+                    450,
+                    600
+                ]
+            },
+            {
+                "recognition": "TemplateMatch",
+                "template": "voyage/rain_rebuild_diamond60.png",
+                "threshold": 0.74,
+                "roi": "RainPriorityTitle",
+                "roi_offset": [
+                    -30,
+                    50,
+                    -100,
+                    160
+                ]
+            },
+            {
+                "recognition": "OCR",
+                "expected": "^接取$",
+                "roi": "RainPriorityTitle",
+                "roi_offset": [
+                    300,
+                    -40,
+                    340,
+                    150
+                ]
+            }
+        ],
+        "box_index": 2,
+        "action": "Click",
+        "post_delay": 700,
+        "next": [
+            "VoyageDetailAssign",
+            "VoyageCycleFinished"
+        ],
+        "rate_limit": 100,
+        "max_hit": 1
+    },
+    "VoyageRefreshOnce": {
+        "recognition": "OCR",
+        "expected": ".*刷新.*",
+        "roi": [
+            267,
+            960,
+            200,
+            100
+        ],
+        "threshold": 0.3,
+        "action": "Click",
+        "post_delay": 900,
+        "next": [
+            "VoyageUnacceptedHighWarningCancel",
+            "VoyageCycleFinished"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "VoyageStopSafely"
+        ],
+        "max_hit": 1
+    },
+    "VoyageUnacceptedHighWarningCancel": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "OCR",
+                "expected": ".*紫色以上.*未接取.*",
+                "roi": [
+                    90,
+                    500,
+                    540,
+                    180
+                ]
+            },
+            {
+                "recognition": "OCR",
+                "expected": "^取消$",
+                "roi": [
+                    70,
+                    690,
+                    260,
+                    150
+                ]
+            }
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 700,
+        "next": [
+            "VoyageCycleFinished"
+        ],
+        "rate_limit": 100,
+        "max_hit": 1
+    },
+    "VoyageCycleFinished": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/merchant_title.png",
+        "threshold": 0.78,
+        "roi": [
+            167,
+            100,
+            433,
+            173
+        ],
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "VoyageStopSafely"
+        ]
+    },
+    "VoyageCancelAcceleration": {
+        "recognition": "And",
+        "all_of": [
+            "VoyageAccelerationPromptFeature",
+            "VoyageAccelerationCancelFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_wait_freezes": {
+            "time": 200,
+            "rate_limit": 150,
+            "timeout": 3000
+        },
+        "post_delay": 100,
+        "next": [
+            "VoyageCycleFinished"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "max_hit": 1
+    },
+    "VoyageAccelerationPromptFeature": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/acceleration_prompt.png",
+        "threshold": 0.8,
+        "roi": [
+            180,
+            540,
+            360,
+            120
+        ]
+    },
+    "VoyageAccelerationCancelFeature": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/acceleration_cancel.png",
+        "threshold": 0.8,
+        "roi": [
+            80,
+            700,
+            240,
+            120
+        ]
+    },
+    "VoyageReturnIdlePage": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "VoyageReturnIdleVerified",
+            "VoyageReturnIdleFromMerchant"
+        ],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "VoyageStopSafely"
+        ]
+    },
+    "VoyageReturnIdleFromMerchant": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/merchant_title.png",
+        "threshold": 0.8,
+        "roi": [
+            167,
+            100,
+            433,
+            173
+        ],
+        "action": "Click",
+        "target": [
+            700,
+            80,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "VoyageReturnIdleVerified",
+            "VoyageReturnIdleFromMerchant"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "VoyageStopSafely"
+        ]
+    },
+    "VoyageReturnIdleVerified": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeStablePageFeature"
+        ],
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "VoyageStopSafely"
+        ]
+    },
+    "ResourceCycleReturnHome": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "PopupFreeDrawClose",
+            "PopupFoodPrizeClose",
+            "PopupPromoDiamondGift",
+            "PopupFoodPromotionClose",
+            "PopupKoiPromotionClose",
+            "PopupTeamResultClose",
+            "PlaneReturnCloseResult",
+            "PopupActivityRewardConfirm",
+            "ResourceCycleHomeReady",
+            "ResourceCyclePromoGiftClose",
+            "ResourceCycleDailyPanelHome",
+            "PlaneReturnCloseCombatPanel",
+            "PlaneReturnCloseHirePanel",
+            "PlaneReturnFromMap",
+            "ResourceCycleClickHome"
+        ],
+        "timeout": 10000,
+        "on_error": [
+            "VoyageStopSafely"
+        ],
+        "rate_limit": 100
+    },
+    "ResourceCyclePromoGiftClose": {
+        "recognition": "OCR",
+        "roi": [
+            60,
+            540,
+            600,
+            260
+        ],
+        "expected": ".*(超值钻石礼|助力冒险征程).*",
+        "action": "Click",
+        "target": [
+            633,
+            196,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "ResourceCycleReturnHome"
+        ],
+        "max_hit": 2,
+        "rate_limit": 100
+    },
+    "ResourceCycleDailyPanelHome": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            60,
+            720,
+            260
+        ],
+        "expected": "^日常$",
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "ResourceCycleReturnHome"
+        ],
+        "max_hit": 2,
+        "rate_limit": 100
+    },
+    "ResourceCycleClickHome": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.72,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_wait_freezes": {
+            "time": 250,
+            "rate_limit": 100,
+            "timeout": 2500
+        },
+        "post_delay": 300,
+        "next": [
+            "ResourceCycleHomeReady",
+            "ResourceCycleClickHome"
+        ],
+        "max_hit": 3,
+        "timeout": 8000,
+        "on_error": [
+            "VoyageStopSafely"
+        ],
+        "rate_limit": 100
+    },
+    "ResourceCycleHomeSelected": {
+        "recognition": "TemplateMatch",
+        "template": "home/main_city_selected_anchor.png",
+        "threshold": 0.72,
+        "roi": [
+            0,
+            1180,
+            100,
+            90
+        ],
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "VoyageStopSafely"
+        ]
+    },
+    "ResourceCycleHomeReady": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "VoyageStopSafely"
+        ]
+    },
+    "ResourceCycleHomeArenaFeature": {
+        "recognition": "OCR",
+        "expected": "^竞技场$",
+        "roi": [
+            0,
+            120,
+            720,
+            930
+        ]
+    },
+    "ResourceCycleHomeShopFeature": {
+        "recognition": "OCR",
+        "expected": "^商店$",
+        "roi": [
+            0,
+            120,
+            720,
+            930
+        ]
+    },
+    "VoyageStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask",
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "VoyageDetailFeature": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "OCR",
+                "expected": "^任务详情$",
+                "roi": [
+                    230,
+                    70,
+                    270,
+                    110
+                ]
+            },
+            {
+                "recognition": "OCR",
+                "expected": "^一键调遣$",
+                "roi": [
+                    100,
+                    945,
+                    245,
+                    120
+                ]
+            },
+            {
+                "recognition": "OCR",
+                "expected": "^派出$",
+                "roi": [
+                    380,
+                    945,
+                    240,
+                    120
+                ]
+            }
+        ]
+    },
+    "VoyageDetailAssign": {
+        "recognition": "And",
+        "all_of": [
+            "VoyageDetailFeature"
+        ],
+        "action": "Click",
+        "target": [
+            225,
+            1010,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "max_hit": 1,
+        "next": [
+            "VoyageDetailDispatch"
+        ],
+        "timeout": 5000,
+        "on_error": [
+            "VoyageStopSafely"
+        ]
+    },
+    "VoyageDetailDispatch": {
+        "recognition": "And",
+        "all_of": [
+            "VoyageDetailFeature"
+        ],
+        "action": "Click",
+        "target": [
+            495,
+            1010,
+            1,
+            1
+        ],
+        "post_delay": 900,
+        "max_hit": 1,
+        "next": [
+            "VoyageCycleFinished"
+        ],
+        "timeout": 5000,
+        "on_error": [
+            "VoyageStopSafely"
+        ]
+    }
+}

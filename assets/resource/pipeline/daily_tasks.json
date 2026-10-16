@@ -1,0 +1,1948 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "DailyInitialClaim": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "DailyPaidPackInitial",
+            "DailyClaimRewardOverlayInitial",
+            "DailySubmitInitial",
+            "DailyInitialDone",
+            "DailyOpenFromHomeInitial",
+            "DailyNavigateHomeInitial"
+        ],
+        "timeout": 12000,
+        "on_error": [
+            "DailyRoutineGoHome"
+        ],
+        "rate_limit": 100
+    },
+    "DailyOpenFromHomeInitial": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "Click",
+        "target": [
+            393,
+            1110,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "DailyInitialClaim"
+        ],
+        "max_hit": 3
+    },
+    "DailyNavigateHomeInitial": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.72,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailyInitialClaim"
+        ],
+        "max_hit": 3
+    },
+    "DailySubmitInitial": {
+        "recognition": "OCR",
+        "roi": [
+            520,
+            360,
+            150,
+            650
+        ],
+        "expected": "^提交$",
+        "order_by": "Vertical",
+        "index": 0,
+        "action": "Click",
+        "post_delay": 700,
+        "next": [
+            "DailyInitialClaim"
+        ],
+        "max_hit": 8
+    },
+    "DailyPaidPackInitial": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantPaidPackTitleFeature",
+            "TaskAssistantPaidPackCloseFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "DailyInitialClaim"
+        ]
+    },
+    "DailyClaimRewardOverlayInitial": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantRewardTitleFeature",
+            "TaskAssistantTapBlankFeature"
+        ],
+        "action": "Click",
+        "target": [
+            573,
+            913,
+            67,
+            53
+        ],
+        "post_delay": 500,
+        "next": [
+            "DailyInitialClaim"
+        ]
+    },
+    "DailyInitialDone": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            90,
+            320,
+            100
+        ],
+        "expected": "^日常$",
+        "action": "StopTask"
+    },
+    "DailySummonDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "DailySummonProgress0",
+            "DailySummonProgress1",
+            "DailySummonProgress2",
+            "DailySummonAlreadyDone",
+            "DailyOpenFromHomeSummon",
+            "DailySummonScrollTasks",
+            "DailyNavigateHomeSummon"
+        ],
+        "timeout": 12000,
+        "rate_limit": 100
+    },
+    "DailyOpenFromHomeSummon": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "Click",
+        "target": [
+            393,
+            1110,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "DailySummonDaily"
+        ]
+    },
+    "DailyNavigateHomeSummon": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.72,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailySummonDaily"
+        ]
+    },
+    "DailySummonScrollTasks": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            90,
+            320,
+            100
+        ],
+        "expected": "^日常$",
+        "action": "Swipe",
+        "begin": [
+            360,
+            960,
+            1,
+            1
+        ],
+        "end": [
+            360,
+            430,
+            1,
+            1
+        ],
+        "duration": 350,
+        "post_delay": 500,
+        "max_hit": 3,
+        "next": [
+            "DailySummonDaily"
+        ]
+    },
+    "DailySummonProgress0": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "DailySummonRow0",
+                "recognition": "OCR",
+                "roi": [
+                    170,
+                    300,
+                    390,
+                    760
+                ],
+                "expected": ".*3次召唤.*"
+            },
+            {
+                "recognition": "OCR",
+                "roi": "DailySummonRow0",
+                "roi_offset": [
+                    55,
+                    20,
+                    160,
+                    90
+                ],
+                "expected": ".*0\\s*/\\s*3.*"
+            },
+            {
+                "recognition": "OCR",
+                "roi": "DailySummonRow0",
+                "roi_offset": [
+                    280,
+                    -20,
+                    160,
+                    120
+                ],
+                "expected": "^前往$"
+            }
+        ],
+        "box_index": 2,
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "DailySummonOnce1"
+        ]
+    },
+    "DailySummonProgress1": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "DailySummonRow1",
+                "recognition": "OCR",
+                "roi": [
+                    170,
+                    300,
+                    390,
+                    760
+                ],
+                "expected": ".*3次召唤.*"
+            },
+            {
+                "recognition": "OCR",
+                "roi": "DailySummonRow1",
+                "roi_offset": [
+                    55,
+                    20,
+                    160,
+                    90
+                ],
+                "expected": ".*1\\s*/\\s*3.*"
+            },
+            {
+                "recognition": "OCR",
+                "roi": "DailySummonRow1",
+                "roi_offset": [
+                    280,
+                    -20,
+                    160,
+                    120
+                ],
+                "expected": "^前往$"
+            }
+        ],
+        "box_index": 2,
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "DailySummonOnce2"
+        ]
+    },
+    "DailySummonProgress2": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "DailySummonRow2",
+                "recognition": "OCR",
+                "roi": [
+                    170,
+                    300,
+                    390,
+                    760
+                ],
+                "expected": ".*3次召唤.*"
+            },
+            {
+                "recognition": "OCR",
+                "roi": "DailySummonRow2",
+                "roi_offset": [
+                    55,
+                    20,
+                    160,
+                    90
+                ],
+                "expected": ".*2\\s*/\\s*3.*"
+            },
+            {
+                "recognition": "OCR",
+                "roi": "DailySummonRow2",
+                "roi_offset": [
+                    280,
+                    -20,
+                    160,
+                    120
+                ],
+                "expected": "^前往$"
+            }
+        ],
+        "box_index": 2,
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "DailySummonOnce3"
+        ]
+    },
+    "DailySummonAlreadyDone": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "DailySummonDoneRow",
+                "recognition": "OCR",
+                "roi": [
+                    170,
+                    300,
+                    390,
+                    760
+                ],
+                "expected": ".*3次召唤.*"
+            },
+            {
+                "recognition": "OCR",
+                "roi": "DailySummonDoneRow",
+                "roi_offset": [
+                    55,
+                    20,
+                    160,
+                    90
+                ],
+                "expected": ".*3\\s*/\\s*3.*"
+            }
+        ],
+        "box_index": 1,
+        "action": "StopTask"
+    },
+    "DailySummonTaskFeature": {
+        "recognition": "OCR",
+        "roi": [
+            230,
+            390,
+            290,
+            110
+        ],
+        "expected": ".*3次召唤.*"
+    },
+    "DailyProgress0of3Feature": {
+        "recognition": "OCR",
+        "roi": [
+            240,
+            450,
+            230,
+            70
+        ],
+        "expected": ".*0\\s*/\\s*3.*"
+    },
+    "DailyProgress1of3Feature": {
+        "recognition": "OCR",
+        "roi": [
+            240,
+            450,
+            230,
+            70
+        ],
+        "expected": ".*1\\s*/\\s*3.*"
+    },
+    "DailyProgress2of3Feature": {
+        "recognition": "OCR",
+        "roi": [
+            240,
+            450,
+            230,
+            70
+        ],
+        "expected": ".*2\\s*/\\s*3.*"
+    },
+    "DailyProgress3of3Feature": {
+        "recognition": "OCR",
+        "roi": [
+            240,
+            450,
+            230,
+            70
+        ],
+        "expected": ".*3\\s*/\\s*3.*"
+    },
+    "DailyFirstGoButtonFeature": {
+        "recognition": "OCR",
+        "roi": [
+            520,
+            430,
+            150,
+            110
+        ],
+        "expected": "^前往$"
+    },
+    "DailySummonOnce1": {
+        "recognition": "OCR",
+        "roi": [
+            70,
+            780,
+            300,
+            130
+        ],
+        "expected": ".*招募1次.*",
+        "action": "Click",
+        "target": [
+            200,
+            847,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "DailySummonHeroDetail1",
+            "DailySummonConfirm1",
+            "DailySummonBlank1"
+        ],
+        "timeout": 15000
+    },
+    "DailySummonConfirm1": {
+        "recognition": "OCR",
+        "roi": [
+            430,
+            840,
+            250,
+            130
+        ],
+        "expected": "^确定$",
+        "action": "Click",
+        "target": [
+            560,
+            913,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailySummonOnce2"
+        ]
+    },
+    "DailySummonBlank1": {
+        "recognition": "TemplateMatch",
+        "template": "daily/tap_blank_to_close.png",
+        "threshold": 0.72,
+        "roi": [
+            133,
+            767,
+            467,
+            233
+        ],
+        "action": "Click",
+        "target": [
+            560,
+            913,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailySummonOnce2"
+        ]
+    },
+    "DailySummonHeroDetail1": {
+        "recognition": "OCR",
+        "roi": [
+            120,
+            1110,
+            500,
+            130
+        ],
+        "expected": ".*(点击空白处|关闭界面).*",
+        "action": "Click",
+        "target": [
+            360,
+            1030,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "DailySummonOnce2"
+        ]
+    },
+    "DailySummonOnce2": {
+        "recognition": "OCR",
+        "roi": [
+            70,
+            780,
+            300,
+            130
+        ],
+        "expected": ".*招募1次.*",
+        "action": "Click",
+        "target": [
+            200,
+            847,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "DailySummonHeroDetail2",
+            "DailySummonConfirm2",
+            "DailySummonBlank2"
+        ],
+        "timeout": 15000
+    },
+    "DailySummonConfirm2": {
+        "recognition": "OCR",
+        "roi": [
+            430,
+            840,
+            250,
+            130
+        ],
+        "expected": "^确定$",
+        "action": "Click",
+        "target": [
+            560,
+            913,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailySummonOnce3"
+        ]
+    },
+    "DailySummonBlank2": {
+        "recognition": "TemplateMatch",
+        "template": "daily/tap_blank_to_close.png",
+        "threshold": 0.72,
+        "roi": [
+            133,
+            767,
+            467,
+            233
+        ],
+        "action": "Click",
+        "target": [
+            560,
+            913,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailySummonOnce3"
+        ]
+    },
+    "DailySummonHeroDetail2": {
+        "recognition": "OCR",
+        "roi": [
+            120,
+            1110,
+            500,
+            130
+        ],
+        "expected": ".*(点击空白处|关闭界面).*",
+        "action": "Click",
+        "target": [
+            360,
+            1030,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "DailySummonOnce3"
+        ]
+    },
+    "DailySummonOnce3": {
+        "recognition": "OCR",
+        "roi": [
+            70,
+            780,
+            300,
+            130
+        ],
+        "expected": ".*招募1次.*",
+        "action": "Click",
+        "target": [
+            200,
+            847,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "DailySummonHeroDetail3",
+            "DailySummonConfirm3",
+            "DailySummonBlank3"
+        ],
+        "timeout": 15000
+    },
+    "DailySummonConfirm3": {
+        "recognition": "OCR",
+        "roi": [
+            430,
+            840,
+            250,
+            130
+        ],
+        "expected": "^确定$",
+        "action": "Click",
+        "target": [
+            560,
+            913,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailyRoutineGoHome"
+        ]
+    },
+    "DailySummonBlank3": {
+        "recognition": "TemplateMatch",
+        "template": "daily/tap_blank_to_close.png",
+        "threshold": 0.72,
+        "roi": [
+            133,
+            767,
+            467,
+            233
+        ],
+        "action": "Click",
+        "target": [
+            560,
+            913,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailyRoutineGoHome"
+        ]
+    },
+    "DailySummonHeroDetail3": {
+        "recognition": "OCR",
+        "roi": [
+            120,
+            1110,
+            500,
+            130
+        ],
+        "expected": ".*(点击空白处|关闭界面).*",
+        "action": "Click",
+        "target": [
+            360,
+            1030,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "DailyRoutineGoHome"
+        ]
+    },
+    "DailyArenaDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "DailyArenaProgress0",
+            "DailyArenaProgress1",
+            "DailyArenaProgress2",
+            "DailyArenaAlreadyDone",
+            "DailyOpenFromHomeArena",
+            "DailyArenaScrollTasks",
+            "DailyNavigateHomeArena"
+        ],
+        "timeout": 12000,
+        "rate_limit": 100
+    },
+    "DailyOpenFromHomeArena": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "Click",
+        "target": [
+            393,
+            1110,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "DailyArenaDaily"
+        ]
+    },
+    "DailyNavigateHomeArena": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.72,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailyArenaDaily"
+        ]
+    },
+    "DailyArenaScrollTasks": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            90,
+            320,
+            100
+        ],
+        "expected": "^日常$",
+        "action": "Swipe",
+        "begin": [
+            360,
+            960,
+            1,
+            1
+        ],
+        "end": [
+            360,
+            430,
+            1,
+            1
+        ],
+        "duration": 350,
+        "post_delay": 500,
+        "max_hit": 3,
+        "next": [
+            "DailyArenaDaily"
+        ]
+    },
+    "DailyArenaTaskFeature": {
+        "recognition": "OCR",
+        "roi": [
+            230,
+            390,
+            300,
+            110
+        ],
+        "expected": ".*3次竞技场挑战.*"
+    },
+    "DailyArenaProgress0": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "DailyArenaRow0",
+                "recognition": "OCR",
+                "roi": [
+                    170,
+                    300,
+                    390,
+                    760
+                ],
+                "expected": ".*3次竞技场挑战.*"
+            },
+            {
+                "recognition": "OCR",
+                "roi": "DailyArenaRow0",
+                "roi_offset": [
+                    55,
+                    20,
+                    160,
+                    90
+                ],
+                "expected": ".*0\\s*/\\s*3.*"
+            },
+            {
+                "recognition": "OCR",
+                "roi": "DailyArenaRow0",
+                "roi_offset": [
+                    280,
+                    -20,
+                    160,
+                    120
+                ],
+                "expected": "^前往$"
+            }
+        ],
+        "box_index": 2,
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "DailyArenaEnsureSkip1",
+            "DailyArenaCheckSkip1"
+        ]
+    },
+    "DailyArenaProgress1": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "DailyArenaRow1",
+                "recognition": "OCR",
+                "roi": [
+                    170,
+                    300,
+                    390,
+                    760
+                ],
+                "expected": ".*3次竞技场挑战.*"
+            },
+            {
+                "recognition": "OCR",
+                "roi": "DailyArenaRow1",
+                "roi_offset": [
+                    55,
+                    20,
+                    160,
+                    90
+                ],
+                "expected": ".*1\\s*/\\s*3.*"
+            },
+            {
+                "recognition": "OCR",
+                "roi": "DailyArenaRow1",
+                "roi_offset": [
+                    280,
+                    -20,
+                    160,
+                    120
+                ],
+                "expected": "^前往$"
+            }
+        ],
+        "box_index": 2,
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "DailyArenaEnsureSkip2",
+            "DailyArenaCheckSkip2"
+        ]
+    },
+    "DailyArenaProgress2": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "DailyArenaRow2",
+                "recognition": "OCR",
+                "roi": [
+                    170,
+                    300,
+                    390,
+                    760
+                ],
+                "expected": ".*3次竞技场挑战.*"
+            },
+            {
+                "recognition": "OCR",
+                "roi": "DailyArenaRow2",
+                "roi_offset": [
+                    55,
+                    20,
+                    160,
+                    90
+                ],
+                "expected": ".*2\\s*/\\s*3.*"
+            },
+            {
+                "recognition": "OCR",
+                "roi": "DailyArenaRow2",
+                "roi_offset": [
+                    280,
+                    -20,
+                    160,
+                    120
+                ],
+                "expected": "^前往$"
+            }
+        ],
+        "box_index": 2,
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "DailyArenaEnsureSkip3",
+            "DailyArenaCheckSkip3"
+        ]
+    },
+    "DailyArenaAlreadyDone": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "sub_name": "DailyArenaDoneRow",
+                "recognition": "OCR",
+                "roi": [
+                    170,
+                    300,
+                    390,
+                    760
+                ],
+                "expected": ".*3次竞技场挑战.*"
+            },
+            {
+                "recognition": "OCR",
+                "roi": "DailyArenaDoneRow",
+                "roi_offset": [
+                    55,
+                    20,
+                    160,
+                    90
+                ],
+                "expected": ".*3\\s*/\\s*3.*"
+            }
+        ],
+        "box_index": 1,
+        "action": "StopTask"
+    },
+    "DailyArenaEnsureSkip1": {
+        "recognition": "TemplateMatch",
+        "template": "daily_task/arena_skip_checked.png",
+        "threshold": 0.76,
+        "roi": [
+            505,
+            700,
+            60,
+            60
+        ],
+        "action": "DoNothing",
+        "next": [
+            "DailyArenaChallenge1"
+        ]
+    },
+    "DailyArenaCheckSkip1": {
+        "recognition": "TemplateMatch",
+        "template": "daily_task/arena_skip_unchecked.png",
+        "threshold": 0.76,
+        "roi": [
+            505,
+            700,
+            60,
+            60
+        ],
+        "action": "Click",
+        "target": [
+            533,
+            730,
+            1,
+            1
+        ],
+        "post_delay": 300,
+        "next": [
+            "DailyArenaChallenge1"
+        ]
+    },
+    "DailyArenaChallenge1": {
+        "recognition": "OCR",
+        "roi": [
+            500,
+            330,
+            170,
+            400
+        ],
+        "expected": "^免费挑战$",
+        "order_by": "Vertical",
+        "index": 1,
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "DailyArenaFormation1",
+            "DailyArenaResult1"
+        ],
+        "timeout": 10000
+    },
+    "DailyArenaFormation1": {
+        "recognition": "And",
+        "all_of": [
+            "EndlessTrialFormationTitleFeature",
+            "EndlessTrialFormationBattleFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "target": [
+            360,
+            1130,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "DailyArenaBattle1",
+            "DailyArenaResult1"
+        ]
+    },
+    "DailyArenaBattle1": {
+        "recognition": "OCR",
+        "roi": [
+            620,
+            400,
+            100,
+            130
+        ],
+        "expected": "^跳过$",
+        "action": "Click",
+        "post_delay": 1000,
+        "next": [
+            "DailyArenaResult1"
+        ]
+    },
+    "DailyArenaResult1": {
+        "recognition": "OCR",
+        "roi": [
+            120,
+            250,
+            480,
+            220
+        ],
+        "expected": ".*挑战(成功|失败).*",
+        "action": "Click",
+        "target": [
+            513,
+            903,
+            1,
+            1
+        ],
+        "post_delay": 600,
+        "next": [
+            "DailyArenaEnsureSkip2",
+            "DailyArenaCheckSkip2"
+        ]
+    },
+    "DailyArenaEnsureSkip2": {
+        "recognition": "TemplateMatch",
+        "template": "daily_task/arena_skip_checked.png",
+        "threshold": 0.76,
+        "roi": [
+            505,
+            700,
+            60,
+            60
+        ],
+        "action": "DoNothing",
+        "next": [
+            "DailyArenaChallenge2"
+        ]
+    },
+    "DailyArenaCheckSkip2": {
+        "recognition": "TemplateMatch",
+        "template": "daily_task/arena_skip_unchecked.png",
+        "threshold": 0.76,
+        "roi": [
+            505,
+            700,
+            60,
+            60
+        ],
+        "action": "Click",
+        "target": [
+            533,
+            730,
+            1,
+            1
+        ],
+        "post_delay": 300,
+        "next": [
+            "DailyArenaChallenge2"
+        ]
+    },
+    "DailyArenaChallenge2": {
+        "recognition": "OCR",
+        "roi": [
+            500,
+            330,
+            170,
+            400
+        ],
+        "expected": "^免费挑战$",
+        "order_by": "Vertical",
+        "index": 1,
+        "action": "Click",
+        "post_delay": 700,
+        "next": [
+            "DailyArenaResult2"
+        ]
+    },
+    "DailyArenaResult2": {
+        "recognition": "OCR",
+        "roi": [
+            120,
+            250,
+            480,
+            220
+        ],
+        "expected": ".*挑战(成功|失败).*",
+        "action": "Click",
+        "target": [
+            513,
+            903,
+            1,
+            1
+        ],
+        "post_delay": 600,
+        "next": [
+            "DailyArenaEnsureSkip3",
+            "DailyArenaCheckSkip3"
+        ]
+    },
+    "DailyArenaEnsureSkip3": {
+        "recognition": "TemplateMatch",
+        "template": "daily_task/arena_skip_checked.png",
+        "threshold": 0.76,
+        "roi": [
+            505,
+            700,
+            60,
+            60
+        ],
+        "action": "DoNothing",
+        "next": [
+            "DailyArenaChallenge3"
+        ]
+    },
+    "DailyArenaCheckSkip3": {
+        "recognition": "TemplateMatch",
+        "template": "daily_task/arena_skip_unchecked.png",
+        "threshold": 0.76,
+        "roi": [
+            505,
+            700,
+            60,
+            60
+        ],
+        "action": "Click",
+        "target": [
+            533,
+            730,
+            1,
+            1
+        ],
+        "post_delay": 300,
+        "next": [
+            "DailyArenaChallenge3"
+        ]
+    },
+    "DailyArenaChallenge3": {
+        "recognition": "OCR",
+        "roi": [
+            500,
+            330,
+            170,
+            400
+        ],
+        "expected": "^免费挑战$",
+        "order_by": "Vertical",
+        "index": 1,
+        "action": "Click",
+        "post_delay": 700,
+        "next": [
+            "DailyArenaResult3"
+        ]
+    },
+    "DailyArenaResult3": {
+        "recognition": "OCR",
+        "roi": [
+            120,
+            250,
+            480,
+            220
+        ],
+        "expected": ".*挑战(成功|失败).*",
+        "action": "Click",
+        "target": [
+            513,
+            903,
+            1,
+            1
+        ],
+        "post_delay": 600,
+        "next": [
+            "DailyRoutineGoHome"
+        ]
+    },
+    "DailyShopRefreshDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "DailyShopPageReady",
+            "DailyShopLeaveDailyForDirect",
+            "DailyShopOpenDirectFromHome",
+            "DailyShopFindHomeEntry"
+        ],
+        "timeout": 12000,
+        "on_error": [
+            "DailyShopStopSafely"
+        ],
+        "rate_limit": 100
+    },
+    "DailyOpenFromHomeShop": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "Click",
+        "target": [
+            393,
+            1110,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "DailyShopRefreshDaily"
+        ]
+    },
+    "DailyShopLeaveDailyForDirect": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            90,
+            320,
+            100
+        ],
+        "expected": "^日常$",
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "max_hit": 1,
+        "next": [
+            "DailyShopRefreshDaily"
+        ]
+    },
+    "DailyShopOpenDirectFromHome": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            620,
+            650,
+            250
+        ],
+        "expected": "^精灵商店$",
+        "action": "Click",
+        "post_delay": 900,
+        "max_hit": 3,
+        "next": [
+            "DailyShopPageReady",
+            "DailyShopOpenDirectFromHome"
+        ],
+        "target": true
+    },
+    "DailyNavigateHomeShop": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.72,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailyShopRefreshDaily"
+        ]
+    },
+    "DailyProgress0of2Feature": {
+        "recognition": "OCR",
+        "roi": [
+            240,
+            450,
+            230,
+            70
+        ],
+        "expected": ".*0\\s*/\\s*2.*"
+    },
+    "DailyProgress1of2Feature": {
+        "recognition": "OCR",
+        "roi": [
+            240,
+            450,
+            230,
+            70
+        ],
+        "expected": ".*1\\s*/\\s*2.*"
+    },
+    "DailyProgress2of2Feature": {
+        "recognition": "OCR",
+        "roi": [
+            240,
+            450,
+            230,
+            70
+        ],
+        "expected": ".*2\\s*/\\s*2.*"
+    },
+    "DailyShopRefresh1": {
+        "recognition": "OCR",
+        "roi": [
+            480,
+            990,
+            200,
+            100
+        ],
+        "expected": ".*刷新\\([0-9]+/[0-9]+\\).*",
+        "action": "Click",
+        "target": [
+            580,
+            1040,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailyShopPageReady"
+        ]
+    },
+    "DailyShopStoreCycleDone": {
+        "recognition": "OCR",
+        "roi": [
+            20,
+            0,
+            260,
+            100
+        ],
+        "expected": "^精灵商店$",
+        "action": "Click",
+        "target": [
+            65,
+            1130,
+            1,
+            1
+        ],
+        "post_delay": 800,
+        "next": [
+            "DailyRoutineHomeReached"
+        ]
+    },
+    "DailyShopStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask"
+    },
+    "DailyRoutineGoHome": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "DailyRoutineHomeReached",
+            "DailyRoutineVisibleBack",
+            "DailyRoutineHomeNav"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000
+    },
+    "DailyRoutineHomeNav": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.72,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 800,
+        "next": [
+            "DailyRoutineHomeReached",
+            "DailyRoutineVisibleBack",
+            "DailyRoutineHomeNav"
+        ],
+        "max_hit": 4,
+        "timeout": 8000
+    },
+    "DailyRoutineVisibleBack": {
+        "recognition": "TemplateMatch",
+        "template": "common/visible_back_button.png",
+        "threshold": 0.78,
+        "roi": [
+            0,
+            1133,
+            180,
+            147
+        ],
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "DailyRoutineHomeReached",
+            "DailyRoutineVisibleBack",
+            "DailyRoutineHomeNav"
+        ],
+        "max_hit": 4,
+        "timeout": 8000
+    },
+    "DailyRoutineHomeReached": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "StopTask"
+    },
+    "DailyFinalClaim": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "DailyPaidPackFinal",
+            "DailyClaimRewardOverlayFinal",
+            "DailyRewardConfirmFinal",
+            "DailySubmitFinal",
+            "DailyInitialDone",
+            "DailyOpenFromHomeFinal",
+            "DailyReturnSelectedSubpageFinal",
+            "DailyNavigateHomeFinal"
+        ],
+        "timeout": 15000,
+        "rate_limit": 100,
+        "on_error": [
+            "DailyFinalStopSafely"
+        ]
+    },
+    "DailyOpenFromHomeFinal": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "Click",
+        "target": [
+            393,
+            1110,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "DailyFinalClaim"
+        ],
+        "max_hit": 3
+    },
+    "DailyReturnSelectedSubpageFinal": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature"
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailyFinalClaim"
+        ],
+        "max_hit": 3
+    },
+    "DailyNavigateHomeFinal": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.72,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailyFinalClaim"
+        ],
+        "max_hit": 3
+    },
+    "DailySubmitFinal": {
+        "recognition": "OCR",
+        "roi": [
+            520,
+            360,
+            150,
+            650
+        ],
+        "expected": "^提交$",
+        "order_by": "Vertical",
+        "index": 0,
+        "action": "Click",
+        "post_delay": 700,
+        "next": [
+            "DailyFinalClaim"
+        ],
+        "max_hit": 8
+    },
+    "DailyPaidPackFinal": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantPaidPackTitleFeature",
+            "TaskAssistantPaidPackCloseFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "DailyFinalClaim"
+        ]
+    },
+    "DailyClaimRewardOverlayFinal": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantRewardTitleFeature",
+            "TaskAssistantTapBlankFeature"
+        ],
+        "action": "Click",
+        "target": [
+            573,
+            913,
+            67,
+            53
+        ],
+        "post_delay": 500,
+        "next": [
+            "DailyFinalClaim"
+        ]
+    },
+    "DailyRewardConfirmFinal": {
+        "recognition": "OCR",
+        "roi": [
+            260,
+            500,
+            250,
+            300
+        ],
+        "expected": "^(确定|奖励)$",
+        "action": "Click",
+        "target": [
+            360,
+            753,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "DailyFinalClaim"
+        ]
+    },
+    "DailyChest25": {
+        "recognition": "TemplateMatch",
+        "template": "daily_task/chest_25_claimable.png",
+        "threshold": 0.76,
+        "roi": [
+            200,
+            270,
+            100,
+            90
+        ],
+        "action": "Click",
+        "target": [
+            247,
+            313,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailyFinalClaim"
+        ],
+        "max_hit": 1
+    },
+    "DailyChest50": {
+        "recognition": "TemplateMatch",
+        "template": "daily_task/chest_50_claimable.png",
+        "threshold": 0.76,
+        "roi": [
+            330,
+            270,
+            100,
+            90
+        ],
+        "action": "Click",
+        "target": [
+            377,
+            313,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailyFinalClaim"
+        ],
+        "max_hit": 1
+    },
+    "DailyChest75": {
+        "recognition": "TemplateMatch",
+        "template": "daily_task/chest_75_claimable.png",
+        "threshold": 0.76,
+        "roi": [
+            460,
+            270,
+            100,
+            90
+        ],
+        "action": "Click",
+        "target": [
+            507,
+            313,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailyFinalClaim"
+        ],
+        "max_hit": 1
+    },
+    "DailyActivity100Feature": {
+        "recognition": "OCR",
+        "roi": [
+            45,
+            315,
+            100,
+            55
+        ],
+        "expected": ".*1[0-9]{2}\\s*/\\s*100.*"
+    },
+    "DailyChest100TemplateFeature": {
+        "recognition": "TemplateMatch",
+        "template": "daily_task/chest_100_claimable.png",
+        "threshold": 0.76,
+        "roi": [
+            590,
+            260,
+            100,
+            100
+        ]
+    },
+    "DailyChest100": {
+        "recognition": "And",
+        "all_of": [
+            "DailyChest100TemplateFeature",
+            "DailyActivity100Feature"
+        ],
+        "box_index": 0,
+        "action": "Click",
+        "target": [
+            643,
+            313,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "DailyFinalClaim"
+        ],
+        "max_hit": 1
+    },
+    "DailyChestsOpened": {
+        "recognition": "And",
+        "all_of": [
+            "DailyAllChestsOpenedFeature",
+            "DailyChest100OpenedFeature",
+            "DailyActivity100Feature"
+        ],
+        "action": "StopTask",
+        "timeout": 5000
+    },
+    "DailyFinalStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask"
+    },
+    "DailyShopPageReady": {
+        "recognition": "OCR",
+        "expected": "^精灵商店$",
+        "roi": [
+            20,
+            0,
+            260,
+            100
+        ],
+        "action": "StopTask",
+        "timeout": 5000,
+        "rate_limit": 100
+    },
+    "DailyShopFreeRefreshScan": {
+        "recognition": "OCR",
+        "expected": "刷新",
+        "roi": [
+            480,
+            990,
+            200,
+            100
+        ],
+        "action": "StopTask",
+        "timeout": 5000,
+        "rate_limit": 100
+    },
+    "DailyActivityScan": {
+        "recognition": "OCR",
+        "expected": "[0-9]+\\s*/\\s*100",
+        "roi": [
+            30,
+            300,
+            145,
+            85
+        ],
+        "action": "StopTask",
+        "timeout": 5000,
+        "rate_limit": 100
+    },
+    "DailyShopPriceScan": {
+        "recognition": "OCR",
+        "roi": [
+            65,
+            600,
+            585,
+            400
+        ],
+        "action": "StopTask"
+    },
+    "DailyShopPurchasedFeature": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "daily_task/shop_purchased.png",
+            "daily_task/shop_purchased_current.png",
+            "daily_task/shop_purchased_stone.png"
+        ],
+        "threshold": [
+            0.85,
+            0.85,
+            0.85
+        ]
+    },
+    "DailyShopGoldFeature": {
+        "recognition": "TemplateMatch",
+        "template": "daily_task/shop_gold.png",
+        "threshold": 0.85
+    },
+    "DailyShopInspectItem": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            145,
+            530,
+            1,
+            1
+        ],
+        "post_delay": 300,
+        "next": [
+            "DailyShopItemNameScan"
+        ]
+    },
+    "DailyShopItemNameScan": {
+        "recognition": "OCR",
+        "roi": [
+            290,
+            440,
+            330,
+            70
+        ],
+        "expected": ".+",
+        "action": "StopTask",
+        "timeout": 3000
+    },
+    "DailyShopCloseItem": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            640,
+            715,
+            1,
+            1
+        ],
+        "post_delay": 300,
+        "next": [
+            "DailyShopPageReady"
+        ]
+    },
+    "DailyShopBuyGold": {
+        "recognition": "And",
+        "all_of": [
+            "DailyShopGoldFeature"
+        ],
+        "action": "Click",
+        "target": [
+            145,
+            645,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "DailyShopConfirmPurchase",
+            "DailyShopPurchaseVerified"
+        ],
+        "timeout": 3000
+    },
+    "DailyShopConfirmPurchase": {
+        "recognition": "OCR",
+        "roi": [
+            420,
+            680,
+            220,
+            130
+        ],
+        "expected": "^确定$",
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "DailyShopPurchaseVerified"
+        ],
+        "max_hit": 1
+    },
+    "DailyShopPurchaseVerified": {
+        "recognition": "TemplateMatch",
+        "template": [
+            "daily_task/shop_purchased.png",
+            "daily_task/shop_purchased_current.png",
+            "daily_task/shop_purchased_stone.png"
+        ],
+        "threshold": [
+            0.85,
+            0.85,
+            0.85
+        ],
+        "action": "StopTask",
+        "timeout": 3000
+    },
+    "DailyAllChestsOpenedFeature": {
+        "recognition": "TemplateMatch",
+        "template": "daily_task/chests_opened.png",
+        "threshold": 0.78,
+        "roi": [
+            190,
+            270,
+            500,
+            90
+        ]
+    },
+    "DailyChest100OpenedFeature": {
+        "recognition": "TemplateMatch",
+        "template": "daily_task/chest_100_opened.png",
+        "threshold": 0.85,
+        "roi": [
+            590,
+            260,
+            110,
+            110
+        ]
+    },
+    "DailyShopFindHomeEntry": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "Swipe",
+        "begin": [
+            120,
+            650,
+            1,
+            1
+        ],
+        "end": [
+            620,
+            650,
+            1,
+            1
+        ],
+        "duration": 500,
+        "post_delay": 700,
+        "max_hit": 3,
+        "next": [
+            "DailyShopOpenDirectFromHome",
+            "DailyShopFindHomeEntry"
+        ],
+        "timeout": 6000,
+        "on_error": [
+            "DailyShopStopSafely"
+        ]
+    }
+}

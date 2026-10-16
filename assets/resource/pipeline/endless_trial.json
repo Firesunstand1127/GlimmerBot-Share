@@ -1,0 +1,627 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "EndlessTrialDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "EndlessTrialCompletedConfirmPopup",
+            "EndlessTrialCompleted",
+            "EndlessTrialBattleActive",
+            "EndlessTrialBuffSelection",
+            "EndlessTrialFormationReady",
+            "EndlessTrialElementPageReady",
+            "EndlessTrialOpenFromDoor",
+            "EndlessTrialCloseVoyage",
+            "EndlessTrialNavigateHome",
+            "EndlessTrialEnterTrainingFromHomeSelected",
+            "EndlessTrialEnterTrainingFromHome",
+            "EndlessTrialClickBack"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "EndlessTrialEnterTrainingFromHomeSelected": {
+        "recognition": "And",
+        "all_of": ["HomeReadyMainCitySelectedFeature", "HomeReadyBackpackNavFeature", "HomeReadyTrainingNavFeature", "HomeReadyCityContentFeature"],
+        "action": "Click",
+        "target": [
+            475,
+            1210,
+            1,
+            1
+        ],
+        "post_delay": 100,
+        "next": [
+            "EndlessTrialOpenFromDoor",
+            "EndlessTrialEnterTrainingFromHomeSelected"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "EndlessTrialCloseVoyage": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/merchant_title.png",
+        "threshold": 0.8,
+        "roi": [
+            167,
+            100,
+            433,
+            173
+        ],
+        "action": "Click",
+        "target": [
+            667,
+            1100,
+            47,
+            60
+        ],
+        "post_delay": 100,
+        "next": [
+            "EndlessTrialNavigateHome"
+        ],
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "EndlessTrialNavigateHome": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.55,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 300,
+        "next": [
+            "EndlessTrialEnterTrainingFromHomeSelected",
+            "EndlessTrialEnterTrainingFromHome",
+            "EndlessTrialNavigateHome"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "EndlessTrialClickBack": {
+        "recognition": "DirectHit",
+        "action": "ClickKey",
+        "key": 4,
+        "max_hit": 2,
+        "post_delay": 300,
+        "next": [
+            "EndlessTrialEnterTrainingFromHomeSelected",
+            "EndlessTrialEnterTrainingFromHome",
+            "EndlessTrialNavigateHome",
+            "EndlessTrialClickBack"
+        ],
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "EndlessTrialEnterTrainingFromHome": {
+        "recognition": "TemplateMatch",
+        "template": "trial/training_entry.png",
+        "threshold": 0.7,
+        "roi": [
+            400,
+            1133,
+            167,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            475,
+            1210,
+            1,
+            1
+        ],
+        "post_delay": 100,
+        "next": [
+            "EndlessTrialOpenFromDoor",
+            "EndlessTrialEnterTrainingFromHome"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "EndlessTrialOpenFromDoor": {
+        "recognition": "And",
+        "all_of": [
+            "EndlessTrialDoorTitleFeature",
+            "EndlessTrialEntryFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "target": [
+            550,
+            485,
+            1,
+            1
+        ],
+        "post_delay": 100,
+        "next": [
+            "EndlessTrialCompletedConfirmPopup",
+            "EndlessTrialCompleted",
+            "EndlessTrialBattleActive",
+            "EndlessTrialBuffSelection",
+            "EndlessTrialFormationReady",
+            "EndlessTrialElementPageReady",
+            "EndlessTrialSelectRightTab"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "EndlessTrialSelectRightTab": {
+        "recognition": "And",
+        "all_of": [
+            "EndlessTrialTitleFeature",
+            "EndlessTrialStartChallengeOcrFeature"
+        ],
+        "action": "Click",
+        "target": [
+            420,
+            90,
+            140,
+            75
+        ],
+        "post_delay": 100,
+        "next": [
+            "EndlessTrialCompletedConfirmPopup",
+            "EndlessTrialCompleted",
+            "EndlessTrialElementPageReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "EndlessTrialElementPageReady": {
+        "recognition": "And",
+        "all_of": [
+            "EndlessTrialTitleFeature",
+            "EndlessTrialRightTabSelectedFeature",
+            "EndlessTrialStartChallengeOcrFeature"
+        ],
+        "box_index": 2,
+        "action": "Click",
+        "target": [
+            300,
+            1000,
+            120,
+            60
+        ],
+        "post_delay": 100,
+        "next": [
+            "EndlessTrialCompletedConfirmPopup",
+            "EndlessTrialCompleted",
+            "EndlessTrialFormationReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "EndlessTrialFormationReady": {
+        "recognition": "And",
+        "all_of": [
+            "EndlessTrialFormationTitleFeature",
+            "EndlessTrialFormationBattleFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "target": [
+            360,
+            1130,
+            1,
+            1
+        ],
+        "post_delay": 300,
+        "next": [
+            "EndlessTrialBuffSelection",
+            "EndlessTrialBattleActive",
+            "EndlessTrialFormationReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "EndlessTrialBattleActive": {
+        "recognition": "And",
+        "all_of": [
+            "EndlessTrialBattleRoundFeature",
+            "EndlessTrialBattleHomeFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 1000,
+        "next": [
+            "EndlessTrialBattleEndedAtHome",
+            "EndlessTrialReturnTraining",
+            "EndlessTrialBattleActive"
+        ],
+        "max_hit": 90,
+        "rate_limit": 100,
+        "timeout": 90000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "EndlessTrialBuffSelection": {
+        "recognition": "And",
+        "all_of": [
+            "EndlessTrialBuffTitleFeature",
+            "EndlessTrialBuffFirstChoiceFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "target": [
+            510,
+            565,
+            80,
+            35
+        ],
+        "post_delay": 100,
+        "next": [
+            "EndlessTrialBattleActive"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "EndlessTrialReturnHome": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.78,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 800,
+        "next": [
+            "EndlessTrialReturnTraining",
+            "EndlessTrialReturnHome"
+        ],
+        "max_hit": 5,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "EndlessTrialReturnTraining": {
+        "recognition": "TemplateMatch",
+        "template": "trial/training_entry.png",
+        "threshold": 0.64,
+        "roi": [
+            400,
+            1133,
+            167,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            475,
+            1210,
+            1,
+            1
+        ],
+        "post_delay": 100,
+        "next": [
+            "EndlessTrialFinished",
+            "EndlessTrialReturnTraining"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "EndlessTrialCompletedConfirmPopup": {
+        "recognition": "OCR",
+        "roi": [
+            70,
+            530,
+            590,
+            160
+        ],
+        "expected": ".*本日已不可获得通关累计奖励.*",
+        "action": "Click",
+        "target": [
+            185,
+            755,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "EndlessTrialCompleted"
+        ],
+        "rate_limit": 100,
+        "timeout": 6000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ]
+    },
+    "EndlessTrialBattleEndedAtHome": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature"
+        ],
+        "action": "Click",
+        "target": [475, 1210, 1, 1],
+        "post_delay": 600,
+        "next": [
+            "EndlessTrialFinished",
+            "EndlessTrialBattleEndedAtHome"
+        ],
+        "max_hit": 4,
+        "rate_limit": 150,
+        "timeout": 10000,
+        "on_error": ["EndlessTrialStopSafely"]
+    },
+    "EndlessTrialCompleted": {
+        "recognition": "And",
+        "all_of": [
+            "EndlessTrialTitleFeature",
+            "EndlessTrialDailyRewardsCompletedFeature"
+        ],
+        "action": "Click",
+        "target": [
+            75,
+            1140,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "EndlessTrialFinished"
+        ],
+        "rate_limit": 100,
+        "timeout": 90000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ]
+    },
+    "EndlessTrialFinished": {
+        "recognition": "And",
+        "all_of": [
+            "EndlessTrialDoorTitleFeature",
+            "EndlessTrialEntryFeature"
+        ],
+        "action": "StopTask",
+        "rate_limit": 250,
+        "timeout": 8000,
+        "on_error": [
+            "EndlessTrialStopSafely"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "EndlessTrialDoorTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "trial/trial_door_title.png",
+        "threshold": 0.78,
+        "roi": [
+            200,
+            100,
+            320,
+            147
+        ]
+    },
+    "EndlessTrialEntryFeature": {
+        "recognition": "TemplateMatch",
+        "template": "trial/endless_entry.png",
+        "threshold": 0.78,
+        "roi": [
+            433,
+            400,
+            267,
+            167
+        ]
+    },
+    "EndlessTrialTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "trial/endless_title.png",
+        "threshold": 0.78,
+        "roi": [
+            0,
+            0,
+            267,
+            100
+        ]
+    },
+    "EndlessTrialRightTabSelectedFeature": {
+        "recognition": "TemplateMatch",
+        "template": "trial/right_tab_selected.png",
+        "threshold": 0.74,
+        "roi": [
+            500,
+            80,
+            100,
+            100
+        ]
+    },
+    "EndlessTrialStartChallengeFeature": {
+        "recognition": "TemplateMatch",
+        "template": "trial/start_challenge.png",
+        "threshold": 0.78,
+        "roi": [
+            233,
+            933,
+            267,
+            200
+        ]
+    },
+    "EndlessTrialStartChallengeOcrFeature": {
+        "recognition": "OCR",
+        "roi": [
+            230,
+            930,
+            270,
+            170
+        ],
+        "expected": "^(开始挑战|重新开始)$"
+    },
+    "EndlessTrialDailyRewardsCompletedFeature": {
+        "recognition": "OCR",
+        "roi": [
+            245,
+            900,
+            470,
+            170
+        ],
+        "expected": ".*已获所有日常结算奖励.*"
+    },
+    "EndlessTrialFormationTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "trial/formation_title.png",
+        "threshold": 0.78,
+        "roi": [
+            167,
+            53,
+            400,
+            133
+        ]
+    },
+    "EndlessTrialFormationBattleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "trial/formation_battle.png",
+        "threshold": 0.78,
+        "roi": [
+            233,
+            1033,
+            267,
+            167
+        ]
+    },
+    "EndlessTrialBuffTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "trial/buff_title.png",
+        "threshold": 0.78,
+        "roi": [
+            167,
+            133,
+            400,
+            167
+        ]
+    },
+    "EndlessTrialBuffFirstChoiceFeature": {
+        "recognition": "TemplateMatch",
+        "template": "trial/buff_first_choice.png",
+        "threshold": 0.78,
+        "roi": [
+            400,
+            500,
+            267,
+            167
+        ]
+    },
+    "EndlessTrialHomeFeature": {
+        "recognition": "And",
+        "all_of": ["HomeReadyMainCitySelectedFeature", "HomeReadyBackpackNavFeature", "HomeReadyTrainingNavFeature", "HomeReadyCityContentFeature"]
+    },
+    "EndlessTrialBattleRoundFeature": {
+        "recognition": "OCR",
+        "roi": [
+            150,
+            0,
+            420,
+            85
+        ],
+        "expected": ".*[0-9]+\\s*/\\s*[0-9]+回合.*"
+    },
+    "EndlessTrialBattleHomeFeature": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.78,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ]
+    },
+    "EndlessTrialTrainingFeature": {
+        "recognition": "TemplateMatch",
+        "template": "trial/training_entry.png",
+        "threshold": 0.64,
+        "roi": [
+            400,
+            1133,
+            167,
+            147
+        ]
+    },
+    "EndlessTrialStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask",
+        "pre_delay": 0,
+        "post_delay": 0
+    }
+}

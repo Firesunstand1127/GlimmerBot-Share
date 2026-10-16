@@ -1,0 +1,28 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "RankingLikesDaily": {
+        "doc": "此入口须由MaaRuntime调用RankingLikesRunner；JSON仅检查主城，不能代表点赞完成。",
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "RankingLikesHomeReady"
+        ],
+        "timeout": 5000,
+        "on_error": [
+            "RankingLikesStopSafely"
+        ]
+    },
+    "RankingLikesHomeReady": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "StopTask",
+        "timeout": 5000
+    },
+    "RankingLikesStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask"
+    }
+}

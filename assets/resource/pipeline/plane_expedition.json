@@ -1,0 +1,503 @@
+{
+  "$schema": "../../../deps/tools/pipeline.schema.json",
+  "PlaneExpeditionDaily": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": [
+      "PlaneExpeditionDailyPopupFreeDrawClose",
+      "PlaneExpeditionDailyPopupFoodPrizeClose",
+      "PlanePopupPromoDiamondGift",
+      "PlanePopupKoiPromotionClose",
+      "PlanePopupFoodPromotionClose",
+      "PlaneMapOrOverlayReady",
+      "PlaneTrainingEntry",
+      "PlaneEnterTrainingFromHome",
+      "PlaneNavigateHome"
+    ],
+    "rate_limit": 100,
+    "timeout": 18000,
+    "on_error": [
+      "PlaneStopSafely"
+    ]
+  },
+  "PlaneEnterTrainingFromHome": {
+    "recognition": "And",
+    "all_of": [
+      "HomeReadyMainCitySelectedFeature",
+      "HomeReadyBackpackNavFeature",
+      "HomeReadyTrainingNavFeature",
+      "HomeReadyCityContentFeature"
+    ],
+    "action": "Click",
+    "target": [
+      475,
+      1210,
+      1,
+      1
+    ],
+    "post_delay": 600,
+    "next": [
+      "PlaneTrainingEntry",
+      "PlaneEnterTrainingFromHome"
+    ],
+    "max_hit": 3,
+    "timeout": 10000,
+    "on_error": [
+      "PlaneStopSafely"
+    ]
+  },
+  "PlaneNavigateHome": {
+    "recognition": "TemplateMatch",
+    "template": "trial/home_from_battle.png",
+    "threshold": 0.72,
+    "roi": [
+      0,
+      1133,
+      133,
+      147
+    ],
+    "action": "Click",
+    "target": [
+      55,
+      1220,
+      1,
+      1
+    ],
+    "post_delay": 600,
+    "next": [
+      "PlaneEnterTrainingFromHome"
+    ],
+    "max_hit": 3,
+    "timeout": 10000,
+    "on_error": [
+      "PlaneStopSafely"
+    ]
+  },
+  "PlaneTrainingEntry": {
+    "recognition": "OCR",
+    "roi": [
+      450,
+      900,
+      245,
+      150
+    ],
+    "expected": "^位面征战$",
+    "action": "Click",
+    "post_delay": 1000,
+    "next": [
+      "PlaneMapOrOverlayReady"
+    ],
+    "timeout": 10000,
+    "on_error": [
+      "PlaneStopSafely"
+    ]
+  },
+  "PlaneReturnHome": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": [
+      "PlaneReturnCloseResult",
+      "PlaneHomeReady",
+      "PlaneReturnCloseDifficulty",
+      "PlaneReturnCloseCombatPanel",
+      "PlaneReturnCloseHirePanel",
+      "PlaneReturnCloseFountain",
+      "PlaneReturnCloseCross",
+      "PlaneReturnFromMap",
+      "PlaneReturnFromTraining"
+    ],
+    "timeout": 10000,
+    "on_error": [
+      "PlaneStopSafely"
+    ]
+  },
+  "PlaneReturnCloseCombatPanel": {
+    "recognition": "OCR",
+    "roi": [
+      190,
+      90,
+      350,
+      120
+    ],
+    "expected": "^(普通守卫|高级守卫|首领怪物|守卫|首领|藏宝洞穴)$",
+    "action": "Click",
+    "target": [
+      682,
+      155,
+      1,
+      1
+    ],
+    "post_delay": 600,
+    "next": [
+      "PlaneReturnHome"
+    ],
+    "max_hit": 3,
+    "on_error": [
+      "PlaneStopSafely"
+    ]
+  },
+  "PlaneReturnCloseHirePanel": {
+    "recognition": "OCR",
+    "roi": [
+      200,
+      170,
+      330,
+      140
+    ],
+    "expected": "^英雄雇佣$",
+    "action": "Click",
+    "target": [
+      682,
+      244,
+      1,
+      1
+    ],
+    "post_delay": 600,
+    "next": [
+      "PlaneReturnHome"
+    ],
+    "max_hit": 3,
+    "on_error": [
+      "PlaneStopSafely"
+    ]
+  },
+  "PlaneReturnFromMap": {
+    "recognition": "OCR",
+    "roi": [
+      600,
+      70,
+      120,
+      150
+    ],
+    "expected": "^返回$",
+    "action": "Click",
+    "post_delay": 700,
+    "next": [
+      "PlaneReturnHome"
+    ],
+    "max_hit": 3,
+    "on_error": [
+      "PlaneStopSafely"
+    ]
+  },
+  "PlaneReturnFromTraining": {
+    "recognition": "TemplateMatch",
+    "template": "trial/home_from_battle.png",
+    "threshold": 0.72,
+    "roi": [
+      0,
+      1133,
+      133,
+      147
+    ],
+    "action": "Click",
+    "target": [
+      55,
+      1220,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "next": [
+      "PlaneReturnHome"
+    ],
+    "max_hit": 3,
+    "on_error": [
+      "PlaneStopSafely"
+    ]
+  },
+  "PlaneHomeReady": {
+    "recognition": "And",
+    "all_of": [
+      "HomeReadyMainCitySelectedFeature",
+      "HomeReadyBackpackNavFeature",
+      "HomeReadyTrainingNavFeature",
+      "HomeReadyCityContentFeature"
+    ],
+    "action": "StopTask"
+  },
+  "PlaneStopSafely": {
+    "recognition": "DirectHit",
+    "action": "StopTask"
+  },
+  "PlaneMapOrOverlayReady": {
+    "recognition": "OCR",
+    "roi": [
+      180,
+      70,
+      380,
+      100
+    ],
+    "expected": ".*第[123]层位面探险.*",
+    "action": "StopTask"
+  },
+  "PlaneReturnCloseFountain": {
+    "action": "Click",
+    "target": [
+      336,
+      1149,
+      1,
+      1
+    ],
+    "post_delay": 600,
+    "next": [
+      "PlaneReturnHome"
+    ],
+    "max_hit": 3,
+    "on_error": [
+      "PlaneStopSafely"
+    ],
+    "recognition": "And",
+    "all_of": [
+      "PlaneFountainTitleFeature",
+      "PlaneLowerCloseHintFeature"
+    ]
+  },
+  "PlaneReturnCloseCross": {
+    "action": "Click",
+    "target": [
+      336,
+      1149,
+      1,
+      1
+    ],
+    "post_delay": 600,
+    "next": [
+      "PlaneReturnHome"
+    ],
+    "max_hit": 3,
+    "on_error": [
+      "PlaneStopSafely"
+    ],
+    "recognition": "And",
+    "all_of": [
+      "PlaneCrossTitleFeature",
+      "PlaneLowerCloseHintFeature"
+    ]
+  },
+  "PlaneDifficultyTitleFeature": {
+    "recognition": "OCR",
+    "roi": [
+      200,
+      250,
+      340,
+      140
+    ],
+    "expected": "^难度选择$"
+  },
+  "PlaneOverlayCloseHintFeature": {
+    "recognition": "OCR",
+    "roi": [
+      170,
+      980,
+      410,
+      140
+    ],
+    "expected": ".*点击空白处关闭界面.*"
+  },
+  "PlaneReturnCloseDifficulty": {
+    "recognition": "And",
+    "all_of": [
+      "PlaneDifficultyTitleFeature",
+      "PlaneOverlayCloseHintFeature"
+    ],
+    "action": "Click",
+    "target": [
+      335,
+      1040,
+      1,
+      1
+    ],
+    "post_delay": 600,
+    "next": [
+      "PlaneReturnHome"
+    ],
+    "max_hit": 3,
+    "on_error": [
+      "PlaneStopSafely"
+    ]
+  },
+  "PlaneLowerCloseHintFeature": {
+    "recognition": "OCR",
+    "roi": [
+      170,
+      1090,
+      410,
+      130
+    ],
+    "expected": ".*点击空白处关闭界面.*"
+  },
+  "PlaneFountainTitleFeature": {
+    "recognition": "OCR",
+    "roi": [
+      230,
+      100,
+      270,
+      120
+    ],
+    "expected": "^回复泉水$"
+  },
+  "PlaneCrossTitleFeature": {
+    "recognition": "OCR",
+    "roi": [
+      230,
+      100,
+      270,
+      120
+    ],
+    "expected": "^复活十字架$"
+  },
+  "PlaneReturnResultTitle": {
+    "recognition": "OCR",
+    "expected": "挑战成功|挑战失败",
+    "roi": [
+      100,
+      250,
+      520,
+      280
+    ]
+  },
+  "PlaneReturnResultMode": {
+    "recognition": "OCR",
+    "expected": "当前战斗.*位面征战",
+    "roi": [
+      150,
+      430,
+      450,
+      100
+    ]
+  },
+  "PlaneReturnResultCloseText": {
+    "recognition": "OCR",
+    "expected": "点击空白处关闭",
+    "roi": [
+      100,
+      850,
+      550,
+      150
+    ]
+  },
+  "PlaneReturnCloseResult": {
+    "recognition": "And",
+    "all_of": [
+      "PlaneReturnResultTitle",
+      "PlaneReturnResultMode",
+      "PlaneReturnResultCloseText"
+    ],
+    "action": "Click",
+    "target": [
+      360,
+      920,
+      1,
+      1
+    ],
+    "post_delay": 650,
+    "next": [
+      "PlaneReturnHome"
+    ],
+    "max_hit": 2,
+    "timeout": 5000,
+    "on_error": [
+      "PlaneStopSafely"
+    ]
+  },
+  "PlanePopupFoodPromotionClose": {
+    "recognition": "And",
+    "all_of": [
+      "PopupFoodPromotionFeature0",
+      "PopupFoodPromotionFeature1"
+    ],
+    "action": "Click",
+    "target": [
+      619,
+      273,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "max_hit": 3,
+    "next": [
+      "PlaneExpeditionDaily"
+    ]
+  },
+  "PlanePopupKoiPromotionClose": {
+    "recognition": "And",
+    "all_of": [
+      "PopupKoiPromotionFeature0",
+      "PopupKoiPromotionFeature1"
+    ],
+    "action": "Click",
+    "target": [
+      631,
+      168,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "max_hit": 3,
+    "next": [
+      "PlaneExpeditionDaily"
+    ]
+  },
+  "PlanePopupPromoDiamondGift": {
+    "recognition": "OCR",
+    "roi": [
+      60,
+      540,
+      600,
+      260
+    ],
+    "expected": ".*(超值钻石礼|助力冒险征程).*",
+    "action": "Click",
+    "target": [
+      633,
+      196,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "next": [
+      "PlaneExpeditionDaily"
+    ],
+    "max_hit": 2,
+    "rate_limit": 100
+  },
+  "PlaneExpeditionDailyPopupFoodPrizeClose": {
+    "recognition": "And",
+    "all_of": [
+      "PopupFoodPrizeTitle",
+      "PopupFoodPrizeDetail"
+    ],
+    "action": "Click",
+    "target": [
+      619,
+      273,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "max_hit": 3,
+    "next": [
+      "PlaneExpeditionDaily"
+    ]
+  },
+  "PlaneExpeditionDailyPopupFreeDrawClose": {
+    "recognition": "And",
+    "all_of": [
+      "PopupFreeDrawTitle",
+      "PopupFreeDrawGo"
+    ],
+    "action": "Click",
+    "target": [
+      619,
+      273,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "max_hit": 3,
+    "next": [
+      "PlaneExpeditionDaily"
+    ]
+  }
+}

@@ -1,0 +1,11 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "TournamentPredictionDaily": {
+        "doc": "Python PredictionRunner owns account verification, support-bar decisions and confirmed round records. This node only checks the main-city prompt.",
+        "recognition": "OCR",
+        "roi": [60, 850, 300, 260],
+        "expected": "(在线锦标赛|巅峰冠军赛)竞猜",
+        "action": "DoNothing",
+        "timeout": 1000
+    }
+}

@@ -1,0 +1,64 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "DomainSpiritDaily": {
+        "doc": "仅导航到域灵主页；三次挑战、领奖和资源数值策略由MaaRuntime的DomainSpiritRunner执行。",
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": ["DomainSpiritHubReady", "DomainSpiritOpenFromMenu", "DomainSpiritOpenMenu"],
+        "timeout": 12000,
+        "rate_limit": 100,
+        "on_error": ["DomainSpiritStopSafely"]
+    },
+    "DomainSpiritOpenMenu": {
+        "recognition": "And",
+        "all_of": ["HomeReadyMainCitySelectedFeature", "HomeReadyBackpackNavFeature", "HomeReadyTrainingNavFeature", "HomeReadyCityContentFeature"],
+        "action": "Click",
+        "target": [665, 1200, 1, 1],
+        "post_delay": 450,
+        "next": ["DomainSpiritOpenFromMenu"],
+        "timeout": 6000,
+        "on_error": ["DomainSpiritStopSafely"]
+    },
+    "DomainSpiritOpenFromMenu": {
+        "recognition": "OCR",
+        "expected": "^域灵$",
+        "roi": [470, 860, 180, 125],
+        "action": "Click",
+        "target": true,
+        "post_delay": 450,
+        "next": ["DomainSpiritHubReady"],
+        "timeout": 6000,
+        "on_error": ["DomainSpiritStopSafely"]
+    },
+    "DomainSpiritHubReady": {
+        "recognition": "And",
+        "all_of": [
+            {"recognition": "OCR", "expected": "^域灵柱$", "roi": [300, 330, 250, 100]},
+            {"recognition": "OCR", "expected": "^域灵荣院$", "roi": [350, 570, 260, 100]},
+            {"recognition": "OCR", "expected": "^域灵试炼$", "roi": [110, 730, 230, 100]}
+        ],
+        "action": "DoNothing"
+    },
+    "DomainSpiritCourtClaimedFeature": {
+        "recognition": "TemplateMatch",
+        "template": "domain_spirit/court_claimed.png",
+        "roi": [510, 250, 145, 745],
+        "threshold": 0.86
+    },
+    "DomainSpiritStageClaimedFeature": {
+        "recognition": "TemplateMatch",
+        "template": "domain_spirit/stage_claimed.png",
+        "roi": [20, 875, 550, 90],
+        "threshold": 0.7
+    },
+    "DomainSpiritRewardDotFeature": {
+        "recognition": "TemplateMatch",
+        "template": "domain_spirit/reward_dot.png",
+        "roi": [20, 860, 550, 45],
+        "threshold": 0.85
+    },
+    "DomainSpiritStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask"
+    }
+}

@@ -1,0 +1,510 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "CrossServerLadderDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "CrossServerLadderResultReturn",
+            "CrossServerLadderFormationChecked",
+            "CrossServerLadderFormationEnsureSkip",
+            "CrossServerLadderListReady",
+            "CrossServerLadderMenuEntry",
+            "CrossServerLadderHomeRightEntry",
+            "CrossServerLadderSwipeHome",
+            "CrossServerLadderClickBack"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderSwipeHome": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "Swipe",
+        "begin": [
+            620,
+            650,
+            1,
+            1
+        ],
+        "end": [
+            120,
+            650,
+            1,
+            1
+        ],
+        "duration": 300,
+        "post_delay": 250,
+        "max_hit": 3,
+        "next": [
+            "CrossServerLadderHomeRightEntry",
+            "CrossServerLadderSwipeHome"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderHomeRightEntry": {
+        "recognition": "OCR",
+        "expected": "^跨服战场$",
+        "roi": [
+            250,
+            150,
+            450,
+            650
+        ],
+        "action": "Click",
+        "target": true,
+        "post_delay": 300,
+        "next": [
+            "CrossServerLadderMenuEntry",
+            "CrossServerLadderHomeRightEntry"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderMenuEntry": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            220,
+            300,
+            90
+        ],
+        "expected": "^跨服天梯$",
+        "action": "Click",
+        "target": [
+            100,
+            330,
+            1,
+            1
+        ],
+        "post_delay": 350,
+        "next": [
+            "CrossServerLadderListReady",
+            "CrossServerLadderMenuEntry"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderListReady": {
+        "recognition": "OCR",
+        "roi": [
+            210,
+            105,
+            300,
+            90
+        ],
+        "expected": "^(天梯争|霸|天梯争霸)$",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderScan": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            35,
+            720,
+            1125
+        ],
+        "expected": ".*[0-9]+.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderAttemptsScan": {
+        "recognition": "OCR",
+        "roi": [
+            490,
+            1085,
+            200,
+            70
+        ],
+        "expected": ".*[0-9]+.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderResolveBattle": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "CrossServerLadderResultReturn",
+            "CrossServerLadderFormationChecked",
+            "CrossServerLadderFormationEnsureSkip",
+            "CrossServerLadderFormationNoSkip"
+        ],
+        "rate_limit": 100,
+        "timeout": 20000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderFormationChecked": {
+        "recognition": "And",
+        "all_of": [
+            "CrossServerLadderFormationTitleFeature",
+            "CrossServerLadderSkipCheckedFeature",
+            "CrossServerLadderBattleButtonFeature"
+        ],
+        "action": "Click",
+        "target": [
+            520,
+            905,
+            1,
+            1
+        ],
+        "post_delay": 800,
+        "next": [
+            "CrossServerLadderResultReturn",
+            "CrossServerLadderFormationChecked"
+        ],
+        "max_hit": 2,
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderFormationEnsureSkip": {
+        "recognition": "And",
+        "all_of": [
+            "CrossServerLadderFormationTitleFeature",
+            "CrossServerLadderSkipTextFeature",
+            "CrossServerLadderBattleButtonFeature"
+        ],
+        "action": "Click",
+        "target": [
+            465,
+            958,
+            1,
+            1
+        ],
+        "post_delay": 250,
+        "next": [
+            "CrossServerLadderFormationChecked",
+            "CrossServerLadderFormationEnsureSkip"
+        ],
+        "max_hit": 2,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderFormationNoSkip": {
+        "recognition": "And",
+        "all_of": [
+            "CrossServerLadderFormationTitleFeature",
+            "CrossServerLadderBattleButtonFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "CrossServerLadderResultReturn",
+            "CrossServerLadderBattlePending"
+        ],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderBattlePending": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "post_delay": 800,
+        "next": [
+            "CrossServerLadderResultReturn",
+            "CrossServerLadderBattlePending"
+        ],
+        "max_hit": 280,
+        "rate_limit": 100,
+        "timeout": 300000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderRefresh": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            980,
+            180,
+            150
+        ],
+        "expected": "^刷新$",
+        "action": "Click",
+        "post_delay": 700,
+        "next": [
+            "CrossServerLadderListReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderOneClick": {
+        "recognition": "OCR",
+        "roi": [
+            500,
+            970,
+            220,
+            170
+        ],
+        "expected": "^一键挑战$",
+        "action": "Click",
+        "post_delay": 900,
+        "next": [
+            "CrossServerLadderOneClickResolve"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderOneClickResolve": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "CrossServerLadderPaidConfirmCancel",
+            "CrossServerLadderOneClickConfirm",
+            "CrossServerLadderResultReturn",
+            "CrossServerLadderListReady",
+            "CrossServerLadderOneClickPending"
+        ],
+        "rate_limit": 100,
+        "timeout": 150000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderOneClickConfirm": {
+        "recognition": "OCR",
+        "roi": [
+            170,
+            700,
+            380,
+            260
+        ],
+        "expected": "^使用$",
+        "action": "Click",
+        "post_delay": 1500,
+        "next": [
+            "CrossServerLadderOneClickResolve"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderPaidConfirmCancel": {
+        "recognition": "OCR",
+        "roi": [
+            80,
+            650,
+            560,
+            180
+        ],
+        "expected": "^取消$",
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "CrossServerLadderListReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderOneClickPending": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "post_delay": 800,
+        "next": [
+            "CrossServerLadderOneClickResolve"
+        ],
+        "max_hit": 180,
+        "rate_limit": 100,
+        "timeout": 150000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderResultReturn": {
+        "recognition": "OCR",
+        "roi": [
+            430,
+            785,
+            210,
+            110
+        ],
+        "expected": "^返回玩法$",
+        "action": "Click",
+        "target": [
+            530,
+            840,
+            1,
+            1
+        ],
+        "post_delay": 350,
+        "next": [
+            "CrossServerLadderListReady",
+            "CrossServerLadderResultReturn"
+        ],
+        "max_hit": 2,
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderReturnHome": {
+        "recognition": "OCR",
+        "roi": [
+            210,
+            105,
+            300,
+            90
+        ],
+        "expected": "^天梯争霸$",
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "CrossServerLadderHomeFinished",
+            "CrossServerLadderReturnHome"
+        ],
+        "max_hit": 5,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderHomeFinished": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature"
+        ],
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderFormationTitleFeature": {
+        "recognition": "OCR",
+        "roi": [
+            230,
+            220,
+            260,
+            80
+        ],
+        "expected": "^挑战$"
+    },
+    "CrossServerLadderSkipTextFeature": {
+        "recognition": "OCR",
+        "roi": [
+            455,
+            920,
+            190,
+            80
+        ],
+        "expected": "^跳过战斗$"
+    },
+    "CrossServerLadderBattleButtonFeature": {
+        "recognition": "OCR",
+        "roi": [
+            430,
+            850,
+            190,
+            100
+        ],
+        "expected": "^开战$"
+    },
+    "CrossServerLadderSkipCheckedFeature": {
+        "recognition": "ColorMatch",
+        "roi": [
+            440,
+            930,
+            55,
+            55
+        ],
+        "method": 4,
+        "lower": [
+            45,
+            130,
+            20
+        ],
+        "upper": [
+            190,
+            255,
+            130
+        ],
+        "count": 120
+    },
+    "CrossServerLadderClickBack": {
+        "recognition": "DirectHit",
+        "action": "ClickKey",
+        "key": 4,
+        "post_delay": 300,
+        "max_hit": 2,
+        "next": [
+            "CrossServerLadderListReady",
+            "CrossServerLadderMenuEntry",
+            "CrossServerLadderHomeRightEntry",
+            "CrossServerLadderSwipeHome",
+            "CrossServerLadderClickBack"
+        ],
+        "rate_limit": 100,
+        "timeout": 6000,
+        "on_error": [
+            "CrossServerLadderStopSafely"
+        ]
+    },
+    "CrossServerLadderStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask"
+    }
+}

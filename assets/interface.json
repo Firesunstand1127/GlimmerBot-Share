@@ -1,0 +1,159 @@
+{
+  "interface_version": 2,
+  "name": "MaaShanShuoShare",
+  "description": "《闪烁之光》基于屏幕状态识别的日常 UI 自动化助手",
+  "contact": "请在本仓库提交问题；分享日志前隐藏账号信息",
+  "license": "MIT",
+  "welcome": "识别基准为720x1280，模拟器为1080x1920；通过桌面程序的本地设置配置 MuMu 12 设备和账号。",
+  "version": "v0.6.15",
+  "controller": [
+    {
+      "name": "MuMu Android 12 - 闪烁之光",
+      "type": "Adb",
+      "display_raw": true
+    }
+  ],
+  "resource": [
+    {
+      "name": "闪烁之光 720x1280 标准识别资源",
+      "path": [
+        "./resource"
+      ]
+    }
+  ],
+  "task": [
+    {
+      "name": "日常：排行榜点赞（Python策略）",
+      "entry": "RankingLikesDaily",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "日常：域灵试炼、奖励与域灵柱升级（Python策略）",
+      "entry": "DomainSpiritDaily",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "周期：位面征战三层手动清图",
+      "entry": "PlaneExpeditionDaily",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "日常：精灵商店购买与刷新",
+      "entry": "DailyShopRefreshDaily",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "日常：元素圣殿",
+      "entry": "ElementTempleDaily",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "日常：深渊幽城 Max 扫荡",
+      "entry": "AbyssDungeonDaily",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "日常：世界竞技场",
+      "entry": "WorldArenaDaily",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "日常：超凡段位",
+      "entry": "SuperRankDaily",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "日常：组队斗技",
+      "entry": "TeamArenaDaily",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "日常：跨服天梯",
+      "entry": "CrossServerLadderDaily",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "日常：邮件领取与未读清理",
+      "entry": "MailClaimDaily",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "日常：任务结算与活跃宝箱",
+      "entry": "DailyFinalClaim",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "日常：无尽试炼",
+      "entry": "EndlessTrialDaily",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "日常：快速战斗远航",
+      "entry": "FastBattleVoyageDaily",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "日常：领取抽奖券",
+      "entry": "IdleTicketDaily",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "日常：领取挂机收益（先远航）",
+      "entry": "IdleIncomeClaimDaily",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "日常：任务助手一键执行",
+      "entry": "TaskAssistantDaily",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "清理启动提示并返回主界面",
+      "entry": "PopupCleanup",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    },
+    {
+      "name": "登录准备：关闭公告并勾选协议",
+      "entry": "LoginPreparation",
+      "controller": [
+        "MuMu Android 12 - 闪烁之光"
+      ]
+    }
+  ]
+}

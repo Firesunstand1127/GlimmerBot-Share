@@ -1,0 +1,197 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "MailClaimDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "MailRewardOverlay",
+            "MailPageReady",
+            "MailOpenFromHome",
+            "MailNavigateHome"
+        ],
+        "timeout": 12000,
+        "rate_limit": 100,
+        "on_error": [
+            "MailStopSafely"
+        ]
+    },
+    "MailOpenFromHome": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "Click",
+        "target": [
+            577,
+            1110,
+            1,
+            1
+        ],
+        "post_delay": 600,
+        "next": [
+            "MailPageReady"
+        ]
+    },
+    "MailNavigateHome": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.72,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "MailClaimDaily"
+        ]
+    },
+    "MailPageReady": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            90,
+            320,
+            100
+        ],
+        "expected": "^邮箱$",
+        "action": "DoNothing",
+        "next": [
+            "MailClaimAll"
+        ]
+    },
+    "MailClaimAll": {
+        "recognition": "OCR",
+        "roi": [
+            480,
+            930,
+            200,
+            120
+        ],
+        "expected": "^一键领取$",
+        "action": "Click",
+        "target": [
+            583,
+            1003,
+            1,
+            1
+        ],
+        "post_delay": 800,
+        "next": [
+            "MailRewardOverlay",
+            "MailUnreadLoop"
+        ],
+        "timeout": 8000
+    },
+    "MailRewardOverlay": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantRewardTitleFeature",
+            "TaskAssistantTapBlankFeature"
+        ],
+        "action": "Click",
+        "target": [
+            573,
+            913,
+            67,
+            53
+        ],
+        "post_delay": 500,
+        "next": [
+            "MailUnreadLoop"
+        ]
+    },
+    "MailUnreadLoop": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "MailDetailDelete",
+            "MailUnread",
+            "MailReturnHome"
+        ],
+        "timeout": 10000,
+        "rate_limit": 120,
+        "on_error": [
+            "MailStopSafely"
+        ]
+    },
+    "MailUnread": {
+        "recognition": "OCR",
+        "roi": [
+            500,
+            250,
+            170,
+            720
+        ],
+        "expected": "^未读$",
+        "order_by": "Vertical",
+        "index": 0,
+        "action": "Click",
+        "post_delay": 450,
+        "next": [
+            "MailUnreadLoop"
+        ],
+        "max_hit": 50
+    },
+    "MailDetailDelete": {
+        "recognition": "OCR",
+        "roi": [
+            250,
+            875,
+            220,
+            130
+        ],
+        "expected": "^删除$",
+        "action": "Click",
+        "post_delay": 450,
+        "next": [
+            "MailUnreadLoop"
+        ],
+        "max_hit": 50
+    },
+    "MailReturnHome": {
+        "recognition": "OCR",
+        "roi": [
+            200,
+            90,
+            320,
+            100
+        ],
+        "expected": "^邮箱$",
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "MailReady"
+        ]
+    },
+    "MailReady": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature"
+        ],
+        "action": "StopTask"
+    },
+    "MailStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask"
+    }
+}

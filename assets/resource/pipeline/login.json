@@ -1,0 +1,702 @@
+{
+  "$schema": "../../../deps/tools/pipeline.schema.json",
+  "GameBootstrap": {
+    "recognition": "DirectHit",
+    "action": "StartApp",
+    "package": "com.sszg.tt.ffsdk01/com.game.sdk.GameSdkActivity",
+    "post_delay": 1000,
+    "next": [
+      "LoginPreparation"
+    ],
+    "timeout": 90000,
+    "on_error": [
+      "LoginStopSafely"
+    ],
+    "rate_limit": 100,
+    "pre_delay": 0
+  },
+  "LoginPreparation": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": [
+      "PopupFreeDrawClose",
+      "PopupFoodPrizeClose",
+      "PopupPromoDiamondGift",
+      "PopupFoodPromotionClose",
+      "PopupKoiPromotionClose",
+      "PopupTeamResultClose",
+      "PopupKoiWinnerClose",
+      "LoginSavedAccountEnter",
+      "LoginSessionExpiredConfirm",
+      "PlaneReturnCloseResult",
+      "PopupActivityRewardConfirm",
+      "PopupFiveStarPackClose",
+      "PopupOnlineTournamentPromotion",
+      "PopupTaskAssistantResult",
+      "PopupPaidAttemptCancel",
+      "PopupLadderOneClickPanelClose",
+      "PopupIdleIncomeCancelOcr",
+      "PopupWeeklyNotice",
+      "PopupGenericGoldClose",
+      "PopupIdleIncomeWarning",
+      "PopupIdleIncomeLimit",
+      "PopupTaskAssistant",
+      "LoginAnnouncementConfirm",
+      "LoginAnnouncementClose",
+      "LoginExitDialogCancel",
+      "LoginAgreementPage",
+      "LoginReachedHomeWithIdleWarning",
+      "LoginReachedHomeStable",
+      "LoginReachedHomeRight",
+      "LoginReachedHomeOcr",
+      "LoginReturnFromIdlePage",
+      "LoginReturnFromPlaneMap",
+      "LoginReturnSelectedSubpage",
+      "LoginGameAlreadyRunning",
+      "LoginWaitForGame"
+    ],
+    "rate_limit": 100,
+    "timeout": 60000,
+    "on_error": [
+      "LoginStopSafely"
+    ],
+    "pre_delay": 0,
+    "post_delay": 0
+  },
+  "LoginAnnouncementConfirm": {
+    "recognition": "TemplateMatch",
+    "template": "popup/login_announcement_confirm.png",
+    "threshold": 0.82,
+    "roi": [
+      233,
+      900,
+      253,
+      173
+    ],
+    "action": "Click",
+    "post_wait_freezes": 200,
+    "post_delay": 100,
+    "next": [
+      "LoginPreparation"
+    ],
+    "rate_limit": 100,
+    "timeout": 10000,
+    "on_error": [
+      "LoginStopSafely"
+    ],
+    "pre_delay": 0
+  },
+  "LoginAnnouncementClose": {
+    "recognition": "TemplateMatch",
+    "template": "popup/login_announcement_close.png",
+    "threshold": 0.82,
+    "roi": [
+      620,
+      180,
+      100,
+      127
+    ],
+    "action": "Click",
+    "post_wait_freezes": 200,
+    "post_delay": 100,
+    "next": [
+      "LoginPreparation"
+    ],
+    "rate_limit": 100,
+    "timeout": 10000,
+    "on_error": [
+      "LoginStopSafely"
+    ],
+    "pre_delay": 0
+  },
+  "LoginAgreementPage": {
+    "recognition": "OCR",
+    "expected": ".*开始游戏.*",
+    "threshold": 0.3,
+    "roi": [
+      200,
+      967,
+      320,
+      167
+    ],
+    "action": "DoNothing",
+    "next": [
+      "LoginAgreementUnchecked",
+      "LoginAgreementAlreadyChecked"
+    ],
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "LoginStopSafely"
+    ],
+    "pre_delay": 0,
+    "post_delay": 0
+  },
+  "LoginAgreementUnchecked": {
+    "recognition": "TemplateMatch",
+    "template": "common/agreement_unchecked.png",
+    "threshold": 0.65,
+    "roi": [
+      113,
+      1020,
+      120,
+      127
+    ],
+    "action": "Click",
+    "post_delay": 100,
+    "next": [
+      "LoginAgreementCheckedAfterClick"
+    ],
+    "rate_limit": 100,
+    "timeout": 5000,
+    "on_error": [
+      "LoginAgreementAlreadyChecked"
+    ],
+    "pre_delay": 0
+  },
+  "LoginAgreementCheckedAfterClick": {
+    "recognition": "TemplateMatch",
+    "template": "common/agreement_checked.png",
+    "threshold": 0.65,
+    "roi": [
+      113,
+      1020,
+      120,
+      127
+    ],
+    "action": "DoNothing",
+    "next": [
+      "LoginStartGame"
+    ],
+    "rate_limit": 100,
+    "timeout": 5000,
+    "on_error": [
+      "LoginStopSafely"
+    ],
+    "pre_delay": 0,
+    "post_delay": 0
+  },
+  "LoginAgreementAlreadyChecked": {
+    "recognition": "TemplateMatch",
+    "template": "common/agreement_checked.png",
+    "threshold": 0.65,
+    "roi": [
+      113,
+      1020,
+      120,
+      127
+    ],
+    "action": "DoNothing",
+    "next": [
+      "LoginStartGame"
+    ],
+    "rate_limit": 100,
+    "timeout": 3000,
+    "on_error": [
+      "LoginStopSafely"
+    ],
+    "pre_delay": 0,
+    "post_delay": 0
+  },
+  "LoginStartGame": {
+    "recognition": "OCR",
+    "expected": ".*开始游戏.*",
+    "threshold": 0.3,
+    "roi": [
+      200,
+      967,
+      320,
+      167
+    ],
+    "action": "Click",
+    "post_delay": 800,
+    "next": [
+      "LoginReachedHomeWithIdleWarning",
+      "LoginReachedHomeStable",
+      "LoginReachedHome",
+      "LoginPreparation"
+    ],
+    "rate_limit": 100,
+    "timeout": 30000,
+    "on_error": [
+      "LoginStopSafely"
+    ],
+    "pre_delay": 0
+  },
+  "LoginExitDialogCancel": {
+    "recognition": "OCR",
+    "expected": "^我再想想$",
+    "roi": [
+      330,
+      620,
+      300,
+      220
+    ],
+    "action": "Click",
+    "post_delay": 500,
+    "next": [
+      "LoginPreparation"
+    ],
+    "rate_limit": 100,
+    "timeout": 5000,
+    "on_error": [
+      "LoginStopSafely"
+    ]
+  },
+  "LoginGameAlreadyRunning": {
+    "recognition": "TemplateMatch",
+    "template": "trial/home_from_battle.png",
+    "threshold": 0.2,
+    "roi": [
+      0,
+      1133,
+      133,
+      147
+    ],
+    "action": "Click",
+    "target": [
+      55,
+      1220,
+      1,
+      1
+    ],
+    "next": [
+      "LoginPreparation"
+    ],
+    "max_hit": 3,
+    "timeout": 8000,
+    "on_error": [
+      "LoginStopSafely"
+    ],
+    "rate_limit": 100,
+    "pre_delay": 0,
+    "post_delay": 500
+  },
+  "LoginReturnFromIdlePage": {
+    "recognition": "And",
+    "all_of": [
+      "IdleIncomeStablePageFeature"
+    ],
+    "action": "Click",
+    "target": [
+      55,
+      1220,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "next": [
+      "LoginPreparation"
+    ],
+    "max_hit": 2,
+    "rate_limit": 100,
+    "timeout": 5000,
+    "on_error": [
+      "LoginStopSafely"
+    ]
+  },
+  "LoginReturnFromPlaneMap": {
+    "recognition": "OCR",
+    "roi": [
+      600,
+      70,
+      120,
+      150
+    ],
+    "expected": "^返回$",
+    "action": "Click",
+    "post_delay": 700,
+    "next": [
+      "LoginPreparation"
+    ],
+    "max_hit": 2
+  },
+  "LoginReturnSelectedSubpage": {
+    "recognition": "And",
+    "all_of": [
+      "HomeReadyMainCitySelectedFeature",
+      "HomeReadyBackpackNavFeature",
+      "HomeReadyTrainingNavFeature"
+    ],
+    "action": "Click",
+    "target": [
+      55,
+      1220,
+      1,
+      1
+    ],
+    "post_delay": 600,
+    "next": [
+      "LoginPreparation"
+    ],
+    "max_hit": 2,
+    "rate_limit": 100,
+    "timeout": 5000,
+    "on_error": [
+      "LoginGameAlreadyRunning"
+    ]
+  },
+  "LoginWaitForGame": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "post_delay": 500,
+    "next": [
+      "LoginPreparation"
+    ],
+    "max_hit": 60,
+    "timeout": 60000,
+    "on_error": [
+      "LoginRecoverBack"
+    ],
+    "rate_limit": 100,
+    "pre_delay": 0
+  },
+  "LoginReachedHomeWithIdleWarning": {
+    "recognition": "And",
+    "all_of": [
+      "LoginHomeMainCityFeature",
+      "LoginIdleWarningFeature"
+    ],
+    "action": "DoNothing",
+    "next": [
+      "PopupCleanup"
+    ],
+    "rate_limit": 100,
+    "pre_delay": 0,
+    "post_delay": 1500
+  },
+  "LoginReachedHome": {
+    "recognition": "TemplateMatch",
+    "template": "home/main_city.png",
+    "threshold": 0.8,
+    "roi": [
+      0,
+      1133,
+      153,
+      147
+    ],
+    "action": "DoNothing",
+    "next": [
+      "PopupCleanup"
+    ],
+    "rate_limit": 100,
+    "pre_delay": 0,
+    "post_delay": 1500
+  },
+  "LoginReachedHomeStable": {
+    "recognition": "And",
+    "all_of": [
+      "HomeReadyMainCitySelectedFeature",
+      "HomeReadyBackpackNavFeature",
+      "HomeReadyTrainingNavFeature",
+      "HomeReadyCityContentFeature"
+    ],
+    "action": "DoNothing",
+    "next": [
+      "PopupCleanup"
+    ],
+    "rate_limit": 100,
+    "pre_delay": 0,
+    "post_delay": 1200
+  },
+  "LoginReachedHomeRight": {
+    "recognition": "TemplateMatch",
+    "template": "home/cross_server_battlefield.png",
+    "threshold": 0.78,
+    "roi": [
+      380,
+      530,
+      220,
+      110
+    ],
+    "action": "DoNothing",
+    "next": [
+      "PopupCleanup"
+    ],
+    "rate_limit": 100,
+    "pre_delay": 0,
+    "post_delay": 300
+  },
+  "LoginReachedHomeOcr": {
+    "recognition": "And",
+    "all_of": [
+      "HomeReadyArenaOcrFeature",
+      "HomeReadyShopOcrFeature"
+    ],
+    "action": "DoNothing",
+    "next": [
+      "PopupCleanup"
+    ],
+    "rate_limit": 100,
+    "pre_delay": 0,
+    "post_delay": 300
+  },
+  "HomeReadyArenaOcrFeature": {
+    "recognition": "OCR",
+    "expected": "^(英雄神殿|商店|精灵商店|召唤|探宝|竞技场)$",
+    "roi": [
+      150,
+      180,
+      340,
+      850
+    ]
+  },
+  "HomeReadyShopOcrFeature": {
+    "recognition": "OCR",
+    "expected": "^(竞技场|锻造屋|镇妖塔|跨服战场|先知召唤|召唤)$",
+    "roi": [
+      490,
+      180,
+      230,
+      850
+    ]
+  },
+  "HomeReadyMainCitySelectedFeature": {
+    "recognition": "TemplateMatch",
+    "template": "home/main_city_selected_anchor.png",
+    "threshold": 0.72,
+    "roi": [
+      0,
+      1180,
+      100,
+      90
+    ]
+  },
+  "HomeReadyBackpackNavFeature": {
+    "recognition": "TemplateMatch",
+    "template": "home/backpack_nav_stable.png",
+    "threshold": 0.75,
+    "roi": [
+      190,
+      1180,
+      120,
+      100
+    ]
+  },
+  "HomeReadyTrainingNavFeature": {
+    "recognition": "TemplateMatch",
+    "template": "home/training_nav_stable.png",
+    "threshold": 0.75,
+    "roi": [
+      400,
+      1180,
+      120,
+      100
+    ]
+  },
+  "HomeReadyTaskAssistantFeature": {
+    "recognition": "TemplateMatch",
+    "template": "home/task_assistant_character.png",
+    "threshold": 0.6,
+    "roi": [
+      0,
+      967,
+      173,
+      233
+    ]
+  },
+  "HomeReadyBottomBarBrightFeature": {
+    "recognition": "ColorMatch",
+    "roi": [
+      0,
+      1180,
+      120,
+      100
+    ],
+    "method": 4,
+    "lower": [
+      100,
+      70,
+      20
+    ],
+    "upper": [
+      255,
+      230,
+      180
+    ],
+    "count": 1200
+  },
+  "HomeReadyCityTextFeature": {
+    "recognition": "Or",
+    "any_of": [
+      "HomeReadyArenaOcrFeature",
+      "HomeReadyShopOcrFeature"
+    ]
+  },
+  "HomeReadyCityContentFeature": {
+    "recognition": "And",
+    "all_of": [
+      "HomeReadyCityVisibleFeature",
+      "HomeReadyUndimmedHeaderFeature"
+    ]
+  },
+  "LoginHomeMainCityFeature": {
+    "recognition": "TemplateMatch",
+    "template": "home/main_city.png",
+    "threshold": 0.8,
+    "roi": [
+      0,
+      1133,
+      153,
+      147
+    ]
+  },
+  "LoginIdleWarningFeature": {
+    "recognition": "TemplateMatch",
+    "template": "popup/idle_income_warning_title.png",
+    "threshold": 0.8,
+    "roi": [
+      167,
+      400,
+      400,
+      147
+    ]
+  },
+  "LoginRecoverBack": {
+    "recognition": "DirectHit",
+    "action": "ClickKey",
+    "key": 4,
+    "post_delay": 500,
+    "next": [
+      "LoginPreparation"
+    ],
+    "max_hit": 2,
+    "timeout": 5000,
+    "on_error": [
+      "LoginStopSafely"
+    ],
+    "rate_limit": 100,
+    "pre_delay": 0
+  },
+  "LoginStopSafely": {
+    "recognition": "DirectHit",
+    "action": "StopTask",
+    "pre_delay": 0,
+    "post_delay": 0
+  },
+  "HomeReadyCityVisibleFeature": {
+    "recognition": "Or",
+    "any_of": [
+      "HomeReadyTaskAssistantFeature",
+      "HomeReadyCityTextFeature"
+    ]
+  },
+  "HomeReadyUndimmedHeaderFeature": {
+    "recognition": "ColorMatch",
+    "roi": [
+      110,
+      0,
+      210,
+      65
+    ],
+    "method": 4,
+    "lower": [
+      200,
+      140,
+      20
+    ],
+    "upper": [
+      255,
+      240,
+      170
+    ],
+    "count": 80
+  },
+  "LoginSessionExpiredBody": {
+    "recognition": "OCR",
+    "expected": "登录信息已.*过期.*重新登录",
+    "roi": [
+      120,
+      530,
+      510,
+      140
+    ]
+  },
+  "LoginSessionExpiredConfirmText": {
+    "recognition": "OCR",
+    "expected": "^确定$",
+    "roi": [
+      240,
+      700,
+      260,
+      110
+    ]
+  },
+  "LoginSessionExpiredConfirm": {
+    "recognition": "And",
+    "all_of": [
+      "LoginSessionExpiredBody",
+      "LoginSessionExpiredConfirmText"
+    ],
+    "action": "Click",
+    "target": [
+      355,
+      755,
+      1,
+      1
+    ],
+    "post_delay": 1200,
+    "next": [
+      "LoginPreparation"
+    ],
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": [
+      "LoginStopSafely"
+    ]
+  },
+  "LoginSavedAccountAlias": {
+    "recognition": "OCR",
+    "expected": "(?!)",
+    "roi": [
+      150,
+      520,
+      360,
+      85
+    ]
+  },
+  "LoginSavedAccountEnterText": {
+    "recognition": "OCR",
+    "expected": "^进入游戏$",
+    "roi": [
+      120,
+      660,
+      480,
+      100
+    ]
+  },
+  "LoginSavedAccountOtherText": {
+    "recognition": "OCR",
+    "expected": "其[它他]登录方式",
+    "roi": [
+      170,
+      780,
+      400,
+      90
+    ]
+  },
+  "LoginSavedAccountEnter": {
+    "recognition": "And",
+    "all_of": [
+      "LoginSavedAccountAlias",
+      "LoginSavedAccountEnterText",
+      "LoginSavedAccountOtherText"
+    ],
+    "action": "Click",
+    "target": [
+      360,
+      706,
+      1,
+      1
+    ],
+    "post_delay": 1200,
+    "next": [
+      "LoginPreparation"
+    ],
+    "max_hit": 1,
+    "timeout": 5000,
+    "on_error": [
+      "LoginStopSafely"
+    ]
+  }
+}

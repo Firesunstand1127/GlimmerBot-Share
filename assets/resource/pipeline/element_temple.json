@@ -1,0 +1,1406 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "ElementTempleDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "ElementTempleRewardCloseLoop",
+            "ElementTempleVictoryNextLoop",
+            "ElementTempleFailureConfirmToFallback",
+            "ElementTempleFormationStartLoop",
+            "ElementTempleNoAttemptsReturn",
+            "ElementTempleChallengeClickLoop",
+            "ElementTempleFloorFallbackStart",
+            "ElementTempleSelectOpenAutoLoop",
+            "ElementTempleDoorEntryLoop",
+            "ElementTempleEnterTrainingFromHomeSelectedLoop",
+            "ElementTempleEnterTrainingFromHomeLoop",
+            "ElementTempleNavigateHomeLoop",
+            "ElementTempleBattlePendingLoop"
+        ],
+        "rate_limit": 100,
+        "timeout": 18000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleOpenMap": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "ElementTempleRewardCloseToMap",
+            "ElementTempleMapReady",
+            "ElementTempleReturnFloorToMap",
+            "ElementTempleDoorEntry",
+            "ElementTempleEnterTrainingFromHomeSelected",
+            "ElementTempleEnterTrainingFromHome",
+            "ElementTempleNavigateHome",
+            "ElementTempleOpenMapBack"
+        ],
+        "rate_limit": 100,
+        "timeout": 18000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleEnterTrainingFromHomeSelected": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "Click",
+        "target": [
+            475,
+            1210,
+            1,
+            1
+        ],
+        "post_delay": 250,
+        "next": [
+            "ElementTempleDoorEntry",
+            "ElementTempleEnterTrainingFromHomeSelected"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleEnterTrainingFromHome": {
+        "recognition": "TemplateMatch",
+        "template": "trial/training_entry.png",
+        "threshold": 0.7,
+        "roi": [
+            400,
+            1133,
+            167,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            475,
+            1210,
+            1,
+            1
+        ],
+        "post_delay": 250,
+        "next": [
+            "ElementTempleDoorEntry",
+            "ElementTempleEnterTrainingFromHome"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleDoorEntry": {
+        "recognition": "And",
+        "all_of": [
+            "ElementTempleDoorTitleFeature",
+            "ElementTempleDoorEntryFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "target": [
+            360,
+            890,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "ElementTempleMapReady",
+            "ElementTempleDoorEntry"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleMapReady": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            75,
+            360,
+            180
+        ],
+        "expected": "^元素圣殿$",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleReturnFloorToMap": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            0,
+            380,
+            210
+        ],
+        "expected": "^[水火风光暗]之圣殿.*",
+        "action": "Click",
+        "target": [
+            80,
+            1135,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "ElementTempleMapReady",
+            "ElementTempleReturnFloorToMap"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleNavigateHome": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.72,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "ElementTempleEnterTrainingFromHomeSelected",
+            "ElementTempleEnterTrainingFromHome"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleOpenMapBack": {
+        "recognition": "DirectHit",
+        "action": "ClickKey",
+        "key": 4,
+        "post_delay": 400,
+        "next": [
+            "ElementTempleOpenMap"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleSelectOpenAuto": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            300,
+            720,
+            790
+        ],
+        "expected": ".*后结束.*",
+        "order_by": "Vertical",
+        "index": 0,
+        "action": "Click",
+        "target_offset": [
+            -40,
+            -35,
+            0,
+            0
+        ],
+        "post_delay": 500,
+        "next": [
+            "ElementTempleFloorReady",
+            "ElementTempleSelectOpenAuto"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleSelectWater": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            315,
+            835,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "ElementTempleFloorReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleSelectLight": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            365,
+            465,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "ElementTempleFloorReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleSelectDark": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            150,
+            690,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "ElementTempleFloorReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleSelectWind": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            600,
+            690,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "ElementTempleFloorReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleSelectFire": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            470,
+            1020,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "ElementTempleFloorReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleFloorReady": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            0,
+            380,
+            210
+        ],
+        "expected": "^[水火风光暗]之圣殿.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleRelocateChat": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "ElementTempleChatMoveBlocking",
+            "ElementTempleChatSafeVerify",
+            "ElementTempleFloorReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 6000
+    },
+    "ElementTempleChatMoveBlocking": {
+        "recognition": "TemplateMatch",
+        "template": "common/chat_icon.png",
+        "threshold": 0.8,
+        "roi": [
+            630,
+            520,
+            90,
+            180
+        ],
+        "action": "Swipe",
+        "begin": [
+            680,
+            590,
+            1,
+            1
+        ],
+        "end": [
+            680,
+            240,
+            1,
+            1
+        ],
+        "duration": 650,
+        "end_hold": 100,
+        "post_delay": 300,
+        "next": [
+            "ElementTempleChatSafeVerify",
+            "ElementTempleFloorReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 5000
+    },
+    "ElementTempleChatSafeVerify": {
+        "recognition": "TemplateMatch",
+        "template": "common/chat_icon.png",
+        "threshold": 0.76,
+        "roi": [
+            630,
+            170,
+            90,
+            170
+        ],
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": [
+            "ElementTempleFloorReady"
+        ]
+    },
+    "ElementTempleAttemptsScan": {
+        "recognition": "OCR",
+        "roi": [
+            500,
+            1090,
+            215,
+            95
+        ],
+        "expected": ".*[0-9]+[ ]*/[ ]*10.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 6000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleChallengeScan": {
+        "recognition": "OCR",
+        "roi": [
+            535,
+            470,
+            170,
+            600
+        ],
+        "expected": "^挑战$",
+        "order_by": "Vertical",
+        "index": 0,
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 4000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleSweepButtonsScan": {
+        "recognition": "OCR",
+        "roi": [
+            535,
+            470,
+            170,
+            600
+        ],
+        "expected": "^扫荡$",
+        "order_by": "Vertical",
+        "index": -1,
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 4000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleFloorScan": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            450,
+            720,
+            650
+        ],
+        "expected": ".*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 6000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleChallengeOne": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "ElementTemplePaidAttemptCancelStop",
+            "ElementTempleBattleSuccessStop",
+            "ElementTempleBattleFailureStop",
+            "ElementTempleFormationStartOne",
+            "ElementTempleChallengeClickOne",
+            "ElementTempleBattlePendingOne"
+        ],
+        "rate_limit": 100,
+        "timeout": 70000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTemplePaidAttemptCancelStop": {
+        "recognition": "OCR",
+        "roi": [
+            80,
+            650,
+            220,
+            180
+        ],
+        "expected": "^取消$",
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "ElementTempleNoFreeAttemptsStop"
+        ],
+        "rate_limit": 100
+    },
+    "ElementTempleNoFreeAttemptsStop": {
+        "recognition": "DirectHit",
+        "action": "StopTask"
+    },
+    "ElementTempleChallengeClickOne": {
+        "recognition": "OCR",
+        "roi": [
+            535,
+            470,
+            170,
+            600
+        ],
+        "expected": "^挑战$",
+        "order_by": "Vertical",
+        "index": 0,
+        "action": "Click",
+        "post_delay": 300,
+        "next": [
+            "ElementTempleChallengeOne"
+        ],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleFormationStartOne": {
+        "recognition": "And",
+        "all_of": [
+            "ElementTempleFormationTitleFeature",
+            "ElementTempleFormationBattleFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "target": [
+            360,
+            1130,
+            1,
+            1
+        ],
+        "post_delay": 450,
+        "next": [
+            "ElementTempleChallengeOne"
+        ],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleBattlePendingOne": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "post_delay": 500,
+        "next": [
+            "ElementTempleChallengeOne"
+        ],
+        "max_hit": 120,
+        "rate_limit": 100,
+        "timeout": 70000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleBattleSuccessStop": {
+        "recognition": "OCR",
+        "roi": [
+            80,
+            220,
+            560,
+            260
+        ],
+        "expected": ".*挑战成功.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 70000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleBattleFailureStop": {
+        "recognition": "OCR",
+        "roi": [
+            80,
+            220,
+            560,
+            260
+        ],
+        "expected": ".*挑战失败.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 70000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleResolveSuccessFast": {
+        "recognition": "OCR",
+        "roi": [
+            400,
+            700,
+            280,
+            180
+        ],
+        "expected": "^挑战下一关$",
+        "action": "Click",
+        "post_delay": 250,
+        "next": [
+            "ElementTempleFormationReadyStop",
+            "ElementTempleFloorReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleFormationReadyStop": {
+        "recognition": "And",
+        "all_of": [
+            "ElementTempleFormationTitleFeature",
+            "ElementTempleFormationBattleFeature"
+        ],
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleResolveSuccessFinal": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "ElementTempleSuccessConfirmFinal",
+            "ElementTempleSuccessBackFinal"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleSuccessConfirmFinal": {
+        "recognition": "OCR",
+        "roi": [
+            45,
+            700,
+            300,
+            190
+        ],
+        "expected": "^确定$",
+        "action": "Click",
+        "post_delay": 300,
+        "next": [
+            "ElementTempleFloorReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleSuccessBackFinal": {
+        "recognition": "OCR",
+        "roi": [
+            80,
+            220,
+            560,
+            260
+        ],
+        "expected": ".*挑战成功.*",
+        "action": "ClickKey",
+        "key": 4,
+        "post_delay": 350,
+        "next": [
+            "ElementTempleFloorReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleResolveFailure": {
+        "recognition": "OCR",
+        "roi": [
+            45,
+            700,
+            300,
+            190
+        ],
+        "expected": "^确定$",
+        "action": "Click",
+        "post_delay": 350,
+        "next": [
+            "ElementTempleFloorReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleSweepOne": {
+        "recognition": "OCR",
+        "roi": [
+            535,
+            470,
+            170,
+            600
+        ],
+        "expected": "^扫荡$",
+        "order_by": "Vertical",
+        "index": -1,
+        "action": "Click",
+        "post_delay": 350,
+        "next": [
+            "ElementTempleSweepRewardClose"
+        ],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleSweepRewardClose": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            820,
+            380,
+            100
+        ],
+        "expected": ".*点击空白处关闭界面.*",
+        "action": "Click",
+        "target": [
+            570,
+            910,
+            1,
+            1
+        ],
+        "post_delay": 350,
+        "next": [
+            "ElementTempleFloorReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleReturnMap": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "ElementTempleMapReady",
+            "ElementTempleReturnFloorToMap"
+        ],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleReturnHome": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "ElementTempleExitDialogCancel",
+            "ElementTempleHomeReady",
+            "ElementTempleRewardCloseReturnHome",
+            "ElementTempleReturnViaHomeIcon",
+            "ElementTempleReturnFloorToMapHome",
+            "ElementTempleReturnMapToDoor",
+            "ElementTempleReturnDoorToHome"
+        ],
+        "rate_limit": 100,
+        "timeout": 18000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleExitDialogCancel": {
+        "recognition": "And",
+        "all_of": [
+            "ElementTempleExitDialogTitleFeature",
+            "ElementTempleExitDialogCancelFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 350,
+        "next": [
+            "ElementTempleReturnHome"
+        ],
+        "rate_limit": 100
+    },
+    "ElementTempleExitDialogTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "popup/system_exit_game_title.png",
+        "threshold": 0.8,
+        "roi": [
+            120,
+            467,
+            333,
+            173
+        ]
+    },
+    "ElementTempleExitDialogCancelFeature": {
+        "recognition": "TemplateMatch",
+        "template": "popup/system_exit_cancel.png",
+        "threshold": 0.8,
+        "roi": [
+            333,
+            620,
+            320,
+            200
+        ]
+    },
+    "ElementTempleReturnViaHomeIcon": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.72,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "ElementTempleReturnHome"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleReturnFloorToMapHome": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            0,
+            380,
+            210
+        ],
+        "expected": "^[水火风光暗]之圣殿.*",
+        "action": "Click",
+        "target": [
+            80,
+            1135,
+            1,
+            1
+        ],
+        "post_delay": 450,
+        "next": [
+            "ElementTempleReturnHome"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleReturnMapToDoor": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            75,
+            360,
+            180
+        ],
+        "expected": "^元素圣殿$",
+        "action": "Click",
+        "target": [
+            80,
+            1135,
+            1,
+            1
+        ],
+        "post_delay": 450,
+        "next": [
+            "ElementTempleReturnHome"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleReturnDoorToHome": {
+        "recognition": "TemplateMatch",
+        "template": "trial/trial_door_title.png",
+        "threshold": 0.78,
+        "roi": [
+            200,
+            100,
+            320,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 600,
+        "next": [
+            "ElementTempleReturnHome"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleHomeReady": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleReturnHomeBack": {
+        "recognition": "DirectHit",
+        "action": "ClickKey",
+        "key": 4,
+        "post_delay": 450,
+        "next": [
+            "ElementTempleReturnHome"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleDoorTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "trial/trial_door_title.png",
+        "threshold": 0.78,
+        "roi": [
+            200,
+            100,
+            320,
+            147
+        ]
+    },
+    "ElementTempleDoorEntryFeature": {
+        "recognition": "OCR",
+        "roi": [
+            250,
+            820,
+            230,
+            115
+        ],
+        "expected": "^元素圣殿$"
+    },
+    "ElementTempleFormationTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "trial/formation_title.png",
+        "threshold": 0.76,
+        "roi": [
+            167,
+            53,
+            400,
+            133
+        ]
+    },
+    "ElementTempleFormationBattleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "trial/formation_battle.png",
+        "threshold": 0.76,
+        "roi": [
+            233,
+            1033,
+            267,
+            167
+        ]
+    },
+    "ElementTempleNoAttemptsFeature": {
+        "recognition": "OCR",
+        "roi": [
+            500,
+            1090,
+            215,
+            95
+        ],
+        "expected": ".*0[ ]*/[ ]*10.*"
+    },
+    "ElementTempleRewardFeature": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            820,
+            380,
+            100
+        ],
+        "expected": ".*点击空白处关闭界面.*"
+    },
+    "ElementTempleRewardCloseLoop": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            820,
+            380,
+            100
+        ],
+        "expected": ".*点击空白处关闭界面.*",
+        "action": "Click",
+        "target": [
+            570,
+            910,
+            1,
+            1
+        ],
+        "post_delay": 350,
+        "next": [
+            "ElementTempleDaily"
+        ]
+    },
+    "ElementTempleRewardCloseToMap": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            820,
+            380,
+            100
+        ],
+        "expected": ".*点击空白处关闭界面.*",
+        "action": "Click",
+        "target": [
+            570,
+            910,
+            1,
+            1
+        ],
+        "post_delay": 350,
+        "next": [
+            "ElementTempleOpenMap"
+        ]
+    },
+    "ElementTempleRewardCloseReturnHome": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            820,
+            380,
+            100
+        ],
+        "expected": ".*点击空白处关闭界面.*",
+        "action": "Click",
+        "target": [
+            570,
+            910,
+            1,
+            1
+        ],
+        "post_delay": 350,
+        "next": [
+            "ElementTempleReturnHome"
+        ]
+    },
+    "ElementTempleVictoryNextLoop": {
+        "recognition": "OCR",
+        "roi": [
+            400,
+            700,
+            280,
+            180
+        ],
+        "expected": "^挑战下一关$",
+        "action": "Click",
+        "post_delay": 350,
+        "next": [
+            "ElementTempleDaily"
+        ]
+    },
+    "ElementTempleFailureConfirmToFallback": {
+        "recognition": "And",
+        "all_of": [
+            "ElementTempleBattleFailureFeature",
+            "ElementTempleConfirmFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 350,
+        "next": [
+            "ElementTempleFallbackLoop"
+        ]
+    },
+    "ElementTempleFormationStartLoop": {
+        "recognition": "And",
+        "all_of": [
+            "ElementTempleFormationTitleFeature",
+            "ElementTempleFormationBattleFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "target": [
+            360,
+            1130,
+            1,
+            1
+        ],
+        "post_delay": 450,
+        "next": [
+            "ElementTempleDaily"
+        ]
+    },
+    "ElementTempleNoAttemptsReturn": {
+        "recognition": "OCR",
+        "roi": [
+            500,
+            1090,
+            215,
+            95
+        ],
+        "expected": ".*0[ ]*/[ ]*10.*",
+        "action": "DoNothing",
+        "next": [
+            "ElementTempleReturnHome"
+        ]
+    },
+    "ElementTempleChallengeClickLoop": {
+        "recognition": "OCR",
+        "roi": [
+            535,
+            470,
+            170,
+            600
+        ],
+        "expected": "^挑战$",
+        "order_by": "Vertical",
+        "index": 0,
+        "action": "Click",
+        "post_delay": 300,
+        "next": [
+            "ElementTempleDaily"
+        ]
+    },
+    "ElementTempleFloorFallbackStart": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            0,
+            380,
+            210
+        ],
+        "expected": "^[水火风光暗]之圣殿.*",
+        "action": "DoNothing",
+        "next": [
+            "ElementTempleFallbackLoop"
+        ]
+    },
+    "ElementTempleSelectOpenAutoLoop": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            300,
+            720,
+            790
+        ],
+        "expected": ".*后结束.*",
+        "order_by": "Vertical",
+        "index": 0,
+        "action": "Click",
+        "target_offset": [
+            -40,
+            -35,
+            0,
+            0
+        ],
+        "post_delay": 500,
+        "next": [
+            "ElementTempleDaily"
+        ]
+    },
+    "ElementTempleDoorEntryLoop": {
+        "recognition": "And",
+        "all_of": [
+            "ElementTempleDoorTitleFeature",
+            "ElementTempleDoorEntryFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "target": [
+            360,
+            890,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "ElementTempleDaily"
+        ]
+    },
+    "ElementTempleEnterTrainingFromHomeSelectedLoop": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "Click",
+        "target": [
+            475,
+            1210,
+            1,
+            1
+        ],
+        "post_delay": 250,
+        "next": [
+            "ElementTempleDaily"
+        ]
+    },
+    "ElementTempleEnterTrainingFromHomeLoop": {
+        "recognition": "TemplateMatch",
+        "template": "trial/training_entry.png",
+        "threshold": 0.7,
+        "roi": [
+            400,
+            1133,
+            167,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            475,
+            1210,
+            1,
+            1
+        ],
+        "post_delay": 250,
+        "next": [
+            "ElementTempleDaily"
+        ]
+    },
+    "ElementTempleNavigateHomeLoop": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.72,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "ElementTempleDaily"
+        ]
+    },
+    "ElementTempleBattlePendingLoop": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "post_delay": 500,
+        "next": [
+            "ElementTempleDaily"
+        ],
+        "max_hit": 140,
+        "rate_limit": 100,
+        "timeout": 80000,
+        "on_error": [
+            "ElementTempleStopSafely"
+        ]
+    },
+    "ElementTempleFallbackLoop": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "ElementTempleFallbackRewardClose",
+            "ElementTempleFallbackNoAttempts",
+            "ElementTempleFallbackSweep"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "ElementTempleReturnHome"
+        ]
+    },
+    "ElementTempleFallbackRewardClose": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            820,
+            380,
+            100
+        ],
+        "expected": ".*点击空白处关闭界面.*",
+        "action": "Click",
+        "target": [
+            570,
+            910,
+            1,
+            1
+        ],
+        "post_delay": 350,
+        "next": [
+            "ElementTempleFallbackLoop"
+        ]
+    },
+    "ElementTempleFallbackNoAttempts": {
+        "recognition": "OCR",
+        "roi": [
+            500,
+            1090,
+            215,
+            95
+        ],
+        "expected": ".*0[ ]*/[ ]*10.*",
+        "action": "DoNothing",
+        "next": [
+            "ElementTempleReturnHome"
+        ]
+    },
+    "ElementTempleFallbackSweep": {
+        "recognition": "OCR",
+        "roi": [
+            535,
+            470,
+            170,
+            600
+        ],
+        "expected": "^扫荡$",
+        "order_by": "Vertical",
+        "index": -1,
+        "action": "Click",
+        "post_delay": 350,
+        "next": [
+            "ElementTempleFallbackLoop"
+        ]
+    },
+    "ElementTempleBattleFailureFeature": {
+        "recognition": "OCR",
+        "roi": [
+            80,
+            220,
+            560,
+            260
+        ],
+        "expected": ".*挑战失败.*"
+    },
+    "ElementTempleConfirmFeature": {
+        "recognition": "OCR",
+        "roi": [
+            45,
+            700,
+            300,
+            190
+        ],
+        "expected": "^确定$"
+    },
+    "ElementTempleStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask"
+    }
+}

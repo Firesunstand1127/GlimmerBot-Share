@@ -1,0 +1,230 @@
+{
+    "ArenaDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": ["ArenaPageReady", "ArenaChampionSettlement", "ArenaTournamentLobby", "ArenaChampionPage", "ArenaHomeEntry"],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaHomeEntry": {
+        "recognition": "OCR",
+        "roi": [0, 180, 720, 700],
+        "expected": "^\u7ade\u6280\u573a$",
+        "action": "Click",
+        "post_delay": 600,
+        "next": ["ArenaPageReady", "ArenaChampionSettlement", "ArenaTournamentLobby", "ArenaChampionPage", "ArenaHomeEntry"],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaChampionPage": {
+        "recognition": "OCR",
+        "roi": [110, 70, 410, 150],
+        "expected": ".*冠军赛.*",
+        "action": "Click",
+        "target": [250, 160, 1, 1],
+        "post_delay": 700,
+        "next": ["ArenaPageReady", "ArenaChampionSettlement", "ArenaTournamentLobby", "ArenaChampionPage"],
+        "max_hit": 2,
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaChampionSettlement": {
+        "recognition": "OCR",
+        "roi": [100, 300, 520, 560],
+        "expected": ".*上期冠军赛结算.*",
+        "action": "Click",
+        "target": [360, 900, 1, 1],
+        "post_delay": 800,
+        "next": ["ArenaPageReady", "ArenaTournamentLobby", "ArenaChampionPage", "ArenaChampionSettlement"],
+        "max_hit": 2,
+        "rate_limit": 100,
+        "timeout": 6000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaTournamentLobby": {
+        "recognition": "OCR",
+        "roi": [170, 970, 380, 190],
+        "expected": "^进入挑战$",
+        "action": "Click",
+        "post_delay": 800,
+        "next": ["ArenaPageReady", "ArenaChampionSettlement", "ArenaTournamentLobby", "ArenaChampionPage"],
+        "max_hit": 2,
+        "rate_limit": 100,
+        "timeout": 7000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaPageReady": {
+        "recognition": "OCR",
+        "roi": [250, 90, 220, 90],
+        "expected": "^\u7ade\u6280\u573a$",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaPowerScan": {
+        "recognition": "OCR",
+        "roi": [0, 30, 720, 680],
+        "expected": ".*[0-9]+.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaHomePowerScan": {
+        "recognition": "OCR",
+        "roi": [90, 45, 250, 75],
+        "expected": ".*[0-9]{6,10}.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaRefresh": {
+        "recognition": "OCR",
+        "roi": [500, 730, 180, 100],
+        "expected": "^\u5237\u65b0$",
+        "action": "Click",
+        "post_delay": 500,
+        "next": ["ArenaPageReady"],
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaEnsureNormal": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": ["ArenaNormalUnchecked", "ArenaNormalChecked"],
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaNormalUnchecked": {
+        "recognition": "TemplateMatch",
+        "template": "daily_task/arena_skip_unchecked.png",
+        "threshold": 0.76,
+        "roi": [505, 700, 60, 60],
+        "action": "StopTask"
+    },
+    "ArenaNormalChecked": {
+        "recognition": "ColorMatch",
+        "roi": [512, 707, 43, 43],
+        "method": 4,
+        "lower": [20, 85, 0],
+        "upper": [175, 255, 135],
+        "count": 90,
+        "action": "Click",
+        "target": [533, 730, 1, 1],
+        "post_delay": 300,
+        "next": ["ArenaNormalUnchecked"],
+        "max_hit": 2,
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaEnsureSkip": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": ["ArenaSkipChecked", "ArenaSkipUnchecked"],
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaSkipChecked": {
+        "recognition": "ColorMatch",
+        "roi": [512, 707, 43, 43],
+        "method": 4,
+        "lower": [20, 85, 0],
+        "upper": [175, 255, 135],
+        "count": 90,
+        "action": "StopTask"
+    },
+    "ArenaSkipUnchecked": {
+        "recognition": "TemplateMatch",
+        "template": "daily_task/arena_skip_unchecked.png",
+        "threshold": 0.76,
+        "roi": [505, 700, 60, 60],
+        "action": "Click",
+        "target": [533, 730, 1, 1],
+        "post_delay": 300,
+        "next": ["ArenaSkipChecked"],
+        "max_hit": 2,
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaStartNormalBattle": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": ["ArenaFormationStart", "ArenaResultConfirm", "ArenaBattleWait"],
+        "rate_limit": 100,
+        "timeout": 130000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaResolveSkippedBattle": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "post_delay": 800,
+        "next": ["ArenaResultConfirm", "ArenaFormationStart", "ArenaBattleWait"],
+        "rate_limit": 100,
+        "timeout": 130000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaFormationStart": {
+        "recognition": "And",
+        "all_of": ["EndlessTrialFormationTitleFeature", "EndlessTrialFormationBattleFeature"],
+        "box_index": 1,
+        "action": "Click",
+        "target": [360, 1130, 1, 1],
+        "post_delay": 600,
+        "next": ["ArenaResultConfirm", "ArenaBattleWait"],
+        "rate_limit": 100,
+        "timeout": 125000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaBattleWait": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "post_delay": 1000,
+        "next": ["ArenaResultConfirm", "ArenaBattleWait"],
+        "max_hit": 120,
+        "rate_limit": 100,
+        "timeout": 125000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaBattleReturnedToList": {
+        "recognition": "And",
+        "all_of": ["ArenaChallengePageTitleFeature", "ArenaChallengeListFeature"],
+        "action": "StopTask",
+        "rate_limit": 100
+    },
+    "ArenaChallengePageTitleFeature": {
+        "recognition": "OCR",
+        "roi": [250, 90, 220, 90],
+        "expected": "^竞技场$"
+    },
+    "ArenaChallengeListFeature": {
+        "recognition": "OCR",
+        "roi": [500, 330, 180, 400],
+        "expected": "^([0-9]+挑战|免费挑战|挑战)$"
+    },
+    "ArenaResultConfirm": {
+        "recognition": "OCR",
+        "roi": [100, 820, 220, 150],
+        "expected": "^\u786e\u5b9a$",
+        "action": "Click",
+        "post_delay": 700,
+        "next": ["ArenaPageReady"],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": ["ArenaStopSafely"]
+    },
+    "ArenaStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask"
+    }
+}

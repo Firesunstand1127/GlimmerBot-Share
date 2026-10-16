@@ -1,0 +1,894 @@
+{
+  "$schema": "../../../deps/tools/pipeline.schema.json",
+  "TeamArenaDaily": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": [
+      "TeamArenaResumeResult",
+      "TeamArenaResumeBattle",
+      "TeamArenaPageReady",
+      "TeamArenaMenuEntry",
+      "TeamArenaHomeRightEntry",
+      "TeamArenaSwipeHome",
+      "TeamArenaClickBack"
+    ],
+    "rate_limit": 100,
+    "timeout": 15000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaSwipeHome": {
+    "recognition": "And",
+    "all_of": [
+      "HomeReadyMainCitySelectedFeature",
+      "HomeReadyBackpackNavFeature",
+      "HomeReadyTrainingNavFeature",
+      "HomeReadyCityContentFeature"
+    ],
+    "action": "Swipe",
+    "begin": [
+      620,
+      650,
+      1,
+      1
+    ],
+    "end": [
+      120,
+      650,
+      1,
+      1
+    ],
+    "duration": 300,
+    "post_delay": 250,
+    "max_hit": 3,
+    "next": [
+      "TeamArenaHomeRightEntry",
+      "TeamArenaSwipeHome"
+    ],
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaHomeRightEntry": {
+    "recognition": "OCR",
+    "expected": "^跨服战场$",
+    "roi": [
+      250,
+      150,
+      450,
+      650
+    ],
+    "action": "Click",
+    "target": true,
+    "post_delay": 350,
+    "next": [
+      "TeamArenaMenuEntry",
+      "TeamArenaHomeRightEntry"
+    ],
+    "max_hit": 3,
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaMenuEntry": {
+    "recognition": "OCR",
+    "roi": [
+      90,
+      430,
+      300,
+      130
+    ],
+    "expected": "^组队斗技$",
+    "action": "Click",
+    "target": [
+      110,
+      545,
+      1,
+      1
+    ],
+    "post_delay": 500,
+    "next": [
+      "TeamArenaResumeBattle",
+      "TeamArenaPageReady",
+      "TeamArenaMenuEntry"
+    ],
+    "max_hit": 3,
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaResumeBattle": {
+    "recognition": "OCR",
+    "roi": [
+      250,
+      185,
+      225,
+      85
+    ],
+    "expected": ".*当前.*第.*局.*",
+    "action": "DoNothing",
+    "next": [
+      "TeamArenaBattleResolve"
+    ],
+    "timeout": 180000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaPageReady": {
+    "recognition": "OCR",
+    "roi": [
+      0,
+      0,
+      260,
+      105
+    ],
+    "expected": "^组队斗技$",
+    "action": "StopTask",
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaStatusScan": {
+    "recognition": "OCR",
+    "roi": [
+      0,
+      540,
+      720,
+      550
+    ],
+    "expected": ".+",
+    "action": "StopTask",
+    "rate_limit": 100,
+    "timeout": 5000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaAttemptsScan": {
+    "recognition": "OCR",
+    "roi": [
+      565,
+      1080,
+      150,
+      75
+    ],
+    "expected": ".*[0-9]+.*",
+    "action": "StopTask",
+    "rate_limit": 100,
+    "timeout": 5000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaOpenMatch": {
+    "recognition": "OCR",
+    "roi": [
+      0,
+      0,
+      260,
+      105
+    ],
+    "expected": "^组队斗技$",
+    "action": "Click",
+    "target": [
+      360,
+      1055,
+      1,
+      1
+    ],
+    "post_delay": 650,
+    "next": [
+      "TeamArenaWaitMatch"
+    ],
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaMatchReady": {
+    "recognition": "OCR",
+    "roi": [
+      70,
+      1040,
+      580,
+      130
+    ],
+    "expected": "^确定$",
+    "action": "StopTask",
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaMatchScan": {
+    "recognition": "OCR",
+    "roi": [
+      0,
+      80,
+      720,
+      950
+    ],
+    "expected": ".*[0-9]+.*",
+    "action": "StopTask",
+    "rate_limit": 100,
+    "timeout": 5000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaRematch": {
+    "recognition": "OCR",
+    "roi": [
+      70,
+      1040,
+      230,
+      130
+    ],
+    "expected": "^重新匹配$",
+    "action": "Click",
+    "target": [
+      178,
+      1110,
+      1,
+      1
+    ],
+    "post_delay": 650,
+    "next": [
+      "TeamArenaWaitMatch"
+    ],
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaConfirmMatch": {
+    "recognition": "OCR",
+    "roi": [
+      70,
+      1040,
+      580,
+      130
+    ],
+    "expected": "^确定$",
+    "action": "Click",
+    "target": true,
+    "post_delay": 600,
+    "next": [
+      "TeamArenaOrderReady"
+    ],
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaOrderReady": {
+    "recognition": "OCR",
+    "roi": [
+      260,
+      1070,
+      220,
+      110
+    ],
+    "expected": "^保存调整$",
+    "action": "StopTask",
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaOrderScan": {
+    "recognition": "OCR",
+    "roi": [
+      55,
+      140,
+      630,
+      950
+    ],
+    "expected": ".+",
+    "action": "StopTask",
+    "rate_limit": 100,
+    "timeout": 5000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaSwap12": {
+    "recognition": "OCR",
+    "roi": [
+      260,
+      1070,
+      220,
+      110
+    ],
+    "expected": "^保存调整$",
+    "action": "Click",
+    "target": [
+      55,
+      460,
+      1,
+      1
+    ],
+    "post_delay": 350,
+    "next": [
+      "TeamArenaOrderReady"
+    ],
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaSwap23": {
+    "recognition": "OCR",
+    "roi": [
+      260,
+      1070,
+      220,
+      110
+    ],
+    "expected": "^保存调整$",
+    "action": "Click",
+    "target": [
+      55,
+      770,
+      1,
+      1
+    ],
+    "post_delay": 350,
+    "next": [
+      "TeamArenaOrderReady"
+    ],
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaStartBattle": {
+    "recognition": "OCR",
+    "roi": [
+      260,
+      1070,
+      420,
+      110
+    ],
+    "expected": "^挑战$",
+    "action": "Click",
+    "target": [
+      550,
+      1130,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "next": [
+      "TeamArenaBattleEntered"
+    ],
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaBattleEntered": {
+    "recognition": "OCR",
+    "roi": [
+      630,
+      400,
+      90,
+      130
+    ],
+    "expected": "^跳过$",
+    "action": "StopTask",
+    "rate_limit": 100,
+    "timeout": 15000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaBattleResolve": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": [
+      "TeamArenaBattleResultConfirm",
+      "TeamArenaBattleSkip",
+      "TeamArenaBattleBlockedNotice",
+      "TeamArenaBattleWait"
+    ],
+    "rate_limit": 100,
+    "timeout": 900000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaBattleResultConfirm": {
+    "recognition": "OCR",
+    "roi": [
+      60,
+      850,
+      250,
+      140
+    ],
+    "expected": "^确定$",
+    "action": "Click",
+    "target": [
+      185,
+      925,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "next": [
+      "TeamArenaPageReady"
+    ],
+    "rate_limit": 100,
+    "timeout": 120000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaBattleSkip": {
+    "recognition": "OCR",
+    "roi": [
+      630,
+      400,
+      90,
+      130
+    ],
+    "expected": "^跳过$",
+    "action": "Click",
+    "target": [
+      686,
+      480,
+      1,
+      1
+    ],
+    "post_delay": 1000,
+    "max_hit": 6,
+    "next": [
+      "TeamArenaBattleResultConfirm",
+      "TeamArenaBattleSkip",
+      "TeamArenaBattleBlockedNotice",
+      "TeamArenaBattleWait"
+    ],
+    "rate_limit": 500,
+    "timeout": 900000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaBattleBlockedNotice": {
+    "recognition": "OCR",
+    "roi": [
+      150,
+      170,
+      430,
+      230
+    ],
+    "expected": ".*挑战.*2次.*跳过战斗.*",
+    "action": "DoNothing",
+    "post_delay": 1200,
+    "max_hit": 5,
+    "next": [
+      "TeamArenaBattleResultConfirm",
+      "TeamArenaBattleBlockedNotice",
+      "TeamArenaBattleWait"
+    ],
+    "rate_limit": 500,
+    "timeout": 900000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaBattleWait": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "post_delay": 1000,
+    "max_hit": 600,
+    "next": [
+      "TeamArenaBattleResultConfirm",
+      "TeamArenaBattleSkip",
+      "TeamArenaBattleBlockedNotice",
+      "TeamArenaBattleWait"
+    ],
+    "rate_limit": 500,
+    "timeout": 900000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaReturnHome": {
+    "recognition": "OCR",
+    "roi": [
+      0,
+      0,
+      260,
+      105
+    ],
+    "expected": "^组队斗技$",
+    "action": "Click",
+    "target": [
+      100,
+      1135,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "next": [
+      "TeamArenaHomeReady",
+      "TeamArenaExitCrossMenu"
+    ],
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaHomeReady": {
+    "recognition": "And",
+    "all_of": [
+      "HomeReadyMainCitySelectedFeature",
+      "HomeReadyBackpackNavFeature",
+      "HomeReadyTrainingNavFeature",
+      "HomeReadyCityContentFeature",
+      "TeamArenaHomeRoleFeature"
+    ],
+    "action": "StopTask",
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaClickBack": {
+    "recognition": "DirectHit",
+    "action": "ClickKey",
+    "key": 4,
+    "post_delay": 350,
+    "max_hit": 2,
+    "next": [
+      "TeamArenaPageReady",
+      "TeamArenaMenuEntry",
+      "TeamArenaHomeRightEntry",
+      "TeamArenaSwipeHome",
+      "TeamArenaClickBack"
+    ],
+    "rate_limit": 100,
+    "timeout": 7000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaStopSafely": {
+    "recognition": "DirectHit",
+    "action": "StopTask"
+  },
+  "TeamArenaCloseOrder": {
+    "roi": [
+      260,
+      1070,
+      220,
+      110
+    ],
+    "next": [
+      "TeamArenaPageReady"
+    ],
+    "recognition": "OCR",
+    "timeout": 8000,
+    "post_delay": 400,
+    "expected": "^保存调整$",
+    "target": [
+      680,
+      90,
+      1,
+      1
+    ],
+    "action": "Click",
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaReopenOrder": {
+    "roi": [
+      300,
+      580,
+      130,
+      70
+    ],
+    "next": [
+      "TeamArenaOrderReady"
+    ],
+    "recognition": "OCR",
+    "timeout": 8000,
+    "post_delay": 500,
+    "expected": "^挑战期$",
+    "target": [
+      360,
+      1055,
+      1,
+      1
+    ],
+    "action": "Click",
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaClockScan": {
+    "recognition": "OCR",
+    "expected": ".+",
+    "roi": [
+      200,
+      590,
+      520,
+      585
+    ],
+    "action": "StopTask",
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaMatchOptionsScan": {
+    "recognition": "OCR",
+    "expected": ".+",
+    "roi": [
+      80,
+      1080,
+      540,
+      115
+    ],
+    "action": "StopTask",
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaOpenChests": {
+    "recognition": "OCR",
+    "expected": "^挑战宝箱$",
+    "roi": [
+      600,
+      1010,
+      120,
+      100
+    ],
+    "action": "Click",
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ],
+    "target": [
+      670,
+      1050,
+      1,
+      1
+    ],
+    "post_delay": 600,
+    "next": [
+      "TeamArenaChestsReady"
+    ]
+  },
+  "TeamArenaChestsReady": {
+    "recognition": "OCR",
+    "expected": "^奖励$",
+    "roi": [
+      280,
+      230,
+      160,
+      85
+    ],
+    "action": "StopTask",
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaChestScan": {
+    "recognition": "OCR",
+    "expected": ".+",
+    "roi": [
+      55,
+      315,
+      600,
+      615
+    ],
+    "action": "StopTask",
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaChestClaim": {
+    "recognition": "OCR",
+    "expected": "^领取$",
+    "roi": [
+      500,
+      380,
+      150,
+      80
+    ],
+    "action": "Click",
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ],
+    "target": true,
+    "post_delay": 600,
+    "next": [
+      "TeamArenaChestRewardReady"
+    ]
+  },
+  "TeamArenaChestRewardReady": {
+    "recognition": "OCR",
+    "expected": "^恭喜获得$",
+    "roi": [
+      230,
+      370,
+      270,
+      120
+    ],
+    "action": "StopTask",
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaChestRewardClose": {
+    "recognition": "OCR",
+    "expected": "^恭喜获得$",
+    "roi": [
+      230,
+      370,
+      270,
+      120
+    ],
+    "action": "Click",
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ],
+    "target": [
+      360,
+      966,
+      1,
+      1
+    ],
+    "post_delay": 600,
+    "next": [
+      "TeamArenaChestsReady"
+    ]
+  },
+  "TeamArenaCloseChests": {
+    "recognition": "OCR",
+    "expected": "^奖励$",
+    "roi": [
+      280,
+      230,
+      160,
+      85
+    ],
+    "action": "Click",
+    "rate_limit": 100,
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ],
+    "target": [
+      678,
+      285,
+      1,
+      1
+    ],
+    "post_delay": 600,
+    "next": [
+      "TeamArenaPageReady"
+    ]
+  },
+  "TeamArenaSwitchBoundary": {
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ],
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": [
+      "TeamArenaReturnHome",
+      "GameBootstrap"
+    ]
+  },
+  "TeamArenaHomeRoleFeature": {
+    "recognition": "OCR",
+    "expected": "(?!)",
+    "roi": [
+      170,
+      0,
+      190,
+      65
+    ]
+  },
+  "TeamArenaExitCrossMenu": {
+    "recognition": "OCR",
+    "expected": "^跨服战场$",
+    "roi": [
+      150,
+      65,
+      400,
+      140
+    ],
+    "action": "Click",
+    "target": [
+      100,
+      1135,
+      1,
+      1
+    ],
+    "post_delay": 650,
+    "next": [
+      "TeamArenaHomeReady"
+    ],
+    "timeout": 8000,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  },
+  "TeamArenaTitleScan": {
+    "roi": [
+      0,
+      0,
+      260,
+      105
+    ],
+    "recognition": "OCR",
+    "on_error": [
+      "TeamArenaStopSafely"
+    ],
+    "action": "StopTask",
+    "timeout": 5000,
+    "expected": ".+"
+  },
+  "TeamArenaResumeResult": {
+    "recognition": "And",
+    "all_of": ["PopupTeamResultFeature0", "PopupTeamResultFeature1", "PopupTeamResultFeature2"],
+    "action": "Click",
+    "target": [185, 925, 1, 1],
+    "post_delay": 700,
+    "max_hit": 2,
+    "next": ["TeamArenaPageReady"]
+  },
+  "TeamArenaWaitMatch": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": [
+      "TeamArenaMatchReady",
+      "TeamArenaOrderReady"
+    ],
+    "timeout": 120000,
+    "rate_limit": 500,
+    "on_error": [
+      "TeamArenaStopSafely"
+    ]
+  }
+}

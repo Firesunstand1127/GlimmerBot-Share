@@ -1,0 +1,617 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "SuperRankDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "SuperRankPageReady",
+            "SuperRankRecoverMatchPage",
+            "SuperRankMenuEntry",
+            "SuperRankHomeRightEntry",
+            "SuperRankSwipeHome",
+            "SuperRankClickBack"
+        ],
+        "rate_limit": 100,
+        "timeout": 15000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankSwipeHome": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "Swipe",
+        "begin": [
+            620,
+            650,
+            1,
+            1
+        ],
+        "end": [
+            120,
+            650,
+            1,
+            1
+        ],
+        "duration": 300,
+        "post_delay": 250,
+        "max_hit": 3,
+        "next": [
+            "SuperRankHomeRightEntry",
+            "SuperRankSwipeHome"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankHomeRightEntry": {
+        "recognition": "OCR",
+        "expected": "^跨服战场$",
+        "roi": [
+            250,
+            150,
+            450,
+            650
+        ],
+        "action": "Click",
+        "target": true,
+        "post_delay": 350,
+        "next": [
+            "SuperRankMenuEntry",
+            "SuperRankHomeRightEntry"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankMenuEntry": {
+        "recognition": "OCR",
+        "roi": [
+            410,
+            430,
+            300,
+            130
+        ],
+        "expected": "^超凡段位$",
+        "action": "Click",
+        "target": [
+            560,
+            545,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "SuperRankPageReady",
+            "SuperRankMenuEntry"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankPageReady": {
+        "recognition": "OCR",
+        "roi": [
+            240,
+            1000,
+            240,
+            120
+        ],
+        "expected": "^进入匹配$|\\d+[:：].*后开启",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankClaimRewardOptional": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "SuperRankClaimRewardButton",
+            "SuperRankPageReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankClaimRewardButton": {
+        "recognition": "OCR",
+        "roi": [
+            520,
+            895,
+            150,
+            100
+        ],
+        "expected": "^领取$",
+        "action": "Click",
+        "target": [
+            600,
+            940,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "SuperRankRewardOverlayClose",
+            "SuperRankPageReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankRewardOverlayClose": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantRewardTitleFeature",
+            "TaskAssistantTapBlankFeature"
+        ],
+        "action": "Click",
+        "target": [
+            573,
+            913,
+            67,
+            53
+        ],
+        "post_delay": 500,
+        "next": [
+            "SuperRankPageReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankRecoverMatchPage": {
+        "recognition": "OCR",
+        "roi": [
+            475,
+            1000,
+            205,
+            120
+        ],
+        "expected": "^(匹配对手|匹配中.*|(?:立刻|立即)挑战)$",
+        "action": "Click",
+        "target": [
+            70,
+            1120,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "SuperRankPageReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankAttemptsScan": {
+        "recognition": "OCR",
+        "roi": [
+            455,
+            1075,
+            220,
+            90
+        ],
+        "expected": ".*[0-9]+[ ]*/[ ]*[0-9]+.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankEnterMatch": {
+        "recognition": "OCR",
+        "roi": [
+            240,
+            1000,
+            240,
+            120
+        ],
+        "expected": "^进入匹配$",
+        "action": "Click",
+        "target": [
+            360,
+            1060,
+            1,
+            1
+        ],
+        "post_delay": 650,
+        "next": [
+            "SuperRankMatchReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankMatchReady": {
+        "recognition": "OCR",
+        "roi": [
+            475,
+            1000,
+            205,
+            120
+        ],
+        "expected": "^(匹配对手|匹配中.*|(?:立刻|立即)挑战)$",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankFindAndChallenge": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "SuperRankOpponentReady",
+            "SuperRankMatchButton",
+            "SuperRankMatchingWait"
+        ],
+        "rate_limit": 100,
+        "timeout": 45000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankOpponentReady": {
+        "recognition": "OCR",
+        "roi": [
+            475,
+            1000,
+            205,
+            120
+        ],
+        "expected": "^(?:立刻|立即)挑战$",
+        "action": "Click",
+        "target": [
+            575,
+            1060,
+            1,
+            1
+        ],
+        "post_delay": 800,
+        "next": [
+            "SuperRankBattleEntered",
+            "SuperRankOpponentReady"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 45000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankMatchButton": {
+        "recognition": "OCR",
+        "roi": [
+            475,
+            1000,
+            205,
+            120
+        ],
+        "expected": "^匹配对手$",
+        "action": "Click",
+        "target": [
+            575,
+            1060,
+            1,
+            1
+        ],
+        "post_delay": 250,
+        "next": [
+            "SuperRankOpponentReady",
+            "SuperRankMatchingWait",
+            "SuperRankMatchButton"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 45000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankMatchingWait": {
+        "recognition": "OCR",
+        "roi": [
+            475,
+            1000,
+            205,
+            120
+        ],
+        "expected": "^匹配中.*$",
+        "action": "DoNothing",
+        "post_delay": 400,
+        "max_hit": 100,
+        "next": [
+            "SuperRankOpponentReady",
+            "SuperRankMatchingWait"
+        ],
+        "rate_limit": 150,
+        "timeout": 45000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankBattleEntered": {
+        "recognition": "OCR",
+        "roi": [
+            630,
+            400,
+            90,
+            130
+        ],
+        "expected": "^跳过$",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 15000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankBattleResolve": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "SuperRankBattleResultConfirm",
+            "SuperRankBattleBlockedNotice",
+            "SuperRankBattleSkip",
+            "SuperRankBattleWait"
+        ],
+        "rate_limit": 100,
+        "timeout": 900000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankBattleResultConfirm": {
+        "recognition": "OCR",
+        "roi": [
+            60,
+            900,
+            250,
+            140
+        ],
+        "expected": "^确定$",
+        "action": "Click",
+        "target": [
+            185,
+            967,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "SuperRankMatchReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 180000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankBattleBlockedNotice": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            250,
+            520,
+            170
+        ],
+        "expected": ".*挑战.*3次.*跳过.*",
+        "action": "DoNothing",
+        "post_delay": 900,
+        "max_hit": 5,
+        "next": [
+            "SuperRankBattleResultConfirm",
+            "SuperRankBattleWait"
+        ],
+        "rate_limit": 300,
+        "timeout": 900000,
+        "on_error": [
+            "SuperRankBattleWaitNoSkip"
+        ]
+    },
+    "SuperRankBattleSkip": {
+        "recognition": "OCR",
+        "roi": [
+            630,
+            400,
+            90,
+            130
+        ],
+        "expected": "^跳过$",
+        "action": "Click",
+        "target": [
+            686,
+            480,
+            1,
+            1
+        ],
+        "post_delay": 900,
+        "max_hit": 3,
+        "next": [
+            "SuperRankBattleResultConfirm",
+            "SuperRankBattleBlockedNotice",
+            "SuperRankBattleWait"
+        ],
+        "rate_limit": 300,
+        "timeout": 900000,
+        "on_error": [
+            "SuperRankBattleWaitNoSkip"
+        ]
+    },
+    "SuperRankBattleWait": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "post_delay": 800,
+        "max_hit": 1100,
+        "next": [
+            "SuperRankBattleResultConfirm",
+            "SuperRankBattleSkip",
+            "SuperRankBattleWait"
+        ],
+        "rate_limit": 300,
+        "timeout": 900000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankReturnHome": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            50,
+            1230,
+            1,
+            1
+        ],
+        "post_delay": 900,
+        "next": [
+            "SuperRankHomeReady",
+            "SuperRankReturnHomeRetry"
+        ],
+        "rate_limit": 100,
+        "timeout": 18000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankReturnHomeRetry": {
+        "recognition": "OCR",
+        "roi": [
+            240,
+            1000,
+            240,
+            120
+        ],
+        "expected": "^进入匹配$",
+        "action": "Click",
+        "target": [
+            50,
+            1230,
+            1,
+            1
+        ],
+        "post_delay": 900,
+        "max_hit": 3,
+        "next": [
+            "SuperRankHomeReady",
+            "SuperRankReturnHomeRetry",
+            "SuperRankReturnHomeBackKey"
+        ],
+        "rate_limit": 150,
+        "timeout": 12000
+    },
+    "SuperRankReturnHomeBackKey": {
+        "recognition": "DirectHit",
+        "action": "ClickKey",
+        "key": 4,
+        "post_delay": 600,
+        "max_hit": 2,
+        "next": [
+            "SuperRankHomeReady",
+            "SuperRankReturnHomeRetry",
+            "SuperRankReturnHomeBackKey"
+        ],
+        "rate_limit": 150,
+        "timeout": 8000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankHomeReady": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 3500,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankClickBack": {
+        "recognition": "DirectHit",
+        "action": "ClickKey",
+        "key": 4,
+        "post_delay": 350,
+        "max_hit": 2,
+        "next": [
+            "SuperRankPageReady",
+            "SuperRankRecoverMatchPage",
+            "SuperRankMenuEntry",
+            "SuperRankHomeRightEntry",
+            "SuperRankSwipeHome",
+            "SuperRankClickBack"
+        ],
+        "rate_limit": 100,
+        "timeout": 7000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask"
+    },
+    "SuperRankBattleWaitNoSkip": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "post_delay": 800,
+        "max_hit": 1100,
+        "next": [
+            "SuperRankBattleResultConfirm",
+            "SuperRankBattleWaitNoSkip"
+        ],
+        "rate_limit": 300,
+        "timeout": 900000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    },
+    "SuperRankAvailabilityScan": {
+        "recognition": "OCR",
+        "roi": [
+            210,
+            1000,
+            480,
+            160
+        ],
+        "expected": ".+",
+        "action": "StopTask",
+        "timeout": 5000,
+        "on_error": [
+            "SuperRankStopSafely"
+        ]
+    }
+}

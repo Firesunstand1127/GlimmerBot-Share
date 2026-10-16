@@ -1,0 +1,496 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "FastBattleVoyageDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "VoyageCancelAcceleration",
+            "FastBattleDismissIncomeResult",
+            "FastBattleResult",
+            "FastBattleDropReadyOcr",
+            "FastBattleDropReady",
+            "FastBattleCloseVoyage",
+            "FastBattleEnterFromHome",
+            "FastBattleIdlePageReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "FastBattleEnterFromHome": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "Click",
+        "target": [
+            360,
+            1215,
+            1,
+            1
+        ],
+        "post_delay": 100,
+        "next": [
+            "FastBattleIdlePageReady",
+            "FastBattleEnterFromHome"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "FastBattleCloseVoyage": {
+        "recognition": "TemplateMatch",
+        "template": "voyage/merchant_title.png",
+        "threshold": 0.8,
+        "roi": [
+            167,
+            100,
+            433,
+            173
+        ],
+        "action": "Click",
+        "target": [
+            667,
+            1100,
+            47,
+            60
+        ],
+        "post_delay": 800,
+        "next": [
+            "FastBattleCloseVoyage",
+            "FastBattleIdlePageReady"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "FastBattleIdlePageReady": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeStablePageFeature"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "FastBattleOpenChest"
+        ],
+        "timeout": 8000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "FastBattleOpenChest": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            60,
+            1030,
+            1,
+            1
+        ],
+        "post_wait_freezes": {
+            "time": 400,
+            "rate_limit": 250,
+            "timeout": 6000
+        },
+        "post_delay": 800,
+        "next": [
+            "FastBattleIdleIncomeResult",
+            "FastBattleDropReadyOcr",
+            "FastBattleDropReady",
+            "FastBattleIdlePageReady"
+        ],
+        "timeout": 10000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "FastBattleIdleIncomeResult": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeResultTitleFeature",
+            "IdleIncomeResultItemsFeature"
+        ],
+        "action": "Click",
+        "target": [
+            30,
+            900,
+            1,
+            1
+        ],
+        "post_delay": 800,
+        "next": [
+            "FastBattleIdleIncomeResult",
+            "FastBattleDropReadyOcr",
+            "FastBattleDropReady",
+            "FastBattleIdlePageReady"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "FastBattleDropReadyOcr": {
+        "recognition": "OCR",
+        "expected": ".*挂机掉落.*",
+        "roi": [
+            100,
+            150,
+            520,
+            220
+        ],
+        "action": "DoNothing",
+        "next": [
+            "FastBattleRemainingZeroPlusZero",
+            "FastBattleRemainingZero",
+            "FastBattleCanRun"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ]
+    },
+    "FastBattleRemainingZeroPlusZero": {
+        "recognition": "OCR",
+        "expected": ".*0\\+0.*",
+        "roi": [
+            120,
+            987,
+            280,
+            93
+        ],
+        "threshold": 0.3,
+        "action": "DoNothing",
+        "next": [
+            "FastBattleDismissIncomeResult",
+            "FastBattleExitDropViaBlank",
+            "FastBattleCloseDropOcr",
+            "FastBattleCloseDrop"
+        ],
+        "timeout": 5000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ],
+        "rate_limit": 100
+    },
+    "FastBattleDropReady": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeDropTitleFeature",
+            "IdleIncomeDropCloseFeature"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "FastBattleRemainingZeroPlusZero",
+            "FastBattleRemainingZero",
+            "FastBattleCanRun"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "FastBattleRemainingZero": {
+        "recognition": "OCR",
+        "expected": ".*今日剩余[:：]?0次.*",
+        "roi": [
+            120,
+            987,
+            280,
+            93
+        ],
+        "threshold": 0.3,
+        "action": "DoNothing",
+        "next": [
+            "FastBattleDismissIncomeResult",
+            "FastBattleExitDropViaBlank",
+            "FastBattleCloseDropOcr",
+            "FastBattleCloseDrop"
+        ],
+        "timeout": 5000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "FastBattleDismissIncomeResult": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeResultTitleFeature",
+            "IdleIncomeResultItemsFeature"
+        ],
+        "action": "Click",
+        "target": [
+            30,
+            900,
+            1,
+            1
+        ],
+        "post_delay": 800,
+        "next": [
+            "FastBattleDismissIncomeResult",
+            "FastBattleDropReadyOcr",
+            "FastBattleDropReady",
+            "FastBattleIdlePageReady"
+        ],
+        "max_hit": 3,
+        "timeout": 5000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "FastBattleCanRun": {
+        "recognition": "TemplateMatch",
+        "template": "idle/fast_battle_button.png",
+        "threshold": 0.72,
+        "roi": [
+            80,
+            933,
+            320,
+            107
+        ],
+        "action": "Click",
+        "post_delay": 600,
+        "next": [
+            "FastBattlePrivilegePopup",
+            "FastBattleDiamondConfirm",
+            "FastBattleResult"
+        ],
+        "max_hit": 12,
+        "timeout": 8000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "FastBattlePrivilegePopup": {
+        "recognition": "OCR",
+        "expected": ".*68.*",
+        "roi": [
+            260,
+            550,
+            220,
+            110
+        ],
+        "threshold": 0.3,
+        "action": "Click",
+        "target": [
+            630,
+            120,
+            60,
+            70
+        ],
+        "post_delay": 500,
+        "next": [
+            "FastBattleDropReadyOcr",
+            "FastBattleDropReady",
+            "FastBattleResult"
+        ],
+        "timeout": 5000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "FastBattleDiamondConfirm": {
+        "recognition": "OCR",
+        "expected": ".*本次快速作战花费.*",
+        "roi": [
+            167,
+            520,
+            400,
+            147
+        ],
+        "threshold": 0.3,
+        "action": "Click",
+        "target": [
+            273,
+            740,
+            47,
+            53
+        ],
+        "post_delay": 500,
+        "next": [
+            "FastBattleDiamondConfirmOk"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "FastBattleDiamondConfirmOk": {
+        "recognition": "OCR",
+        "expected": ".*确认.*",
+        "roi": [
+            433,
+            693,
+            200,
+            120
+        ],
+        "threshold": 0.3,
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "FastBattleResult"
+        ],
+        "timeout": 5000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "FastBattleResult": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "OCR",
+                "expected": ".*快速.*",
+                "roi": [
+                    180,
+                    450,
+                    500,
+                    260
+                ],
+                "threshold": 0.3
+            },
+            {
+                "recognition": "OCR",
+                "expected": ".*获得物品.*",
+                "roi": [
+                    180,
+                    600,
+                    500,
+                    350
+                ],
+                "threshold": 0.3
+            }
+        ],
+        "action": "Click",
+        "target": [
+            653,
+            1120,
+            53,
+            53
+        ],
+        "post_delay": 800,
+        "next": [
+            "FastBattleDropReadyOcr",
+            "FastBattleDropReady"
+        ],
+        "timeout": 10000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "FastBattleCloseDropOcr": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeDropTitleFeature",
+            "IdleIncomeDropCloseFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 900,
+        "next": [
+            "FastBattleOnlyFinished"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ]
+    },
+    "FastBattleExitDropViaBlank": {
+        "recognition": "TemplateMatch",
+        "template": "idle/idle_drop_title.png",
+        "threshold": 0.76,
+        "roi": [
+            133,
+            167,
+            467,
+            267
+        ],
+        "action": "Click",
+        "target": [
+            50,
+            1215,
+            1,
+            1
+        ],
+        "post_delay": 1000,
+        "next": [
+            "FastBattleOnlyFinished",
+            "FastBattleExitDropViaBlank"
+        ],
+        "max_hit": 2,
+        "rate_limit": 150,
+        "timeout": 8000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ]
+    },
+    "FastBattleCloseDrop": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeDropTitleFeature",
+            "IdleIncomeDropCloseFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "FastBattleCloseDrop",
+            "FastBattleOnlyFinished"
+        ],
+        "max_hit": 3,
+        "timeout": 5000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "FastBattleOnlyFinished": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeStablePageFeature"
+        ],
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "FastBattleStopSafely"
+        ]
+    },
+    "FastBattleStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask",
+        "pre_delay": 0,
+        "post_delay": 0
+    }
+}

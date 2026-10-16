@@ -1,0 +1,1129 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "PopupCleanup": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "PopupFreeDrawClose",
+            "PopupFoodPrizeClose",
+            "PopupFoodPromotionClose",
+            "PopupKoiPromotionClose",
+            "PopupTeamResultClose",
+            "PopupKoiWinnerClose",
+            "PopupActivityRewardConfirm",
+            "PopupFiveStarPackClose",
+            "PopupOnlineTournamentPromotion",
+            "PopupTaskAssistantResult",
+            "PopupPaidAttemptCancel",
+            "PopupLadderOneClickPanelClose",
+            "PopupIdleIncomeCancelOcr",
+            "PopupIdleIncomeWarning",
+            "PopupIdleIncomeLimit",
+            "PopupWeeklyNotice",
+            "PopupPromoDiamondGift",
+            "PopupGenericGoldClose",
+            "PopupReunionJourney",
+            "PopupFreeDrawsPromotion",
+            "PopupFreeDrawsPage",
+            "PopupSystemExitDialog",
+            "PopupTaskAssistant",
+            "PopupDailyTaskPanelHome",
+            "PopupQuestionnaireGuide",
+            "PopupCleanupReadyStableCandidate",
+            "PopupUnknownRecoverBack"
+        ],
+        "rate_limit": 100,
+        "timeout": 20000,
+        "on_error": [
+            "PopupCleanupStopSafely"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "PopupPromoDiamondGift": {
+        "recognition": "OCR",
+        "roi": [
+            60,
+            540,
+            600,
+            260
+        ],
+        "expected": ".*(超值钻石礼|助力冒险征程).*",
+        "action": "Click",
+        "target": [
+            633,
+            196,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "PopupCleanup"
+        ],
+        "max_hit": 2,
+        "rate_limit": 100
+    },
+    "PopupDailyTaskPanelHome": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            60,
+            720,
+            260
+        ],
+        "expected": "^日常$",
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "PopupCleanup"
+        ],
+        "max_hit": 2,
+        "rate_limit": 100
+    },
+    "PopupQuestionnaireGuide": {
+        "recognition": "OCR",
+        "roi": [
+            90,
+            980,
+            230,
+            80
+        ],
+        "expected": ".*问.*调查.*",
+        "action": "Click",
+        "target": [
+            500,
+            900,
+            1,
+            1
+        ],
+        "post_delay": 600,
+        "next": [
+            "PopupCleanup"
+        ],
+        "max_hit": 2,
+        "rate_limit": 100
+    },
+    "PopupPaidAttemptCancel": {
+        "recognition": "OCR",
+        "roi": [
+            80,
+            650,
+            220,
+            180
+        ],
+        "expected": "^取消$",
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "PopupCleanup"
+        ],
+        "rate_limit": 100,
+        "max_hit": 2
+    },
+    "PopupLadderOneClickPanelClose": {
+        "recognition": "OCR",
+        "roi": [
+            180,
+            330,
+            360,
+            140
+        ],
+        "expected": "^一键挑战$",
+        "action": "Click",
+        "target": [
+            660,
+            405,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "PopupCleanup"
+        ],
+        "rate_limit": 100,
+        "max_hit": 2
+    },
+    "PopupAssistantReminder": {
+        "recognition": "OCR",
+        "roi": [
+            70,
+            960,
+            300,
+            120
+        ],
+        "expected": ".*(每周福利|领取提醒).*",
+        "action": "Click",
+        "target": [
+            55,
+            1100,
+            1,
+            1
+        ],
+        "post_delay": 350,
+        "next": [
+            "PopupCleanup"
+        ],
+        "rate_limit": 100
+    },
+    "PopupIdleIncomeLimit": {
+        "recognition": "OCR",
+        "roi": [
+            80,
+            540,
+            560,
+            160
+        ],
+        "expected": ".*挂机收益.*(上限|领取).*",
+        "action": "Click",
+        "target": [
+            185,
+            755,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "PopupCleanup"
+        ],
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": [
+            "PopupUnknownRecoverBack"
+        ]
+    },
+    "PopupIdleIncomeCancelOcr": {
+        "recognition": "OCR",
+        "roi": [
+            80,
+            700,
+            240,
+            100
+        ],
+        "expected": "^取消$",
+        "action": "Click",
+        "post_delay": 500,
+        "next": [
+            "PopupCleanup"
+        ],
+        "rate_limit": 100,
+        "max_hit": 2
+    },
+    "PopupWeeklyNotice": {
+        "recognition": "OCR",
+        "roi": [
+            430,
+            1020,
+            290,
+            180
+        ],
+        "expected": ".*本周不再提示.*",
+        "action": "Click",
+        "target": [
+            497,
+            1102,
+            1,
+            1
+        ],
+        "post_delay": 250,
+        "next": [
+            "PopupWeeklyNoticeClose"
+        ]
+    },
+    "PopupWeeklyNoticeClose": {
+        "recognition": "OCR",
+        "roi": [
+            430,
+            1020,
+            290,
+            180
+        ],
+        "expected": ".*本周不再提示.*",
+        "action": "Click",
+        "target": [
+            630,
+            255,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "PopupCleanup"
+        ]
+    },
+    "PopupGenericGoldClose": {
+        "recognition": "TemplateMatch",
+        "template": "popup/generic_gold_close.png",
+        "threshold": 0.7,
+        "roi": [
+            520,
+            80,
+            200,
+            320
+        ],
+        "action": "Click",
+        "post_wait_freezes": {
+            "time": 300,
+            "rate_limit": 200,
+            "timeout": 5000
+        },
+        "post_delay": 600,
+        "next": [
+            "PopupCleanup"
+        ],
+        "max_hit": 8,
+        "rate_limit": 150,
+        "timeout": 10000,
+        "on_error": [
+            "PopupUnknownRecoverBack"
+        ]
+    },
+    "PopupCloseQuizMenu": {
+        "recognition": "TemplateMatch",
+        "template": "common/assistant_quiz_menu_open.png",
+        "threshold": 0.78,
+        "roi": [
+            33,
+            647,
+            300,
+            467
+        ],
+        "action": "Click",
+        "target": [
+            70,
+            1137,
+            1,
+            1
+        ],
+        "post_delay": 400,
+        "next": [
+            "PopupCleanup"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "PopupIdleIncomeWarning": {
+        "recognition": "And",
+        "all_of": [
+            "PopupIdleIncomeTitleFeature",
+            "PopupIdleIncomeTextFeature",
+            "PopupIdleIncomeCancelFeature"
+        ],
+        "box_index": 2,
+        "action": "Click",
+        "post_wait_freezes": {
+            "time": 300,
+            "rate_limit": 100,
+            "timeout": 3000
+        },
+        "post_delay": 350,
+        "next": [
+            "PopupCleanup"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "PopupIdleIncomeTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "popup/idle_income_warning_title.png",
+        "threshold": 0.8,
+        "roi": [
+            167,
+            400,
+            400,
+            147
+        ]
+    },
+    "PopupIdleIncomeTextFeature": {
+        "recognition": "TemplateMatch",
+        "template": "popup/idle_income_warning_text.png",
+        "threshold": 0.76,
+        "roi": [
+            53,
+            533,
+            613,
+            153
+        ]
+    },
+    "PopupIdleIncomeCancelFeature": {
+        "recognition": "TemplateMatch",
+        "template": "popup/idle_income_warning_cancel.png",
+        "threshold": 0.8,
+        "roi": [
+            67,
+            680,
+            253,
+            160
+        ]
+    },
+    "PopupReunionJourney": {
+        "recognition": "And",
+        "all_of": [
+            "PopupReunionTitleFeature",
+            "PopupReunionCloseFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_wait_freezes": 200,
+        "post_delay": 100,
+        "next": [
+            "PopupCleanup"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "PopupReunionTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "popup/reunion_journey_title.png",
+        "threshold": 0.76,
+        "roi": [
+            147,
+            13,
+            433,
+            200
+        ]
+    },
+    "PopupReunionCloseFeature": {
+        "recognition": "TemplateMatch",
+        "template": "popup/reunion_journey_close.png",
+        "threshold": 0.8,
+        "roi": [
+            567,
+            80,
+            133,
+            147
+        ]
+    },
+    "PopupFreeDrawsPromotion": {
+        "recognition": "And",
+        "all_of": [
+            "PopupFreeDrawsPromotionTextFeature",
+            "PopupFreeDrawsPromotionGoFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 100,
+        "next": [
+            "PopupFreeDrawsPage"
+        ],
+        "timeout": 10000,
+        "on_error": [
+            "PopupCleanupStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "PopupFreeDrawsPromotionTextFeature": {
+        "recognition": "TemplateMatch",
+        "template": "popup/free_4000_draws_text.png",
+        "threshold": 0.76,
+        "roi": [
+            0,
+            600,
+            720,
+            300
+        ]
+    },
+    "PopupFreeDrawsPromotionGoFeature": {
+        "recognition": "TemplateMatch",
+        "template": "popup/free_4000_draws_go.png",
+        "threshold": 0.8,
+        "roi": [
+            167,
+            833,
+            400,
+            200
+        ]
+    },
+    "PopupFreeDrawsPage": {
+        "recognition": "And",
+        "all_of": [
+            "PopupFreeDrawsPageTitleFeature",
+            "PopupFreeDrawsPageCloseFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_wait_freezes": 200,
+        "post_delay": 100,
+        "next": [
+            "PopupCleanup"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "PopupFreeDrawsPageTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "popup/free_4000_draws_page_title.png",
+        "threshold": 0.76,
+        "roi": [
+            233,
+            120,
+            467,
+            267
+        ]
+    },
+    "PopupFreeDrawsPageCloseFeature": {
+        "recognition": "TemplateMatch",
+        "template": "popup/free_4000_draws_close.png",
+        "threshold": 0.8,
+        "roi": [
+            587,
+            40,
+            120,
+            153
+        ]
+    },
+    "PopupSystemExitDialog": {
+        "recognition": "And",
+        "all_of": [
+            "PopupSystemExitTitleFeature",
+            "PopupSystemExitCancelFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 100,
+        "next": [
+            "PopupCleanup"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "PopupSystemExitTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "popup/system_exit_game_title.png",
+        "threshold": 0.8,
+        "roi": [
+            120,
+            467,
+            333,
+            173
+        ]
+    },
+    "PopupSystemExitCancelFeature": {
+        "recognition": "TemplateMatch",
+        "template": "popup/system_exit_cancel.png",
+        "threshold": 0.8,
+        "roi": [
+            333,
+            620,
+            320,
+            200
+        ]
+    },
+    "PopupTaskAssistant": {
+        "recognition": "OCR",
+        "expected": [
+            "^一键执行$"
+        ],
+        "roi": [
+            180,
+            1020,
+            360,
+            150
+        ],
+        "action": "Click",
+        "target": [
+            700,
+            80,
+            1,
+            1
+        ],
+        "post_delay": 800,
+        "next": [
+            "PopupCleanup"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "max_hit": 3,
+        "on_error": [
+            "PopupCleanupStopSafely"
+        ]
+    },
+    "PopupTaskAssistantTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "common/task_assistant_title.png",
+        "threshold": 0.78,
+        "roi": [
+            200,
+            167,
+            400,
+            233
+        ]
+    },
+    "PopupTaskAssistantExecuteFeature": {
+        "recognition": "TemplateMatch",
+        "template": "common/task_assistant_execute.png",
+        "threshold": 0.8,
+        "roi": [
+            167,
+            1000,
+            400,
+            200
+        ]
+    },
+    "PopupCleanupFinished": {
+        "recognition": "And",
+        "all_of": [
+            "PopupHomeMainCityFeature",
+            "PopupHomeShopFeature"
+        ],
+        "action": "StopTask",
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "PopupHomeMainCityFeature": {
+        "recognition": "TemplateMatch",
+        "template": "home/main_city.png",
+        "threshold": 0.86,
+        "roi": [
+            0,
+            1133,
+            153,
+            147
+        ]
+    },
+    "PopupHomeShopFeature": {
+        "recognition": "TemplateMatch",
+        "template": "home/shop_label.png",
+        "threshold": 0.86,
+        "roi": [
+            400,
+            633,
+            280,
+            200
+        ]
+    },
+    "PopupCleanupFinishedRight": {
+        "recognition": "TemplateMatch",
+        "template": "home/cross_server_battlefield.png",
+        "threshold": 0.78,
+        "roi": [
+            380,
+            530,
+            220,
+            110
+        ],
+        "action": "StopTask",
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "PopupCleanupReadyStableCandidate": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "DoNothing",
+        "post_delay": 1800,
+        "next": [
+            "PopupIdleIncomeCancelOcr",
+            "PopupIdleIncomeWarning",
+            "PopupIdleIncomeLimit",
+            "PopupCleanupReadyStableVerified",
+            "PopupCleanup"
+        ]
+    },
+    "PopupCleanupReadyStableVerified": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "StopTask",
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "PopupCleanupFinishedOcr": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyArenaOcrFeature",
+            "HomeReadyShopOcrFeature"
+        ],
+        "action": "StopTask",
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "PopupUnknownRecoverBack": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            40,
+            1225,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "PopupCleanup"
+        ],
+        "max_hit": 2,
+        "timeout": 5000,
+        "on_error": [
+            "PopupCleanupStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "PopupCloseQuizSingleBubble": {
+        "recognition": "TemplateMatch",
+        "template": "common/assistant_quiz_single_bubble.png",
+        "threshold": 0.78,
+        "roi": [
+            40,
+            880,
+            300,
+            240
+        ],
+        "action": "Click",
+        "target": [
+            70,
+            1137,
+            1,
+            1
+        ],
+        "post_wait_freezes": {
+            "time": 250,
+            "rate_limit": 100,
+            "timeout": 2500
+        },
+        "post_delay": 350,
+        "next": [
+            "PopupCleanup"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "PopupCleanupStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask",
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "PopupTaskAssistantResult": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantResultTitleFeature",
+            "TaskAssistantFinishFeature"
+        ],
+        "action": "Click",
+        "target": [
+            360,
+            1020,
+            1,
+            1
+        ],
+        "post_delay": 600,
+        "next": [
+            "PopupTaskAssistantResult",
+            "PopupTaskAssistant",
+            "PopupCleanup"
+        ],
+        "max_hit": 3,
+        "timeout": 5000
+    },
+    "PopupOnlineTournamentPromotion": {
+        "recognition": "And",
+        "all_of": [
+            "PopupOnlineTournamentPromotionTitle",
+            "PopupOnlineTournamentPromotionWatch"
+        ],
+        "action": "Click",
+        "target": [
+            670,
+            125,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "PopupCleanup"
+        ],
+        "max_hit": 2
+    },
+    "PopupOnlineTournamentPromotionTitle": {
+        "recognition": "OCR",
+        "roi": [
+            50,
+            700,
+            620,
+            160
+        ],
+        "expected": "在线锦标赛"
+    },
+    "PopupOnlineTournamentPromotionWatch": {
+        "recognition": "OCR",
+        "roi": [
+            240,
+            1060,
+            260,
+            110
+        ],
+        "expected": "点击观看"
+    },
+    "PopupFiveStarPackFeature": {
+        "recognition": "And",
+        "all_of": [
+            {
+                "recognition": "OCR",
+                "expected": "5星强力英雄",
+                "roi": [
+                    90,
+                    185,
+                    530,
+                    105
+                ]
+            },
+            {
+                "recognition": "OCR",
+                "expected": "礼包消失",
+                "roi": [
+                    190,
+                    680,
+                    330,
+                    85
+                ]
+            },
+            {
+                "recognition": "OCR",
+                "expected": "[0-9]+元",
+                "roi": [
+                    260,
+                    940,
+                    230,
+                    95
+                ]
+            }
+        ]
+    },
+    "PopupFiveStarPackClose": {
+        "recognition": "And",
+        "all_of": [
+            "PopupFiveStarPackFeature"
+        ],
+        "action": "Click",
+        "target": [
+            604,
+            332,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "max_hit": 2,
+        "next": [
+            "PopupCleanup"
+        ]
+    },
+    "PopupActivityRewardTitle": {
+        "recognition": "OCR",
+        "expected": "^奖励$",
+        "roi": [
+            250,
+            420,
+            220,
+            90
+        ]
+    },
+    "PopupActivityRewardBody": {
+        "recognition": "OCR",
+        "expected": "^当前活跃度奖励$",
+        "roi": [
+            200,
+            500,
+            330,
+            100
+        ]
+    },
+    "PopupActivityRewardConfirmText": {
+        "recognition": "OCR",
+        "expected": "^确定$",
+        "roi": [
+            240,
+            700,
+            260,
+            110
+        ]
+    },
+    "PopupActivityRewardConfirm": {
+        "recognition": "And",
+        "all_of": [
+            "PopupActivityRewardTitle",
+            "PopupActivityRewardBody",
+            "PopupActivityRewardConfirmText"
+        ],
+        "action": "Click",
+        "target": [
+            355,
+            755,
+            1,
+            1
+        ],
+        "post_delay": 600,
+        "next": [
+            "PopupCleanup"
+        ],
+        "max_hit": 2,
+        "timeout": 5000,
+        "on_error": [
+            "PopupCleanupStopSafely"
+        ]
+    },
+    "PopupKoiWinnerTitle": {
+        "recognition": "OCR",
+        "expected": "中奖者",
+        "roi": [
+            270,
+            425,
+            190,
+            85
+        ]
+    },
+    "PopupKoiWinnerPrize": {
+        "recognition": "OCR",
+        "expected": "锦鲤大奖",
+        "roi": [
+            220,
+            650,
+            300,
+            80
+        ]
+    },
+    "PopupKoiWinnerClose": {
+        "recognition": "And",
+        "all_of": [
+            "PopupKoiWinnerTitle",
+            "PopupKoiWinnerPrize"
+        ],
+        "action": "Click",
+        "target": [
+            360,
+            1060,
+            1,
+            1
+        ],
+        "post_delay": 600,
+        "next": [
+            "PopupCleanup"
+        ],
+        "max_hit": 2,
+        "timeout": 5000,
+        "on_error": [
+            "PopupCleanupStopSafely"
+        ]
+    },
+    "PopupFoodPromotionFeature0": {
+        "recognition": "OCR",
+        "expected": "美食红包抢不停",
+        "roi": [
+            100,
+            750,
+            520,
+            120
+        ]
+    },
+    "PopupFoodPromotionFeature1": {
+        "recognition": "OCR",
+        "expected": "每天12点/20点限时开启",
+        "roi": [
+            90,
+            830,
+            550,
+            100
+        ]
+    },
+    "PopupFoodPromotionClose": {
+        "recognition": "And",
+        "all_of": [
+            "PopupFoodPromotionFeature0",
+            "PopupFoodPromotionFeature1"
+        ],
+        "action": "Click",
+        "target": [
+            619,
+            273,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "max_hit": 3,
+        "next": [
+            "PopupCleanup"
+        ]
+    },
+    "PopupKoiPromotionFeature0": {
+        "recognition": "OCR",
+        "expected": "夺超值锦鲤大奖",
+        "roi": [
+            180,
+            825,
+            500,
+            120
+        ]
+    },
+    "PopupKoiPromotionFeature1": {
+        "recognition": "OCR",
+        "expected": "点击前往",
+        "roi": [
+            240,
+            930,
+            260,
+            110
+        ]
+    },
+    "PopupKoiPromotionClose": {
+        "recognition": "And",
+        "all_of": [
+            "PopupKoiPromotionFeature0",
+            "PopupKoiPromotionFeature1"
+        ],
+        "action": "Click",
+        "target": [
+            631,
+            168,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "max_hit": 3,
+        "next": [
+            "PopupCleanup"
+        ]
+    },
+    "PopupTeamResultFeature0": {
+        "recognition": "OCR",
+        "expected": "挑战成功|挑战失败",
+        "roi": [
+            100,
+            240,
+            530,
+            180
+        ]
+    },
+    "PopupTeamResultFeature1": {
+        "recognition": "OCR",
+        "expected": "当前战斗.*新组队竞技场",
+        "roi": [
+            140,
+            390,
+            460,
+            75
+        ]
+    },
+    "PopupTeamResultFeature2": {
+        "recognition": "OCR",
+        "expected": "^确定$",
+        "roi": [
+            80,
+            880,
+            230,
+            95
+        ]
+    },
+    "PopupTeamResultClose": {
+        "recognition": "And",
+        "all_of": [
+            "PopupTeamResultFeature0",
+            "PopupTeamResultFeature1",
+            "PopupTeamResultFeature2"
+        ],
+        "action": "Click",
+        "target": [
+            185,
+            925,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "max_hit": 3,
+        "next": [
+            "PopupCleanup"
+        ]
+    },
+    "PopupFoodPrizeTitle": {
+        "recognition": "OCR",
+        "expected": "游戏掉落万份美食",
+        "roi": [
+            0,
+            750,
+            720,
+            170
+        ]
+    },
+    "PopupFoodPrizeDetail": {
+        "recognition": "OCR",
+        "expected": "有概率获取实体美食奖励",
+        "roi": [
+            130,
+            900,
+            450,
+            90
+        ]
+    },
+    "PopupFoodPrizeClose": {
+        "recognition": "And",
+        "all_of": [
+            "PopupFoodPrizeTitle",
+            "PopupFoodPrizeDetail"
+        ],
+        "action": "Click",
+        "target": [
+            619,
+            273,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "max_hit": 3,
+        "next": [
+            "PopupCleanup"
+        ]
+    },
+    "PopupFreeDrawTitle": {
+        "recognition": "OCR",
+        "expected": "免费领4000抽",
+        "roi": [
+            0,
+            650,
+            600,
+            150
+        ]
+    },
+    "PopupFreeDrawGo": {
+        "recognition": "OCR",
+        "expected": "点击前往",
+        "roi": [
+            200,
+            860,
+            330,
+            130
+        ]
+    },
+    "PopupFreeDrawClose": {
+        "recognition": "And",
+        "all_of": [
+            "PopupFreeDrawTitle",
+            "PopupFreeDrawGo"
+        ],
+        "action": "Click",
+        "target": [
+            619,
+            273,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "max_hit": 3,
+        "next": [
+            "PopupCleanup"
+        ]
+    }
+}

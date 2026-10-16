@@ -1,0 +1,680 @@
+{
+  "$schema": "../../../deps/tools/pipeline.schema.json",
+  "AccountSwitchOpenSdk": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": [
+      "AccountSwitchOpenSdkPopupPromoDiamondGift",
+      "AccountSwitchOpenSdkPopupFreeDrawClose",
+      "AccountSwitchOpenSdkPopupFoodPrizeClose",
+      "AccountSwitchOpenSdkPopupFoodPromotionClose",
+      "AccountSwitchOpenSdkPopupKoiPromotionClose",
+      "AccountSwitchOpenSdkPopupTeamResultClose",
+      "AccountSwitchSdkReady",
+      "AccountSwitchSettingsPage",
+      "AccountSwitchProfilePage",
+      "AccountSwitchHomeOcr",
+      "AccountSwitchHomePage",
+      "AccountSwitchWait"
+    ],
+    "timeout": 30000,
+    "on_error": [
+      "AccountSwitchStopSafely"
+    ],
+    "rate_limit": 120
+  },
+  "AccountSwitchHomeOcr": {
+    "recognition": "OCR",
+    "expected": "^主城$",
+    "roi": [
+      0,
+      1160,
+      115,
+      120
+    ],
+    "action": "Click",
+    "target": [
+      50,
+      50,
+      1,
+      1
+    ],
+    "post_delay": 500,
+    "next": [
+      "AccountSwitchOpenSdk"
+    ]
+  },
+  "AccountSwitchHomePage": {
+    "recognition": "And",
+    "all_of": [
+      "HomeReadyMainCitySelectedFeature",
+      "HomeReadyBackpackNavFeature",
+      "HomeReadyTrainingNavFeature",
+      "HomeReadyCityContentFeature"
+    ],
+    "action": "Click",
+    "target": [
+      50,
+      50,
+      1,
+      1
+    ],
+    "post_delay": 500,
+    "next": [
+      "AccountSwitchOpenSdk"
+    ]
+  },
+  "AccountSwitchHomeVisible": {
+    "recognition": "And",
+    "all_of": [
+      "HomeReadyMainCitySelectedFeature",
+      "HomeReadyBackpackNavFeature",
+      "HomeReadyTrainingNavFeature",
+      "HomeReadyCityContentFeature"
+    ],
+    "action": "StopTask",
+    "timeout": 5000,
+    "on_error": [
+      "AccountSwitchStopSafely"
+    ]
+  },
+  "AccountServerVerify": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": [
+      "AccountServerVerifyPopupPromoDiamondGift",
+      "AccountServerVerifyPopupFreeDrawClose",
+      "AccountServerVerifyPopupFoodPrizeClose",
+      "AccountServerVerifyPopupFoodPromotionClose",
+      "AccountServerVerifyPopupKoiPromotionClose",
+      "AccountServerVerifyPopupTeamResultClose",
+      "AccountServerSettingsScan",
+      "AccountServerSettingsPage",
+      "AccountServerProfilePage",
+      "AccountServerHomeOcr",
+      "AccountServerHomePage",
+      "AccountServerWait"
+    ],
+    "timeout": 30000,
+    "on_error": [
+      "AccountSwitchStopSafely"
+    ],
+    "rate_limit": 150
+  },
+  "AccountServerHomeOcr": {
+    "recognition": "OCR",
+    "expected": "^主城$",
+    "roi": [
+      0,
+      1160,
+      115,
+      120
+    ],
+    "action": "Click",
+    "target": [
+      50,
+      50,
+      1,
+      1
+    ],
+    "post_delay": 450,
+    "next": [
+      "AccountServerVerify"
+    ]
+  },
+  "AccountServerHomePage": {
+    "recognition": "And",
+    "all_of": [
+      "HomeReadyMainCitySelectedFeature",
+      "HomeReadyBackpackNavFeature",
+      "HomeReadyTrainingNavFeature",
+      "HomeReadyCityContentFeature"
+    ],
+    "action": "Click",
+    "target": [
+      50,
+      50,
+      1,
+      1
+    ],
+    "post_delay": 450,
+    "next": [
+      "AccountServerVerify"
+    ]
+  },
+  "AccountServerProfilePage": {
+    "recognition": "OCR",
+    "expected": "^个人空间$",
+    "roi": [
+      50,
+      100,
+      360,
+      180
+    ],
+    "action": "Click",
+    "target": [
+      590,
+      657,
+      1,
+      1
+    ],
+    "post_delay": 450,
+    "next": [
+      "AccountServerVerify"
+    ]
+  },
+  "AccountServerSettingsPage": {
+    "recognition": "OCR",
+    "expected": "^系统设置$",
+    "roi": [
+      180,
+      280,
+      360,
+      180
+    ],
+    "action": "DoNothing",
+    "next": [
+      "AccountServerSettingsScan"
+    ]
+  },
+  "AccountServerSettingsScan": {
+    "recognition": "OCR",
+    "expected": "(?!)",
+    "roi": [
+      115,
+      930,
+      260,
+      115
+    ],
+    "action": "StopTask",
+    "timeout": 5000,
+    "on_error": [
+      "AccountSwitchStopSafely"
+    ]
+  },
+  "AccountServerReturnHome": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "next": [
+      "AccountServerCloseSettings",
+      "AccountServerCloseProfile",
+      "AccountSwitchHomeVisible",
+      "AccountSwitchWaitReturnHome"
+    ],
+    "timeout": 12000,
+    "on_error": [
+      "AccountSwitchStopSafely"
+    ],
+    "rate_limit": 120
+  },
+  "AccountServerCloseSettings": {
+    "recognition": "OCR",
+    "expected": "^系统设置$",
+    "roi": [
+      180,
+      280,
+      360,
+      180
+    ],
+    "action": "Click",
+    "target": [
+      677,
+      352,
+      1,
+      1
+    ],
+    "post_delay": 500,
+    "next": [
+      "AccountServerReturnHome"
+    ]
+  },
+  "AccountServerCloseProfile": {
+    "recognition": "OCR",
+    "expected": "^个人空间$",
+    "roi": [
+      50,
+      100,
+      360,
+      180
+    ],
+    "action": "Click",
+    "target": [
+      680,
+      165,
+      1,
+      1
+    ],
+    "post_delay": 600,
+    "next": [
+      "AccountServerReturnHome"
+    ]
+  },
+  "AccountSwitchWaitReturnHome": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "post_delay": 300,
+    "next": [
+      "AccountServerReturnHome"
+    ],
+    "max_hit": 20
+  },
+  "AccountSwitchProfilePage": {
+    "recognition": "OCR",
+    "expected": "^个人空间$",
+    "roi": [
+      50,
+      100,
+      360,
+      180
+    ],
+    "action": "Click",
+    "target": [
+      590,
+      657,
+      1,
+      1
+    ],
+    "post_delay": 500,
+    "next": [
+      "AccountSwitchOpenSdk"
+    ]
+  },
+  "AccountSwitchSettingsPage": {
+    "recognition": "OCR",
+    "expected": "^系统设置$",
+    "roi": [
+      180,
+      280,
+      360,
+      180
+    ],
+    "action": "Click",
+    "target": [
+      587,
+      997,
+      1,
+      1
+    ],
+    "post_delay": 900,
+    "next": [
+      "AccountSwitchOpenSdk"
+    ]
+  },
+  "AccountSwitchWait": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "post_delay": 350,
+    "next": [
+      "AccountSwitchOpenSdk"
+    ],
+    "max_hit": 45
+  },
+  "AccountSwitchSdkReady": {
+    "recognition": "OCR",
+    "expected": "^进入游戏$",
+    "roi": [
+      120,
+      570,
+      480,
+      260
+    ],
+    "action": "StopTask"
+  },
+  "AccountSwitchSdkCurrentScan": {
+    "recognition": "OCR",
+    "expected": ".+",
+    "roi": [
+      55,
+      480,
+      610,
+      180
+    ],
+    "action": "StopTask",
+    "timeout": 8000,
+    "on_error": [
+      "AccountSwitchStopSafely"
+    ]
+  },
+  "AccountSwitchExpandAccountList": {
+    "recognition": "OCR",
+    "expected": "^进入游戏$",
+    "roi": [
+      120,
+      570,
+      480,
+      260
+    ],
+    "action": "Click",
+    "target": [
+      577,
+      580,
+      1,
+      1
+    ],
+    "post_delay": 450,
+    "timeout": 8000,
+    "on_error": [
+      "AccountSwitchStopSafely"
+    ]
+  },
+  "AccountSwitchListReady": {
+    "recognition": "OCR",
+    "expected": "(?!)",
+    "roi": [
+      55,
+      620,
+      610,
+      370
+    ],
+    "action": "StopTask",
+    "timeout": 5000,
+    "on_error": [
+      "AccountSwitchStopSafely"
+    ]
+  },
+  "AccountSwitchListScanAll": {
+    "recognition": "OCR",
+    "expected": ".+",
+    "roi": [
+      55,
+      620,
+      610,
+      370
+    ],
+    "action": "StopTask",
+    "timeout": 5000,
+    "on_error": [
+      "AccountSwitchStopSafely"
+    ]
+  },
+  "AccountSwitchSelectAccount": {
+    "recognition": "OCR",
+    "expected": "(?!)",
+    "roi": [
+      55,
+      620,
+      610,
+      370
+    ],
+    "order_by": "Vertical",
+    "action": "Click",
+    "post_delay": 500,
+    "timeout": 8000,
+    "on_error": [
+      "AccountSwitchStopSafely"
+    ]
+  },
+  "AccountSwitchEnterGame": {
+    "recognition": "OCR",
+    "expected": "^进入游戏$",
+    "roi": [
+      120,
+      570,
+      480,
+      260
+    ],
+    "action": "Click",
+    "post_delay": 1000,
+    "timeout": 10000,
+    "on_error": [
+      "AccountSwitchStopSafely"
+    ]
+  },
+  "AccountSwitchStopSafely": {
+    "recognition": "DirectHit",
+    "action": "StopTask"
+  },
+  "AccountServerWait": {
+    "recognition": "DirectHit",
+    "action": "DoNothing",
+    "post_delay": 350,
+    "next": [
+      "AccountServerVerify"
+    ],
+    "max_hit": 45
+  },
+  "AccountServerVerifyPopupFoodPromotionClose": {
+    "recognition": "And",
+    "all_of": [
+      "PopupFoodPromotionFeature0",
+      "PopupFoodPromotionFeature1"
+    ],
+    "action": "Click",
+    "target": [
+      619,
+      273,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "max_hit": 3,
+    "next": [
+      "AccountServerVerify"
+    ]
+  },
+  "AccountServerVerifyPopupKoiPromotionClose": {
+    "recognition": "And",
+    "all_of": [
+      "PopupKoiPromotionFeature0",
+      "PopupKoiPromotionFeature1"
+    ],
+    "action": "Click",
+    "target": [
+      631,
+      168,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "max_hit": 3,
+    "next": [
+      "AccountServerVerify"
+    ]
+  },
+  "AccountServerVerifyPopupTeamResultClose": {
+    "recognition": "And",
+    "all_of": [
+      "PopupTeamResultFeature0",
+      "PopupTeamResultFeature1",
+      "PopupTeamResultFeature2"
+    ],
+    "action": "Click",
+    "target": [
+      185,
+      925,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "max_hit": 3,
+    "next": [
+      "AccountServerVerify"
+    ]
+  },
+  "AccountSwitchOpenSdkPopupFoodPromotionClose": {
+    "recognition": "And",
+    "all_of": [
+      "PopupFoodPromotionFeature0",
+      "PopupFoodPromotionFeature1"
+    ],
+    "action": "Click",
+    "target": [
+      619,
+      273,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "max_hit": 3,
+    "next": [
+      "AccountSwitchOpenSdk"
+    ]
+  },
+  "AccountSwitchOpenSdkPopupKoiPromotionClose": {
+    "recognition": "And",
+    "all_of": [
+      "PopupKoiPromotionFeature0",
+      "PopupKoiPromotionFeature1"
+    ],
+    "action": "Click",
+    "target": [
+      631,
+      168,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "max_hit": 3,
+    "next": [
+      "AccountSwitchOpenSdk"
+    ]
+  },
+  "AccountSwitchOpenSdkPopupTeamResultClose": {
+    "recognition": "And",
+    "all_of": [
+      "PopupTeamResultFeature0",
+      "PopupTeamResultFeature1",
+      "PopupTeamResultFeature2"
+    ],
+    "action": "Click",
+    "target": [
+      185,
+      925,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "max_hit": 3,
+    "next": [
+      "AccountSwitchOpenSdk"
+    ]
+  },
+  "AccountServerVerifyPopupFoodPrizeClose": {
+    "recognition": "And",
+    "all_of": [
+      "PopupFoodPrizeTitle",
+      "PopupFoodPrizeDetail"
+    ],
+    "action": "Click",
+    "target": [
+      619,
+      273,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "max_hit": 3,
+    "next": [
+      "AccountServerVerify"
+    ]
+  },
+  "AccountSwitchOpenSdkPopupFoodPrizeClose": {
+    "recognition": "And",
+    "all_of": [
+      "PopupFoodPrizeTitle",
+      "PopupFoodPrizeDetail"
+    ],
+    "action": "Click",
+    "target": [
+      619,
+      273,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "max_hit": 3,
+    "next": [
+      "AccountSwitchOpenSdk"
+    ]
+  },
+  "AccountServerVerifyPopupPromoDiamondGift": {
+    "recognition": "OCR",
+    "roi": [
+      60,
+      540,
+      600,
+      260
+    ],
+    "expected": ".*(超值钻石礼|助力冒险征程).*",
+    "action": "Click",
+    "target": [
+      633,
+      196,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "next": [
+      "AccountServerVerify"
+    ],
+    "max_hit": 2,
+    "rate_limit": 100,
+    "on_error": [
+      "AccountSwitchStopSafely"
+    ]
+  },
+  "AccountServerVerifyPopupFreeDrawClose": {
+    "recognition": "And",
+    "all_of": [
+      "PopupFreeDrawTitle",
+      "PopupFreeDrawGo"
+    ],
+    "action": "Click",
+    "target": [
+      619,
+      273,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "max_hit": 3,
+    "next": [
+      "AccountServerVerify"
+    ]
+  },
+  "AccountSwitchOpenSdkPopupPromoDiamondGift": {
+    "recognition": "OCR",
+    "roi": [
+      60,
+      540,
+      600,
+      260
+    ],
+    "expected": ".*(超值钻石礼|助力冒险征程).*",
+    "action": "Click",
+    "target": [
+      633,
+      196,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "next": [
+      "AccountSwitchOpenSdk"
+    ],
+    "max_hit": 2,
+    "rate_limit": 100,
+    "on_error": [
+      "AccountSwitchStopSafely"
+    ]
+  },
+  "AccountSwitchOpenSdkPopupFreeDrawClose": {
+    "recognition": "And",
+    "all_of": [
+      "PopupFreeDrawTitle",
+      "PopupFreeDrawGo"
+    ],
+    "action": "Click",
+    "target": [
+      619,
+      273,
+      1,
+      1
+    ],
+    "post_delay": 700,
+    "max_hit": 3,
+    "next": [
+      "AccountSwitchOpenSdk"
+    ]
+  }
+}

@@ -1,0 +1,950 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "IdleIncomeDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "IdleIncomeResult",
+            "IdleIncomeClaimButtonNew",
+            "IdleIncomeDropBackNew",
+            "IdleIncomeCloseDropWindow",
+            "IdleIncomeCloseTaskAssistant",
+            "IdleIncomePageReady",
+            "IdleIncomeNavigateHome",
+            "IdleIncomeEnterFromHome",
+            "IdleIncomeEnter"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "IdleTicketDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "IdleTicketOnlyPageReady",
+            "IdleTicketCloseTaskAssistant",
+            "IdleTicketNavigateHome",
+            "IdleTicketEnterFromHome",
+            "IdleTicketEnter"
+        ],
+        "rate_limit": 150,
+        "timeout": 12000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "IdleTicketEnterFromHome": {
+        "recognition": "And",
+        "all_of": ["HomeReadyMainCitySelectedFeature", "HomeReadyBackpackNavFeature", "HomeReadyTrainingNavFeature", "HomeReadyCityContentFeature"],
+        "action": "Click",
+        "target": [
+            360,
+            1215,
+            1,
+            1
+        ],
+        "post_wait_freezes": {
+            "time": 300,
+            "rate_limit": 200,
+            "timeout": 5000
+        },
+        "post_delay": 300,
+        "next": [
+            "IdleTicketOnlyPageReady",
+            "IdleTicketEnterFromHome"
+        ],
+        "max_hit": 3,
+        "rate_limit": 150,
+        "timeout": 10000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ]
+    },
+    "IdleTicketNavigateHome": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.78,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 600,
+        "next": [
+            "IdleTicketEnterFromHome",
+            "IdleTicketEnter"
+        ],
+        "rate_limit": 150,
+        "timeout": 10000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ]
+    },
+    "IdleTicketCloseTaskAssistant": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantHeaderFeature",
+            "TaskAssistantExecuteFeature"
+        ],
+        "action": "Click",
+        "target": [650, 850, 1, 1],
+        "post_delay": 600,
+        "next": [
+            "IdleTicketEnter"
+        ]
+    },
+    "IdleTicketEnter": {
+        "recognition": "TemplateMatch",
+        "template": "home/battle_entry.png",
+        "threshold": 0.7,
+        "roi": [
+            267,
+            1133,
+            187,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            360,
+            1215,
+            1,
+            1
+        ],
+        "post_wait_freezes": {
+            "time": 300,
+            "rate_limit": 200,
+            "timeout": 5000
+        },
+        "post_delay": 300,
+        "next": [
+            "IdleTicketOnlyPageReady",
+            "IdleTicketEnter"
+        ],
+        "max_hit": 3,
+        "rate_limit": 150,
+        "timeout": 12000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ]
+    },
+    "IdleTicketOnlyPageReady": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeStablePageFeature"
+        ],
+        "action": "DoNothing",
+        "pre_delay": 800,
+        "next": [
+            "IdleTicketClaimableOnly",
+            "IdleTicketClaimableOcrOnly",
+            "IdleTicketAlreadyClaimedOnly",
+            "IdleTicketMissingOnly"
+        ],
+        "rate_limit": 150,
+        "timeout": 10000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ]
+    },
+    "IdleTicketClaimableOnly": {
+        "recognition": "TemplateMatch",
+        "template": "idle/ticket_claimable.png",
+        "threshold": 0.6,
+        "roi": [
+            0,
+            100,
+            173,
+            220
+        ],
+        "action": "Click",
+        "target": [75, 190, 1, 1],
+        "post_delay": 1800,
+        "next": [
+            "IdleTicketPageClaimOnly",
+            "IdleTicketPageClaimedOnly",
+            "IdleTicketClaimableOnly"
+        ],
+        "max_hit": 5,
+        "rate_limit": 150,
+        "timeout": 10000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ]
+    },
+    "IdleTicketClaimableOcrOnly": {
+        "recognition": "OCR",
+        "roi": [0, 100, 173, 220],
+        "expected": ".*(4000抽|可领取).*",
+        "action": "Click",
+        "target": [70, 190, 1, 1],
+        "post_delay": 800,
+        "next": [
+            "IdleTicketPageClaimOnly",
+            "IdleTicketPageClaimedOnly",
+            "IdleTicketClaimableOcrOnly"
+        ],
+        "max_hit": 3,
+        "rate_limit": 150,
+        "timeout": 10000,
+        "on_error": ["IdleIncomeStopSafely"]
+    },
+    "IdleTicketPageClaimOnly": {
+        "recognition": "And",
+        "all_of": [
+            "IdleTicketPageTitleFeature",
+            "IdleTicketClaimButtonFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "IdleTicketRewardOverlayOnly"
+        ],
+        "timeout": 10000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "rate_limit": 150
+    },
+    "IdleTicketPageClaimedOnly": {
+        "recognition": "OCR",
+        "roi": [150, 840, 420, 110],
+        "expected": ".*次日可领取.*",
+        "action": "Click",
+        "target": [663, 133, 1, 1],
+        "post_delay": 800,
+        "next": [
+            "IdleTicketOnlyFinished"
+        ],
+        "timeout": 8000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "rate_limit": 150
+    },
+    "IdleTicketRewardOverlayOnly": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantRewardTitleFeature",
+            "TaskAssistantTapBlankFeature"
+        ],
+        "action": "Click",
+        "target": [
+            650,
+            850,
+            1,
+            1
+        ],
+        "post_delay": 800,
+        "next": [
+            "IdleTicketRewardOverlayOnly",
+            "IdleTicketClosePageOnly"
+        ],
+        "max_hit": 3,
+        "timeout": 10000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "rate_limit": 150
+    },
+    "IdleTicketClosePageOnly": {
+        "recognition": "And",
+        "all_of": [
+            "IdleTicketPageTitleFeature",
+            "IdleTicketCloseFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "IdleTicketClosePageOnly",
+            "IdleTicketOnlyFinished"
+        ],
+        "max_hit": 3,
+        "timeout": 10000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "rate_limit": 150
+    },
+    "IdleTicketAlreadyClaimedOnly": {
+        "recognition": "TemplateMatch",
+        "template": "idle/ticket_claimed.png",
+        "threshold": 0.76,
+        "roi": [
+            0,
+            100,
+            173,
+            220
+        ],
+        "action": "DoNothing",
+        "next": [
+            "IdleTicketOnlyFinished"
+        ],
+        "rate_limit": 150
+    },
+    "IdleTicketMissingOnly": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeStablePageFeature"
+        ],
+        "action": "Click",
+        "target": [70, 190, 1, 1],
+        "post_delay": 800,
+        "next": [
+            "IdleTicketPageClaimOnly",
+            "IdleTicketPageClaimedOnly",
+            "IdleTicketAlreadyClaimedOnly",
+            "IdleTicketMissingConfirmedOnly"
+        ],
+        "timeout": 5000,
+        "on_error": ["IdleIncomeStopSafely"],
+        "rate_limit": 150
+    },
+    "IdleTicketMissingConfirmedOnly": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeStablePageFeature"
+        ],
+        "action": "StopTask",
+        "rate_limit": 150,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "IdleTicketOnlyFinished": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeStablePageFeature"
+        ],
+        "action": "StopTask",
+        "rate_limit": 300,
+        "timeout": 10000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ]
+    },
+    "IdleIncomeClaimDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "IdleIncomeResult",
+            "IdleIncomePrivilegePopup",
+            "IdleIncomeClaimButtonNew",
+            "IdleIncomeDropBackNew",
+            "IdleIncomeCloseDropWindow",
+            "IdleIncomePageReady",
+            "IdleIncomeNavigateHome",
+            "IdleIncomeEnterFromHome",
+            "IdleIncomeEnter"
+        ],
+        "rate_limit": 150,
+        "timeout": 12000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ]
+    },
+    "IdleIncomeEnterFromHome": {
+        "recognition": "And",
+        "all_of": ["HomeReadyMainCitySelectedFeature", "HomeReadyBackpackNavFeature", "HomeReadyTrainingNavFeature", "HomeReadyCityContentFeature"],
+        "action": "Click",
+        "target": [
+            360,
+            1215,
+            1,
+            1
+        ],
+        "post_delay": 100,
+        "next": [
+            "IdleIncomePageReady",
+            "IdleIncomeEnterFromHome"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "IdleIncomeNavigateHome": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.78,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 300,
+        "next": [
+            "IdleIncomeEnterFromHome",
+            "IdleIncomeEnter"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "IdleIncomeCloseTaskAssistant": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantHeaderFeature",
+            "TaskAssistantExecuteFeature"
+        ],
+        "action": "Click",
+        "target": [
+            333,
+            1193,
+            53,
+            47
+        ],
+        "post_delay": 100,
+        "next": [
+            "IdleIncomeEnter"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "IdleIncomeEnter": {
+        "recognition": "TemplateMatch",
+        "template": "home/battle_entry.png",
+        "threshold": 0.7,
+        "roi": [
+            267,
+            1133,
+            187,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            360,
+            1215,
+            1,
+            1
+        ],
+        "post_wait_freezes": 200,
+        "post_delay": 100,
+        "next": [
+            "IdleIncomePageReady",
+            "IdleIncomeEnter"
+        ],
+        "max_hit": 3,
+        "timeout": 12000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "IdleIncomePageReady": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeStablePageFeature"
+        ],
+        "action": "DoNothing",
+        "next": [
+            "IdleQuickClaimCheck"
+        ],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "IdleIncomeChestFeature": {
+        "recognition": "TemplateMatch",
+        "template": "idle/idle_chest.png",
+        "threshold": 0.55,
+        "roi": [
+            0,
+            920,
+            200,
+            233
+        ]
+    },
+    "IdleIncomeBattleTabFeature": {
+        "recognition": "TemplateMatch",
+        "template": "idle/battle_tab.png",
+        "threshold": 0.58,
+        "roi": [
+            267,
+            1133,
+            187,
+            147
+        ]
+    },
+    "IdleIncomeStablePageFeature": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeChestFeature",
+            "IdleIncomeBattleTabFeature"
+        ]
+    },
+    "IdleTicketClaimable": {
+        "recognition": "TemplateMatch",
+        "template": "idle/ticket_claimable.png",
+        "threshold": 0.78,
+        "roi": [
+            0,
+            100,
+            173,
+            220
+        ],
+        "action": "Click",
+        "target": [75, 190, 1, 1],
+        "post_delay": 1200,
+        "next": [
+            "IdleTicketPageClaim",
+            "IdleTicketClaimable"
+        ],
+        "max_hit": 3,
+        "timeout": 10000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "IdleTicketPageClaim": {
+        "recognition": "And",
+        "all_of": [
+            "IdleTicketPageTitleFeature",
+            "IdleTicketClaimButtonFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 100,
+        "next": [
+            "IdleTicketRewardOverlay"
+        ],
+        "timeout": 10000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "IdleTicketPageTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "idle/ticket_page_title.png",
+        "threshold": 0.76,
+        "roi": [
+            233,
+            120,
+            467,
+            267
+        ]
+    },
+    "IdleTicketClaimButtonFeature": {
+        "recognition": "TemplateMatch",
+        "template": "idle/ticket_claim_button.png",
+        "threshold": 0.8,
+        "roi": [
+            167,
+            867,
+            400,
+            233
+        ]
+    },
+    "IdleTicketRewardOverlay": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantRewardTitleFeature",
+            "TaskAssistantTapBlankFeature"
+        ],
+        "action": "Click",
+        "target": [
+            573,
+            853,
+            67,
+            53
+        ],
+        "post_delay": 100,
+        "next": [
+            "IdleTicketClosePage"
+        ],
+        "timeout": 10000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "IdleTicketClosePage": {
+        "recognition": "And",
+        "all_of": [
+            "IdleTicketPageTitleFeature",
+            "IdleTicketCloseFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 100,
+        "next": [
+            "IdleQuickClaimCheck"
+        ],
+        "timeout": 10000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "IdleTicketCloseFeature": {
+        "recognition": "TemplateMatch",
+        "template": "idle/ticket_page_close.png",
+        "threshold": 0.8,
+        "roi": [
+            587,
+            40,
+            120,
+            153
+        ]
+    },
+    "IdleTicketAlreadyClaimed": {
+        "recognition": "TemplateMatch",
+        "template": "idle/ticket_claimed.png",
+        "threshold": 0.76,
+        "roi": [
+            0,
+            100,
+            173,
+            220
+        ],
+        "action": "DoNothing",
+        "next": [
+            "IdleQuickClaimCheck"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "IdleQuickClaimCheck": {
+        "recognition": "TemplateMatch",
+        "template": "idle/quick_claim_checked_box.png",
+        "threshold": 0.8,
+        "roi": [
+            0,
+            1033,
+            107,
+            147
+        ],
+        "action": "DoNothing",
+        "next": [
+            "IdleIncomeOpenChest"
+        ],
+        "rate_limit": 100,
+        "timeout": 3000,
+        "on_error": [
+            "IdleQuickClaimEnable"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "IdleQuickClaimEnable": {
+        "recognition": "TemplateMatch",
+        "template": "idle/quick_claim_checked.png",
+        "threshold": 0.72,
+        "roi": [
+            0,
+            1033,
+            347,
+            147
+        ],
+        "inverse": true,
+        "action": "Click",
+        "target": [
+            13,
+            1090,
+            60,
+            60
+        ],
+        "post_delay": 100,
+        "next": [
+            "IdleQuickClaimVerify"
+        ],
+        "timeout": 3000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "IdleQuickClaimVerify": {
+        "recognition": "TemplateMatch",
+        "template": "idle/quick_claim_checked_box.png",
+        "threshold": 0.8,
+        "roi": [
+            0,
+            1033,
+            107,
+            147
+        ],
+        "action": "DoNothing",
+        "next": [
+            "IdleIncomeOpenChest"
+        ],
+        "timeout": 3000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "IdleIncomeOpenChest": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            60,
+            1030,
+            1,
+            1
+        ],
+        "post_wait_freezes": {
+            "time": 400,
+            "rate_limit": 250,
+            "timeout": 6000
+        },
+        "post_delay": 800,
+        "next": [
+            "IdleIncomeResult",
+            "IdleIncomeClaimButtonNew",
+            "IdleIncomeDropBackNew",
+            "IdleIncomeCloseDropWindow"
+        ],
+        "timeout": 10000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "IdleIncomeResult": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeResultTitleFeature",
+            "IdleIncomeResultItemsFeature"
+        ],
+        "action": "Click",
+        "target": [
+            30,
+            900,
+            1,
+            1
+        ],
+        "post_delay": 800,
+        "next": [
+            "IdleIncomeResult",
+            "IdleIncomePrivilegePopup",
+            "IdleIncomeDropBackNew",
+            "IdleIncomeCloseDropWindow",
+            "IdleIncomeFinished"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "IdleIncomeResultTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "idle/idle_income_result_title.png",
+        "threshold": 0.76,
+        "roi": [
+            133,
+            267,
+            467,
+            233
+        ]
+    },
+    "IdleIncomeResultItemsFeature": {
+        "recognition": "TemplateMatch",
+        "template": "idle/idle_income_items_header.png",
+        "threshold": 0.78,
+        "roi": [
+            100,
+            533,
+            520,
+            233
+        ]
+    },
+    "IdleIncomeCloseDropWindow": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeDropTitleFeature",
+            "IdleIncomeDropCloseFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "IdleIncomeResult",
+            "IdleIncomePrivilegePopup",
+            "IdleIncomeDropBackNew",
+            "IdleIncomeCloseDropWindow",
+            "IdleIncomeFinished"
+        ],
+        "max_hit": 3,
+        "timeout": 10000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "IdleIncomePrivilegePopup": {
+        "recognition": "OCR",
+        "expected": ".*68元激活.*",
+        "roi": [
+            260,
+            550,
+            220,
+            110
+        ],
+        "threshold": 0.3,
+        "action": "Click",
+        "target": [
+            646,
+            226,
+            1,
+            1
+        ],
+        "post_delay": 800,
+        "next": [
+            "IdleIncomeResult",
+            "IdleIncomePrivilegePopup",
+            "IdleIncomeDropBackNew",
+            "IdleIncomeCloseDropWindow",
+            "IdleIncomeFinished"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "IdleIncomeDropBackNew": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeDropTitleFeature",
+            "IdleIncomeDropCloseFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "target": [648, 227, 1, 1],
+        "post_delay": 900,
+        "next": ["IdleIncomeFinished", "IdleIncomeDropBackNew"],
+        "max_hit": 3,
+        "rate_limit": 120,
+        "timeout": 8000,
+        "on_error": ["IdleIncomeStopSafely"]
+    },
+    "IdleIncomeClaimButtonNew": {
+        "recognition": "OCR",
+        "expected": "^领取收益$",
+        "roi": [360, 900, 280, 150],
+        "action": "Click",
+        "target": [420, 950, 150, 90],
+        "post_delay": 1400,
+        "next": [
+            "IdleIncomeResult",
+            "IdleIncomeClaimButtonNew",
+            "IdleIncomeExitDropViaBlank"
+        ],
+        "max_hit": 3,
+        "rate_limit": 120,
+        "timeout": 14000,
+        "on_error": ["IdleIncomeStopSafely"]
+    },
+    "IdleIncomeExitDropViaBlank": {
+        "recognition": "TemplateMatch",
+        "template": "idle/idle_drop_title.png",
+        "threshold": 0.76,
+        "roi": [133, 167, 467, 267],
+        "action": "Click",
+        "target": [50, 1215, 1, 1],
+        "post_delay": 1000,
+        "next": [
+            "IdleIncomeResult",
+            "IdleIncomeFinished",
+            "IdleIncomeExitDropViaBlank"
+        ],
+        "max_hit": 2,
+        "rate_limit": 150,
+        "timeout": 10000,
+        "on_error": ["IdleIncomeStopSafely"]
+    },
+    "IdleIncomeDropTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "idle/idle_drop_title.png",
+        "threshold": 0.76,
+        "roi": [
+            133,
+            167,
+            467,
+            267
+        ]
+    },
+    "IdleIncomeDropCloseFeature": {
+        "recognition": "TemplateMatch",
+        "template": "idle/idle_drop_close.png",
+        "threshold": 0.8,
+        "roi": [
+            567,
+            133,
+            133,
+            200
+        ]
+    },
+    "IdleIncomeFinished": {
+        "recognition": "And",
+        "all_of": [
+            "IdleIncomeStablePageFeature"
+        ],
+        "action": "StopTask",
+        "rate_limit": 500,
+        "timeout": 10000,
+        "on_error": [
+            "IdleIncomeStopSafely"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "IdleIncomeStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask",
+        "pre_delay": 0,
+        "post_delay": 0
+    }
+}

@@ -1,0 +1,341 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "AbyssDungeonDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "AbyssSweepDialogCloseForEntry",
+            "AbyssPageReady",
+            "AbyssDoorEntry",
+            "AbyssEnterTrainingFromHomeSelected",
+            "AbyssEnterTrainingFromHome",
+            "AbyssNavigateHome",
+            "AbyssClickBack"
+        ],
+        "rate_limit": 100,
+        "timeout": 18000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssSweepDialogCloseForEntry": {
+        "recognition": "OCR",
+        "roi": [210, 390, 300, 80],
+        "expected": "^\u626b\u8361$",
+        "action": "ClickKey",
+        "key": 4,
+        "post_delay": 350,
+        "next": ["AbyssPageReady"]
+    },
+    "AbyssEnterTrainingFromHomeSelected": {
+        "recognition": "And",
+        "all_of": ["HomeReadyMainCitySelectedFeature", "HomeReadyBackpackNavFeature", "HomeReadyTrainingNavFeature", "HomeReadyCityContentFeature"],
+        "action": "Click",
+        "target": [475, 1210, 1, 1],
+        "post_delay": 250,
+        "next": ["AbyssDoorEntry", "AbyssEnterTrainingFromHomeSelected"],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssEnterTrainingFromHome": {
+        "recognition": "TemplateMatch",
+        "template": "trial/training_entry.png",
+        "threshold": 0.7,
+        "roi": [400, 1133, 167, 147],
+        "action": "Click",
+        "target": [475, 1210, 1, 1],
+        "post_delay": 250,
+        "next": ["AbyssDoorEntry", "AbyssEnterTrainingFromHome"],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssDoorEntry": {
+        "recognition": "And",
+        "all_of": ["AbyssDoorTitleFeature", "AbyssDoorEntryFeature"],
+        "box_index": 1,
+        "action": "Click",
+        "target": [365, 335, 1, 1],
+        "post_delay": 1200,
+        "next": ["AbyssPageReady"],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssPageReady": {
+        "recognition": "OCR",
+        "roi": [0, 0, 250, 95],
+        "expected": "^\u6df1\u6e0a\u5e7d\u57ce$",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssNavigateHome": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.72,
+        "roi": [0, 1133, 133, 147],
+        "action": "Click",
+        "target": [55, 1220, 1, 1],
+        "post_delay": 500,
+        "next": ["AbyssEnterTrainingFromHomeSelected", "AbyssEnterTrainingFromHome"],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssClickBack": {
+        "recognition": "DirectHit",
+        "action": "ClickKey",
+        "key": 4,
+        "post_delay": 400,
+        "next": [
+            "AbyssPageReady",
+            "AbyssDoorEntry",
+            "AbyssEnterTrainingFromHomeSelected",
+            "AbyssEnterTrainingFromHome",
+            "AbyssNavigateHome",
+            "AbyssClickBack"
+        ],
+        "max_hit": 2,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssStaminaScan": {
+        "recognition": "OCR",
+        "roi": [550, 1138, 165, 50],
+        "expected": ".*[0-9]+.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssOpenSweep": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": ["AbyssWeeklyNoticeCheck", "AbyssSweepButton"],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssWeeklyNoticeCheck": {
+        "recognition": "OCR",
+        "roi": [430, 1020, 290, 180],
+        "expected": ".*\u672c\u5468\u4e0d\u518d\u63d0\u793a.*",
+        "action": "Click",
+        "target": [497, 1102, 1, 1],
+        "post_delay": 250,
+        "next": ["AbyssWeeklyNoticeClose"],
+        "rate_limit": 100,
+        "timeout": 6000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssWeeklyNoticeClose": {
+        "recognition": "OCR",
+        "roi": [430, 1020, 290, 180],
+        "expected": ".*\u672c\u5468\u4e0d\u518d\u63d0\u793a.*",
+        "action": "Click",
+        "target": [630, 255, 1, 1],
+        "post_delay": 500,
+        "next": ["AbyssSweepButton"],
+        "rate_limit": 100,
+        "timeout": 6000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssSweepButton": {
+        "recognition": "And",
+        "all_of": ["AbyssPageReady", "AbyssStaminaScan"],
+        "box_index": 0,
+        "action": "Click",
+        "target": [670, 975, 1, 1],
+        "post_delay": 450,
+        "next": ["AbyssSweepDialogReady"],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssSweepDialogReady": {
+        "recognition": "OCR",
+        "roi": [210, 390, 300, 80],
+        "expected": "^\u626b\u8361$",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssClickMax": {
+        "recognition": "OCR",
+        "roi": [495, 470, 100, 75],
+        "expected": "^Max$",
+        "action": "Click",
+        "target": [540, 515, 1, 1],
+        "post_delay": 300,
+        "next": ["AbyssSweepDialogReady"],
+        "rate_limit": 100,
+        "timeout": 6000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssSweepCountScan": {
+        "recognition": "OCR",
+        "roi": [260, 475, 210, 70],
+        "expected": "^[0-9]+$",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssSweepCostScan": {
+        "recognition": "OCR",
+        "roi": [285, 685, 165, 70],
+        "expected": ".*[0-9]+[ ]*/[ ]*[0-9]+.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssExecuteSweep": {
+        "recognition": "OCR",
+        "roi": [270, 730, 190, 95],
+        "expected": "^\u626b\u8361$",
+        "action": "Click",
+        "target": [360, 780, 1, 1],
+        "post_delay": 700,
+        "next": ["AbyssSweepRewardReady", "AbyssSweepConfirmReady"],
+        "rate_limit": 100,
+        "timeout": 15000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssSweepRewardReady": {
+        "recognition": "OCR",
+        "roi": [200, 820, 320, 100],
+        "expected": ".*\u70b9\u51fb\u7a7a\u767d\u5904\u5173\u95ed\u754c\u9762.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssSweepConfirmReady": {
+        "recognition": "OCR",
+        "roi": [30, 650, 660, 500],
+        "expected": "^\u786e\u5b9a$",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssConfirmResult": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": ["AbyssSweepRewardClose", "AbyssSweepConfirmClick"],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssSweepRewardClose": {
+        "recognition": "OCR",
+        "roi": [200, 820, 320, 100],
+        "expected": ".*\u70b9\u51fb\u7a7a\u767d\u5904\u5173\u95ed\u754c\u9762.*",
+        "action": "Click",
+        "target": [570, 910, 1, 1],
+        "post_delay": 450,
+        "next": ["AbyssCloseSweepAfterResult", "AbyssPageReady"],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssSweepConfirmClick": {
+        "recognition": "OCR",
+        "roi": [30, 650, 660, 500],
+        "expected": "^\u786e\u5b9a$",
+        "action": "Click",
+        "post_delay": 600,
+        "next": ["AbyssCloseSweepAfterResult", "AbyssPageReady"],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssCloseSweepAfterResult": {
+        "recognition": "OCR",
+        "roi": [210, 390, 300, 80],
+        "expected": "^\u626b\u8361$",
+        "action": "ClickKey",
+        "key": 4,
+        "post_delay": 350,
+        "next": ["AbyssPageReady"],
+        "rate_limit": 100,
+        "timeout": 6000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssReturnHome": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": ["AbyssHomeReady", "AbyssReturnFromPage", "AbyssReturnFromDoor", "AbyssReturnHomeBack"],
+        "rate_limit": 100,
+        "timeout": 15000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssReturnFromPage": {
+        "recognition": "OCR",
+        "roi": [0, 0, 250, 95],
+        "expected": "^\u6df1\u6e0a\u5e7d\u57ce$",
+        "action": "Click",
+        "target": [85, 1225, 1, 1],
+        "post_delay": 500,
+        "next": ["AbyssReturnFromDoor", "AbyssReturnFromPage"],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssReturnFromDoor": {
+        "recognition": "TemplateMatch",
+        "template": "trial/trial_door_title.png",
+        "threshold": 0.78,
+        "roi": [200, 100, 320, 147],
+        "action": "Click",
+        "target": [55, 1220, 1, 1],
+        "post_delay": 650,
+        "next": ["AbyssHomeReady", "AbyssReturnFromDoor"],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssHomeReady": {
+        "recognition": "And",
+        "all_of": ["HomeReadyMainCitySelectedFeature", "HomeReadyBackpackNavFeature", "HomeReadyTrainingNavFeature", "HomeReadyCityContentFeature"],
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssReturnHomeBack": {
+        "recognition": "DirectHit",
+        "action": "ClickKey",
+        "key": 4,
+        "post_delay": 450,
+        "next": ["AbyssReturnHome"],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": ["AbyssStopSafely"]
+    },
+    "AbyssDoorTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "trial/trial_door_title.png",
+        "threshold": 0.78,
+        "roi": [200, 100, 320, 147]
+    },
+    "AbyssDoorEntryFeature": {
+        "recognition": "OCR",
+        "roi": [250, 285, 230, 100],
+        "expected": "^\u6df1\u6e0a\u5e7d\u57ce$"
+    },
+    "AbyssStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask"
+    }
+}

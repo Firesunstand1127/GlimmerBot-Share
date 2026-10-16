@@ -1,0 +1,479 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "SummonThreeEnter": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "SummonThreePageReady",
+            "SummonThreeResultBlankHint",
+            "SummonThreeHomeEntry",
+            "SummonThreeClickHomeNav"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeHomeEntry": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            180,
+            720,
+            850
+        ],
+        "expected": "^召唤$",
+        "action": "Click",
+        "post_delay": 900,
+        "next": [
+            "SummonThreePageReady",
+            "SummonThreeHomeEntry"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeClickHomeNav": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.72,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 750,
+        "next": [
+            "SummonThreePageReady",
+            "SummonThreeHomeEntry",
+            "SummonThreeClickHomeNav"
+        ],
+        "max_hit": 4,
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreePageReady": {
+        "recognition": "OCR",
+        "roi": [
+            60,
+            770,
+            600,
+            160
+        ],
+        "expected": ".*招募1次.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeSelectAdvanced": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "SummonThreeAdvancedPageReady",
+            "SummonThreeAdvancedCarouselNext"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeAdvancedPageReady": {
+        "recognition": "OCR",
+        "roi": [
+            150,
+            950,
+            420,
+            190
+        ],
+        "expected": ".*高级召唤.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeAdvancedCarouselNext": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            650,
+            1040,
+            1,
+            1
+        ],
+        "post_delay": 550,
+        "next": [
+            "SummonThreeSelectAdvanced"
+        ],
+        "max_hit": 4,
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeSelectBasic": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "SummonThreeBasicPageReady",
+            "SummonThreeBasicCarouselNext"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeBasicPageReady": {
+        "recognition": "OCR",
+        "roi": [
+            150,
+            950,
+            420,
+            190
+        ],
+        "expected": ".*基础召唤.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeBasicCarouselNext": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            650,
+            1040,
+            1,
+            1
+        ],
+        "post_delay": 550,
+        "next": [
+            "SummonThreeSelectBasic"
+        ],
+        "max_hit": 4,
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeAdvancedFreeOptional": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "SummonThreeAdvancedFreePull",
+            "SummonThreeFreeUnavailable"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeAdvancedFreePull": {
+        "recognition": "OCR",
+        "roi": [
+            70,
+            790,
+            280,
+            150
+        ],
+        "expected": "^免费召唤$",
+        "action": "Click",
+        "target": [
+            200,
+            850,
+            1,
+            1
+        ],
+        "post_delay": 900,
+        "next": [
+            "SummonThreeResolveAfterPull"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeBasicFreeOptional": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "SummonThreeBasicFreePull",
+            "SummonThreeFreeUnavailable"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeBasicFreePull": {
+        "recognition": "OCR",
+        "roi": [
+            70,
+            790,
+            280,
+            150
+        ],
+        "expected": "^免费召唤$",
+        "action": "Click",
+        "target": [
+            200,
+            850,
+            1,
+            1
+        ],
+        "post_delay": 900,
+        "next": [
+            "SummonThreeResolveAfterPull"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeFreeUnavailable": {
+        "recognition": "OCR",
+        "roi": [
+            70,
+            790,
+            280,
+            150
+        ],
+        "expected": ".*招募1次.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeBasicTicketCountScan": {
+        "recognition": "OCR",
+        "roi": [
+            270,
+            730,
+            200,
+            100
+        ],
+        "expected": ".*[0-9]+.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeBasicTicketPull": {
+        "recognition": "OCR",
+        "roi": [
+            70,
+            790,
+            280,
+            150
+        ],
+        "expected": ".*招募1次.*",
+        "action": "Click",
+        "target": [
+            200,
+            850,
+            1,
+            1
+        ],
+        "post_delay": 900,
+        "next": [
+            "SummonThreeResolveAfterPull"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeResolveAfterPull": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "SummonThreeFiveStarPackClose",
+            "SummonThreePageReady",
+            "SummonThreeResultConfirm",
+            "SummonThreeResultBlankHint",
+            "SummonThreeAnimationAdvance"
+        ],
+        "rate_limit": 150,
+        "timeout": 45000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeResultConfirm": {
+        "recognition": "OCR",
+        "roi": [
+            400,
+            820,
+            280,
+            180
+        ],
+        "expected": "^确定$",
+        "action": "Click",
+        "post_delay": 800,
+        "next": [
+            "SummonThreeResolveAfterPull"
+        ],
+        "max_hit": 5,
+        "rate_limit": 150,
+        "timeout": 45000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeResultBlankHint": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            1040,
+            520,
+            190
+        ],
+        "expected": ".*(点击空白处|关闭界面).*",
+        "action": "Click",
+        "target": [
+            600,
+            1040,
+            1,
+            1
+        ],
+        "post_delay": 800,
+        "next": [
+            "SummonThreeResolveAfterPull"
+        ],
+        "max_hit": 5,
+        "rate_limit": 150,
+        "timeout": 45000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeAnimationAdvance": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            650,
+            1080,
+            1,
+            1
+        ],
+        "post_delay": 120,
+        "next": [
+            "SummonThreeResolveAfterPull"
+        ],
+        "max_hit": 80,
+        "rate_limit": 80,
+        "timeout": 30000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeReturnHome": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "SummonThreeHomeReady",
+            "SummonThreeVisibleBack"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeVisibleBack": {
+        "recognition": "TemplateMatch",
+        "template": "common/visible_back_button.png",
+        "threshold": 0.72,
+        "roi": [
+            0,
+            1130,
+            180,
+            150
+        ],
+        "action": "Click",
+        "post_delay": 700,
+        "next": [
+            "SummonThreeHomeReady",
+            "SummonThreeVisibleBack"
+        ],
+        "max_hit": 4,
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeHomeReady": {
+        "recognition": "TemplateMatch",
+        "template": "home/main_city_selected_anchor.png",
+        "threshold": 0.72,
+        "roi": [
+            0,
+            1180,
+            100,
+            90
+        ],
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 6000,
+        "on_error": [
+            "SummonThreeStopSafely"
+        ]
+    },
+    "SummonThreeStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask"
+    },
+    "SummonThreeFiveStarPackClose": {
+        "recognition": "And",
+        "all_of": [
+            "PopupFiveStarPackFeature"
+        ],
+        "action": "Click",
+        "target": [
+            604,
+            332,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "max_hit": 2,
+        "next": [
+            "SummonThreeResolveAfterPull"
+        ]
+    }
+}

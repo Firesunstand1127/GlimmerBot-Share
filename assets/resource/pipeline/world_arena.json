@@ -1,0 +1,626 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "WorldArenaDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "WorldArenaPageReady",
+            "WorldArenaRecoverOpponentPage",
+            "WorldArenaSwitchFromSeasonGlory",
+            "WorldArenaMenuEntry",
+            "WorldArenaHomeRightEntry",
+            "WorldArenaSwipeHome",
+            "WorldArenaClickBack"
+        ],
+        "rate_limit": 100,
+        "timeout": 18000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaSwipeHome": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "Swipe",
+        "begin": [
+            620,
+            650,
+            1,
+            1
+        ],
+        "end": [
+            120,
+            650,
+            1,
+            1
+        ],
+        "duration": 300,
+        "post_delay": 250,
+        "max_hit": 3,
+        "next": [
+            "WorldArenaHomeRightEntry",
+            "WorldArenaSwipeHome"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaHomeRightEntry": {
+        "recognition": "OCR",
+        "expected": "^跨服战场$",
+        "roi": [
+            250,
+            150,
+            450,
+            650
+        ],
+        "action": "Click",
+        "target": true,
+        "post_delay": 350,
+        "next": [
+            "WorldArenaMenuEntry",
+            "WorldArenaHomeRightEntry"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaMenuEntry": {
+        "recognition": "OCR",
+        "roi": [
+            70,
+            850,
+            300,
+            150
+        ],
+        "expected": "^世界竞技场$",
+        "action": "Click",
+        "target": [
+            160,
+            965,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "WorldArenaPageReady",
+            "WorldArenaMenuEntry"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaPageTitleFeature": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            0,
+            260,
+            105
+        ],
+        "expected": "^世界竞技场$"
+    },
+    "WorldArenaStartMatchFeature": {
+        "recognition": "OCR",
+        "roi": [
+            240,
+            970,
+            240,
+            120
+        ],
+        "expected": "^开始匹配$"
+    },
+    "WorldArenaPageReady": {
+        "recognition": "And",
+        "all_of": [
+            "WorldArenaPageTitleFeature",
+            "WorldArenaStartMatchFeature"
+        ],
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaSwitchFromSeasonGlory": {
+        "recognition": "OCR",
+        "roi": [
+            120,
+            60,
+            500,
+            140
+        ],
+        "expected": "^赛季荣耀$",
+        "action": "Click",
+        "target": [
+            250,
+            105,
+            1,
+            1
+        ],
+        "post_delay": 900,
+        "next": [
+            "WorldArenaPageReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaRecoverOpponentPage": {
+        "recognition": "OCR",
+        "roi": [
+            240,
+            1040,
+            240,
+            140
+        ],
+        "expected": "^立即挑战$",
+        "action": "ClickKey",
+        "key": 4,
+        "post_delay": 500,
+        "next": [
+            "WorldArenaPageReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaEnsureAutoSkip": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "WorldArenaSwitchForAutoSkip",
+            "WorldArenaAutoSkipChecked",
+            "WorldArenaAutoSkipUnchecked"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaSwitchForAutoSkip": {
+        "recognition": "OCR",
+        "roi": [
+            120,
+            60,
+            500,
+            140
+        ],
+        "expected": "^赛季荣耀$",
+        "action": "Click",
+        "target": [
+            250,
+            105,
+            1,
+            1
+        ],
+        "post_delay": 900,
+        "next": [
+            "WorldArenaAutoSkipChecked",
+            "WorldArenaAutoSkipUnchecked"
+        ],
+        "rate_limit": 100,
+        "timeout": 10000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaAutoSkipChecked": {
+        "recognition": "TemplateMatch",
+        "template": "world_arena/autoskip_checked.png",
+        "threshold": 0.78,
+        "roi": [
+            405,
+            1105,
+            75,
+            75
+        ],
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaAutoSkipUnchecked": {
+        "recognition": "TemplateMatch",
+        "template": "world_arena/autoskip_unchecked.png",
+        "threshold": 0.78,
+        "roi": [
+            405,
+            1105,
+            75,
+            75
+        ],
+        "action": "Click",
+        "target": [
+            440,
+            1135,
+            1,
+            1
+        ],
+        "post_delay": 350,
+        "max_hit": 2,
+        "next": [
+            "WorldArenaAutoSkipChecked"
+        ],
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaAttemptsScan": {
+        "recognition": "OCR",
+        "roi": [
+            500,
+            1070,
+            190,
+            85
+        ],
+        "expected": ".*[0-9]+[ ]*/[ ]*[0-9]+.*",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaStartAndChallenge": {
+        "recognition": "OCR",
+        "roi": [
+            240,
+            970,
+            240,
+            120
+        ],
+        "expected": "^开始匹配$",
+        "action": "Click",
+        "target": [
+            360,
+            1035,
+            1,
+            1
+        ],
+        "post_delay": 1200,
+        "next": [
+            "WorldArenaOpponentReady",
+            "WorldArenaStartAndChallenge"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 20000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaOpponentReady": {
+        "recognition": "OCR",
+        "roi": [
+            240,
+            1040,
+            240,
+            140
+        ],
+        "expected": "^立即挑战$",
+        "action": "Click",
+        "target": [
+            360,
+            1110,
+            1,
+            1
+        ],
+        "post_delay": 700,
+        "next": [
+            "WorldArenaBattleEntered",
+            "WorldArenaBattleResultReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 20000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaBattleEntered": {
+        "recognition": "OCR",
+        "roi": [
+            630,
+            400,
+            90,
+            130
+        ],
+        "expected": "^跳过$",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 15000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaBattleResultReady": {
+        "recognition": "OCR",
+        "roi": [
+            60,
+            900,
+            250,
+            140
+        ],
+        "expected": "^确定$",
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 900000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaBattleResolve": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "WorldArenaBattleResultConfirm",
+            "WorldArenaBattleBlockedNotice",
+            "WorldArenaBattleSkip",
+            "WorldArenaBattleWait"
+        ],
+        "rate_limit": 100,
+        "timeout": 900000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaClosePersonalInfo": {
+        "recognition": "OCR",
+        "roi": [
+            70,
+            100,
+            300,
+            120
+        ],
+        "expected": "^个人信息$",
+        "action": "Click",
+        "target": [
+            680,
+            215,
+            1,
+            1
+        ],
+        "post_delay": 1200,
+        "next": [
+            "WorldArenaPageReady"
+        ],
+        "max_hit": 3,
+        "rate_limit": 150,
+        "timeout": 10000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaBattleResultConfirm": {
+        "recognition": "OCR",
+        "roi": [
+            60,
+            900,
+            250,
+            140
+        ],
+        "expected": "^确定$",
+        "action": "Click",
+        "target": [
+            185,
+            1010,
+            1,
+            1
+        ],
+        "post_delay": 1800,
+        "next": [
+            "WorldArenaClosePersonalInfo",
+            "WorldArenaPageReady"
+        ],
+        "rate_limit": 100,
+        "timeout": 180000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaBattleBlockedNotice": {
+        "recognition": "OCR",
+        "roi": [
+            100,
+            250,
+            520,
+            170
+        ],
+        "expected": ".*挑战.*3次.*跳过.*",
+        "action": "DoNothing",
+        "post_delay": 900,
+        "max_hit": 5,
+        "next": [
+            "WorldArenaBattleResultConfirm",
+            "WorldArenaBattleWait"
+        ],
+        "rate_limit": 300,
+        "timeout": 900000,
+        "on_error": [
+            "WorldArenaBattleWaitNoSkip"
+        ]
+    },
+    "WorldArenaBattleSkip": {
+        "recognition": "OCR",
+        "roi": [
+            630,
+            400,
+            90,
+            130
+        ],
+        "expected": "^跳过$",
+        "action": "Click",
+        "target": [
+            686,
+            480,
+            1,
+            1
+        ],
+        "post_delay": 900,
+        "max_hit": 3,
+        "next": [
+            "WorldArenaBattleResultConfirm",
+            "WorldArenaBattleBlockedNotice",
+            "WorldArenaBattleWait"
+        ],
+        "rate_limit": 300,
+        "timeout": 900000,
+        "on_error": [
+            "WorldArenaBattleWaitNoSkip"
+        ]
+    },
+    "WorldArenaBattleWait": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "post_delay": 800,
+        "max_hit": 1100,
+        "next": [
+            "WorldArenaBattleResultConfirm",
+            "WorldArenaBattleSkip",
+            "WorldArenaBattleWait"
+        ],
+        "rate_limit": 300,
+        "timeout": 900000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaReturnHome": {
+        "recognition": "DirectHit",
+        "action": "Click",
+        "target": [
+            50,
+            1230,
+            1,
+            1
+        ],
+        "post_delay": 900,
+        "next": [
+            "WorldArenaHomeReady",
+            "WorldArenaReturnHomeRetry"
+        ],
+        "rate_limit": 100,
+        "timeout": 18000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaReturnHomeRetry": {
+        "recognition": "OCR",
+        "roi": [
+            0,
+            0,
+            260,
+            105
+        ],
+        "expected": "^世界竞技场$",
+        "action": "Click",
+        "target": [
+            50,
+            1230,
+            1,
+            1
+        ],
+        "post_delay": 900,
+        "max_hit": 3,
+        "next": [
+            "WorldArenaHomeReady",
+            "WorldArenaReturnHomeRetry",
+            "WorldArenaReturnHomeBackKey"
+        ],
+        "rate_limit": 150,
+        "timeout": 12000
+    },
+    "WorldArenaReturnHomeBackKey": {
+        "recognition": "DirectHit",
+        "action": "ClickKey",
+        "key": 4,
+        "post_delay": 600,
+        "max_hit": 2,
+        "next": [
+            "WorldArenaHomeReady",
+            "WorldArenaReturnHomeRetry",
+            "WorldArenaReturnHomeBackKey"
+        ],
+        "rate_limit": 150,
+        "timeout": 8000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaHomeReady": {
+        "recognition": "And",
+        "all_of": [
+            "ResourceCycleHomeArenaFeature",
+            "ResourceCycleHomeShopFeature"
+        ],
+        "action": "StopTask",
+        "rate_limit": 100,
+        "timeout": 3500,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaClickBack": {
+        "recognition": "DirectHit",
+        "action": "ClickKey",
+        "key": 4,
+        "post_delay": 350,
+        "max_hit": 2,
+        "next": [
+            "WorldArenaPageReady",
+            "WorldArenaRecoverOpponentPage",
+            "WorldArenaMenuEntry",
+            "WorldArenaHomeRightEntry",
+            "WorldArenaSwipeHome",
+            "WorldArenaClickBack"
+        ],
+        "rate_limit": 100,
+        "timeout": 7000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    },
+    "WorldArenaStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask"
+    },
+    "WorldArenaBattleWaitNoSkip": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "post_delay": 800,
+        "max_hit": 1100,
+        "next": [
+            "WorldArenaBattleResultConfirm",
+            "WorldArenaBattleWaitNoSkip"
+        ],
+        "rate_limit": 300,
+        "timeout": 900000,
+        "on_error": [
+            "WorldArenaStopSafely"
+        ]
+    }
+}

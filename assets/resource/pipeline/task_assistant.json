@@ -1,0 +1,594 @@
+{
+    "$schema": "../../../deps/tools/pipeline.schema.json",
+    "TaskAssistantDaily": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "TaskAssistantWeeklyNotice",
+            "TaskAssistantIdleIncomeWarning",
+            "TaskAssistantCloseQuizSingleBubble",
+            "TaskAssistantCloseQuizPanel",
+            "TaskAssistantOpenFromHome",
+            "TaskAssistantOpen",
+            "TaskAssistantPanelReady",
+            "TaskAssistantExecutionFinished",
+            "TaskAssistantNavigateHome",
+            "TaskAssistantVisibleBack",
+            "TaskAssistantRecoverBack"
+        ],
+        "rate_limit": 100,
+        "timeout": 12000,
+        "on_error": [
+            "TaskAssistantStopSafely"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "TaskAssistantOpenFromHome": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "Click",
+        "target": [
+            70,
+            1137,
+            1,
+            1
+        ],
+        "post_delay": 400,
+        "next": [
+            "TaskAssistantIdleIncomeWarning",
+            "TaskAssistantPanelReady",
+            "TaskAssistantCloseQuizSingleBubble",
+            "TaskAssistantCloseQuizPanel",
+            "TaskAssistantOpenFromHome",
+            "TaskAssistantOpen"
+        ],
+        "max_hit": 5,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "TaskAssistantStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "TaskAssistantNavigateHome": {
+        "recognition": "TemplateMatch",
+        "template": "trial/home_from_battle.png",
+        "threshold": 0.78,
+        "roi": [
+            0,
+            1133,
+            133,
+            147
+        ],
+        "action": "Click",
+        "target": [
+            55,
+            1220,
+            1,
+            1
+        ],
+        "post_delay": 800,
+        "next": [
+            "TaskAssistantCloseQuizSingleBubble",
+            "TaskAssistantCloseQuizPanel",
+            "TaskAssistantOpenFromHome",
+            "TaskAssistantOpen",
+            "TaskAssistantNavigateHome",
+            "TaskAssistantRecoverBack"
+        ],
+        "max_hit": 5,
+        "rate_limit": 100,
+        "timeout": 8000,
+        "on_error": [
+            "TaskAssistantStopSafely"
+        ],
+        "pre_delay": 0
+    },
+    "TaskAssistantVisibleBack": {
+        "recognition": "TemplateMatch",
+        "template": "common/visible_back_button.png",
+        "threshold": 0.8,
+        "roi": [
+            0,
+            1133,
+            180,
+            147
+        ],
+        "action": "Click",
+        "post_delay": 300,
+        "next": [
+            "TaskAssistantOpenFromHome",
+            "TaskAssistantOpen",
+            "TaskAssistantNavigateHome",
+            "TaskAssistantCloseQuizSingleBubble",
+            "TaskAssistantCloseQuizPanel",
+            "TaskAssistantVisibleBack"
+        ],
+        "rate_limit": 100,
+        "timeout": 5000,
+        "on_error": [
+            "TaskAssistantRecoverBack"
+        ],
+        "pre_delay": 0
+    },
+    "TaskAssistantCloseQuizPanel": {
+        "recognition": "TemplateMatch",
+        "template": "common/assistant_quiz_panel.png",
+        "threshold": 0.8,
+        "roi": [
+            40,
+            880,
+            300,
+            240
+        ],
+        "action": "Click",
+        "target": [
+            360,
+            760,
+            1,
+            1
+        ],
+        "post_delay": 300,
+        "next": [
+            "TaskAssistantPanelReady",
+            "TaskAssistantOpenFromHome",
+            "TaskAssistantOpen",
+            "TaskAssistantNavigateHome",
+            "TaskAssistantVisibleBack",
+            "TaskAssistantCloseQuizSingleBubble",
+            "TaskAssistantCloseQuizPanel"
+        ],
+        "rate_limit": 100,
+        "timeout": 2000,
+        "on_error": [
+            "TaskAssistantRecoverBack"
+        ],
+        "pre_delay": 0
+    },
+    "TaskAssistantRecoverBack": {
+        "recognition": "DirectHit",
+        "action": "ClickKey",
+        "key": 4,
+        "max_hit": 2,
+        "post_delay": 300,
+        "next": [
+            "TaskAssistantPanelReady",
+            "TaskAssistantOpenFromHome",
+            "TaskAssistantOpen",
+            "TaskAssistantNavigateHome",
+            "TaskAssistantVisibleBack",
+            "TaskAssistantCloseQuizSingleBubble",
+            "TaskAssistantCloseQuizPanel",
+            "TaskAssistantRecoverBack"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "TaskAssistantOpen": {
+        "recognition": "TemplateMatch",
+        "template": "home/task_assistant_character.png",
+        "threshold": 0.6,
+        "roi": [
+            0,
+            967,
+            173,
+            233
+        ],
+        "action": "Click",
+        "post_wait_freezes": 200,
+        "post_delay": 100,
+        "next": [
+            "TaskAssistantIdleIncomeWarning",
+            "TaskAssistantPanelReady",
+            "TaskAssistantCloseQuizSingleBubble",
+            "TaskAssistantCloseQuizPanel",
+            "TaskAssistantOpen"
+        ],
+        "timeout": 10000,
+        "on_error": [
+            "TaskAssistantStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "TaskAssistantCloseQuizSingleBubble": {
+        "recognition": "TemplateMatch",
+        "template": "common/assistant_quiz_single_bubble.png",
+        "threshold": 0.78,
+        "roi": [
+            40,
+            880,
+            300,
+            240
+        ],
+        "action": "Click",
+        "target": [
+            70,
+            1137,
+            1,
+            1
+        ],
+        "post_wait_freezes": {
+            "time": 250,
+            "rate_limit": 100,
+            "timeout": 2500
+        },
+        "post_delay": 350,
+        "next": [
+            "TaskAssistantPanelReady",
+            "TaskAssistantOpenFromHome",
+            "TaskAssistantOpen",
+            "TaskAssistantNavigateHome",
+            "TaskAssistantVisibleBack",
+            "TaskAssistantCloseQuizSingleBubble",
+            "TaskAssistantCloseQuizPanel"
+        ],
+        "max_hit": 3,
+        "rate_limit": 100,
+        "timeout": 3000,
+        "on_error": [
+            "TaskAssistantRecoverBack"
+        ],
+        "pre_delay": 0
+    },
+    "TaskAssistantIdleIncomeWarning": {
+        "recognition": "And",
+        "all_of": [
+            "PopupIdleIncomeTitleFeature",
+            "PopupIdleIncomeTextFeature",
+            "PopupIdleIncomeCancelFeature"
+        ],
+        "box_index": 2,
+        "action": "Click",
+        "post_wait_freezes": 200,
+        "post_delay": 150,
+        "next": [
+            "TaskAssistantDaily"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "TaskAssistantPanelReady": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantHeaderFeature",
+            "TaskAssistantExecuteFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "target": [
+            360,
+            1090,
+            1,
+            1
+        ],
+        "post_delay": 6000,
+        "next": [
+            "TaskAssistantRunLoop"
+        ],
+        "timeout": 10000,
+        "on_error": [
+            "TaskAssistantStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "TaskAssistantHeaderFeature": {
+        "recognition": "TemplateMatch",
+        "template": "daily/task_assistant_header.png",
+        "threshold": 0.78,
+        "roi": [
+            200,
+            167,
+            433,
+            233
+        ]
+    },
+    "TaskAssistantExecuteFeature": {
+        "recognition": "TemplateMatch",
+        "template": "daily/task_assistant_execute.png",
+        "threshold": 0.8,
+        "roi": [
+            167,
+            967,
+            433,
+            233
+        ]
+    },
+    "TaskAssistantRunLoop": {
+        "recognition": "DirectHit",
+        "action": "DoNothing",
+        "next": [
+            "TaskAssistantWeeklyNotice",
+            "TaskAssistantRewardOverlay",
+            "TaskAssistantChallengeResult",
+            "TaskAssistantPaidPack",
+            "TaskAssistantExecutionFinished",
+            "TaskAssistantExecuteRetry"
+        ],
+        "rate_limit": 100,
+        "timeout": 90000,
+        "on_error": [
+            "TaskAssistantStopSafely"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "TaskAssistantWeeklyNotice": {
+        "recognition": "OCR",
+        "roi": [
+            430,
+            1020,
+            290,
+            180
+        ],
+        "expected": ".*本周不再提示.*",
+        "action": "Click",
+        "target": [
+            497,
+            1102,
+            1,
+            1
+        ],
+        "post_delay": 250,
+        "next": [
+            "TaskAssistantWeeklyNoticeClose"
+        ]
+    },
+    "TaskAssistantWeeklyNoticeClose": {
+        "recognition": "OCR",
+        "roi": [
+            430,
+            1020,
+            290,
+            180
+        ],
+        "expected": ".*本周不再提示.*",
+        "action": "Click",
+        "target": [
+            630,
+            255,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "TaskAssistantDaily"
+        ]
+    },
+    "TaskAssistantExecuteRetry": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantHeaderFeature",
+            "TaskAssistantExecuteFeature"
+        ],
+        "action": "Click",
+        "target": [
+            360,
+            1090,
+            1,
+            1
+        ],
+        "post_delay": 6000,
+        "next": [
+            "TaskAssistantRunLoop"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "max_hit": 3
+    },
+    "TaskAssistantRewardOverlay": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantRewardTitleFeature",
+            "TaskAssistantTapBlankFeature"
+        ],
+        "action": "Click",
+        "target": [
+            573,
+            913,
+            67,
+            53
+        ],
+        "post_delay": 100,
+        "next": [
+            "TaskAssistantRunLoop"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "TaskAssistantRewardTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "daily/assistant_reward_title.png",
+        "threshold": 0.76,
+        "roi": [
+            167,
+            333,
+            400,
+            200
+        ]
+    },
+    "TaskAssistantTapBlankFeature": {
+        "recognition": "TemplateMatch",
+        "template": "daily/tap_blank_to_close.png",
+        "threshold": 0.76,
+        "roi": [
+            133,
+            767,
+            467,
+            233
+        ]
+    },
+    "TaskAssistantChallengeResult": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantChallengeSuccessFeature",
+            "TaskAssistantTapBlankFeature"
+        ],
+        "action": "Click",
+        "target": [
+            573,
+            913,
+            67,
+            53
+        ],
+        "post_delay": 100,
+        "next": [
+            "TaskAssistantRunLoop"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "TaskAssistantChallengeSuccessFeature": {
+        "recognition": "TemplateMatch",
+        "template": "daily/assistant_challenge_success.png",
+        "threshold": 0.76,
+        "roi": [
+            67,
+            200,
+            587,
+            333
+        ]
+    },
+    "TaskAssistantPaidPack": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantPaidPackTitleFeature",
+            "TaskAssistantPaidPackCloseFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "post_delay": 100,
+        "next": [
+            "TaskAssistantRunLoop"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "TaskAssistantPaidPackTitleFeature": {
+        "recognition": "TemplateMatch",
+        "template": "popup/value_pack_1288_title.png",
+        "threshold": 0.76,
+        "roi": [
+            67,
+            467,
+            567,
+            267
+        ]
+    },
+    "TaskAssistantPaidPackCloseFeature": {
+        "recognition": "TemplateMatch",
+        "template": "popup/value_pack_close.png",
+        "threshold": 0.8,
+        "roi": [
+            520,
+            200,
+            173,
+            200
+        ]
+    },
+    "TaskAssistantExecutionFinished": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantResultTitleFeature",
+            "TaskAssistantFinishFeature"
+        ],
+        "box_index": 1,
+        "action": "Click",
+        "target": [
+            360,
+            1020,
+            1,
+            1
+        ],
+        "post_delay": 500,
+        "next": [
+            "TaskAssistantRewardOverlay",
+            "TaskAssistantExecutionFinished",
+            "TaskAssistantClosePanel",
+            "TaskAssistantHomeReached"
+        ],
+        "timeout": 30000,
+        "on_error": [
+            "TaskAssistantStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0,
+        "max_hit": 3
+    },
+    "TaskAssistantResultTitleFeature": {
+        "recognition": "OCR",
+        "expected": "^执行结果$",
+        "roi": [
+            200,
+            180,
+            330,
+            170
+        ]
+    },
+    "TaskAssistantFinishFeature": {
+        "recognition": "OCR",
+        "expected": "^完成$",
+        "roi": [
+            240,
+            950,
+            250,
+            120
+        ]
+    },
+    "TaskAssistantClosePanel": {
+        "recognition": "And",
+        "all_of": [
+            "TaskAssistantHeaderFeature",
+            "TaskAssistantExecuteFeature"
+        ],
+        "action": "Click",
+        "target": [
+            700,
+            80,
+            1,
+            1
+        ],
+        "post_delay": 300,
+        "next": [
+            "TaskAssistantHomeReached",
+            "TaskAssistantClosePanel"
+        ],
+        "timeout": 10000,
+        "max_hit": 3,
+        "on_error": [
+            "TaskAssistantStopSafely"
+        ],
+        "rate_limit": 100,
+        "pre_delay": 0
+    },
+    "TaskAssistantHomeReached": {
+        "recognition": "And",
+        "all_of": [
+            "HomeReadyMainCitySelectedFeature",
+            "HomeReadyBackpackNavFeature",
+            "HomeReadyTrainingNavFeature",
+            "HomeReadyCityContentFeature"
+        ],
+        "action": "StopTask",
+        "rate_limit": 500,
+        "timeout": 10000,
+        "on_error": [
+            "TaskAssistantStopSafely"
+        ],
+        "pre_delay": 0,
+        "post_delay": 0
+    },
+    "TaskAssistantStopSafely": {
+        "recognition": "DirectHit",
+        "action": "StopTask",
+        "pre_delay": 0,
+        "post_delay": 0
+    }
+}

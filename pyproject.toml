@@ -1,0 +1,13 @@
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+include = ["ui/*.py", "tools/*.py"]
+exclude = ["ui/runtime", "ui/vendor"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+ignore = ["E402"]
+
+[tool.ruff.lint.per-file-ignores]
+# app keeps these imports as the public interface for existing device tools.
+"ui/app.py" = ["F401"]
